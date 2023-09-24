@@ -43,8 +43,30 @@ export const WifeSchema = Yup.object({
   gardianwifeContact: Yup.number()
     .max(8)
     .required("Gardian Contact is required"),
-  gardianwifeMobile: Yup.string()
+  gardianwifeMobile: Yup.number()
     .max(10)
     .required("Gardian Mobile is required"),
   gardianwifeEmail: Yup.string().email().required("Not proper email"),
+});
+
+export const PriestSchema = Yup.object({
+  priestname: Yup.string().required("Priest name is required"),
+  priestbirthdate: Yup.string().required("Priets birthdate is required"),
+  priestage: Yup.number().min(18).required("Priets age is required"),
+  priestlocation: Yup.string().required("Priest Address is required"),
+  prietsaddress: Yup.string().required("Priest Address is required"),
+});
+
+export const Witness1Schema = Yup.object({
+  witness1detail: Yup.string().required("Witness-1 name is required"),
+  witness1birthdate: Yup.string().required("Witness-1 birthdate is required"),
+  witness1age: Yup.number().min(18).required("Witness-1 age is required"),
+  witness1address: Yup.string().required("Witness-1 Address is required"),
+});
+
+export const Witness2Schema = Yup.object({
+  witness2name: Yup.string().required("Witness-2 name is required"),
+  witness2birthdate: Yup.string().required("Witness-2 birthdate is required"),
+  witness2age: Yup.number().min(18).required("Witness-2 age is required"),
+  witness2address: Yup.string().required("Witness-2 Address is required"),
 });

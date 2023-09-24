@@ -44,3 +44,25 @@ export const WifeValue = {
   gardianwifeMobile: 0,
   gardianwifeEmail: "",
 };
+
+export const PrietsValue = {
+  priestname: "",
+  priestbirthdate: null,
+  priestage: 0,
+  priestlocation: "",
+  prietsaddress: "",
+};
+
+export const Witness1Value = {
+  witness1detail: "",
+  witness1birthdate: null,
+  witness1age: 0,
+  witness1address: "",
+};
+
+export const Witness2Value = {
+  witness2name: "",
+  witness2birthdate: null,
+  witness2age: 0,
+  witness2address: "",
+};

@@ -28,13 +28,20 @@ import { DatePicker } from "@material-ui/pickers";
 import {
   HusbandSchema,
   MerriageSchema,
+  PriestSchema,
   WifeSchema,
+  Witness1Schema,
+  Witness2Schema,
 } from "../ValidationSchema/validationSchema";
 import {
   HusbandValue,
   MerriageValue,
+  PrietsValue,
   WifeValue,
+  Witness1Value,
+  Witness2Value,
 } from "../InitialValue/InitalValue";
+import File from "../FileUpload/File";
 
 interface merriage {
   location: string;
@@ -194,6 +201,51 @@ const MainForm = () => {
     validationSchema: WifeSchema,
     onSubmit: (values) => {
       console.log("Form 3 submitted with values:", valuesForm3);
+    },
+  });
+
+  const {
+    values: valuesForm4,
+    touched: touchedForm4,
+    errors: errorsForm4,
+    handleBlur: handleBlurForm4,
+    handleChange: handleChangeForm4,
+    handleSubmit: handleSubmitForm4,
+  } = useFormik({
+    initialValues: PrietsValue,
+    validationSchema: PriestSchema,
+    onSubmit: (values) => {
+      console.log("Form 4 submitted with values:", valuesForm4);
+    },
+  });
+
+  const {
+    values: valuesForm5,
+    touched: touchedForm5,
+    errors: errorsForm5,
+    handleBlur: handleBlurForm5,
+    handleChange: handleChangeForm5,
+    handleSubmit: handleSubmitForm5,
+  } = useFormik({
+    initialValues: Witness1Value,
+    validationSchema: Witness1Schema,
+    onSubmit: (values) => {
+      console.log("Form 5 submitted with values:", valuesForm5);
+    },
+  });
+
+  const {
+    values: valuesForm6,
+    touched: touchedForm6,
+    errors: errorsForm6,
+    handleBlur: handleBlurForm6,
+    handleChange: handleChangeForm6,
+    handleSubmit: handleSubmitForm6,
+  } = useFormik({
+    initialValues: Witness2Value,
+    validationSchema: Witness2Schema,
+    onSubmit: (values) => {
+      console.log("Form 6 submitted with values:", valuesForm6);
     },
   });
 
@@ -955,25 +1007,82 @@ const MainForm = () => {
             <Grid container spacing={2}>
               <Grid item xs={6}>
                 <InputLabel>Name</InputLabel>
-                <TextField variant="outlined" sx={{ width: "100%" }} />
+                <TextField
+                  variant="outlined"
+                  sx={{ width: "100%" }}
+                  name="priestname"
+                  value={valuesForm4.priestname}
+                  onChange={handleChangeForm4}
+                  onBlur={handleBlurForm4}
+                />
+                {errorsForm4.priestname && touchedForm4.priestname ? (
+                  <span style={{ color: "red" }}>{errorsForm4.priestname}</span>
+                ) : null}
               </Grid>
               <Grid item xs={6}>
                 <InputLabel>Date of Birth</InputLabel>
-                <TextField variant="outlined" sx={{ width: "100%" }} />
+                <TextField
+                  variant="outlined"
+                  sx={{ width: "100%" }}
+                  name="priestbirthdate"
+                  value={valuesForm4.priestbirthdate}
+                  onChange={handleChangeForm4}
+                  onBlur={handleBlurForm4}
+                />
+                {errorsForm4.priestbirthdate && touchedForm4.priestbirthdate ? (
+                  <span style={{ color: "red" }}>
+                    {errorsForm4.priestbirthdate}
+                  </span>
+                ) : null}
               </Grid>
               <Grid item xs={6}>
                 <InputLabel>Age</InputLabel>
-                <TextField variant="outlined" sx={{ width: "100%" }} />
+                <TextField
+                  variant="outlined"
+                  sx={{ width: "100%" }}
+                  name="priestage"
+                  value={valuesForm4.priestage}
+                  onChange={handleChangeForm4}
+                  onBlur={handleBlurForm4}
+                />
+                {errorsForm4.priestage && touchedForm4.priestage ? (
+                  <span style={{ color: "red" }}>{errorsForm4.priestage}</span>
+                ) : null}
               </Grid>
               <Grid item xs={6}>
                 <InputLabel>Priest Location</InputLabel>
-                <TextField variant="outlined" sx={{ width: "100%" }} />
+                <TextField
+                  variant="outlined"
+                  sx={{ width: "100%" }}
+                  name="priestlocation"
+                  value={valuesForm4.priestlocation}
+                  onChange={handleChangeForm4}
+                  onBlur={handleBlurForm4}
+                />
+                {errorsForm4.priestlocation && touchedForm4.priestlocation ? (
+                  <span style={{ color: "red" }}>
+                    {errorsForm4.priestlocation}
+                  </span>
+                ) : null}
               </Grid>
               <Grid item xs={12}>
                 <InputLabel>Address</InputLabel>
-                <TextField variant="outlined" sx={{ width: "100%" }} />
+                <TextField
+                  variant="outlined"
+                  sx={{ width: "100%" }}
+                  name="prietsaddress"
+                  value={valuesForm4.prietsaddress}
+                  onChange={handleChangeForm4}
+                  onBlur={handleBlurForm4}
+                />
+                {errorsForm4.prietsaddress && touchedForm4.prietsaddress ? (
+                  <span style={{ color: "red" }}>
+                    {errorsForm4.prietsaddress}
+                  </span>
+                ) : null}
               </Grid>
               <Button
+                onClick={() => handleSubmitForm4()}
                 variant="contained"
                 color="success"
                 sx={{ m: "20px", width: "7%" }}
@@ -999,21 +1108,71 @@ const MainForm = () => {
             <Grid container spacing={2}>
               <Grid item xs={6}>
                 <InputLabel>Name</InputLabel>
-                <TextField variant="outlined" sx={{ width: "100%" }} />
+                <TextField
+                  variant="outlined"
+                  sx={{ width: "100%" }}
+                  name="witness1detail"
+                  value={valuesForm5.witness1detail}
+                  onChange={handleChangeForm5}
+                  onBlur={handleBlurForm5}
+                />
+                {errorsForm5.witness1detail && touchedForm5.witness1detail ? (
+                  <span style={{ color: "red" }}>
+                    {errorsForm5.witness1detail}
+                  </span>
+                ) : null}
               </Grid>
               <Grid item xs={6}>
                 <InputLabel>Date of Birth</InputLabel>
-                <TextField variant="outlined" sx={{ width: "100%" }} />
+                <TextField
+                  variant="outlined"
+                  sx={{ width: "100%" }}
+                  name="witness1birthdate"
+                  value={valuesForm5.witness1birthdate}
+                  onChange={handleChangeForm5}
+                  onBlur={handleBlurForm5}
+                />
+                {errorsForm5.witness1birthdate &&
+                touchedForm5.witness1birthdate ? (
+                  <span style={{ color: "red" }}>
+                    {errorsForm5.witness1birthdate}
+                  </span>
+                ) : null}
               </Grid>
               <Grid item xs={6}>
                 <InputLabel>Age</InputLabel>
-                <TextField variant="outlined" sx={{ width: "100%" }} />
+                <TextField
+                  variant="outlined"
+                  sx={{ width: "100%" }}
+                  name="witness1age"
+                  value={valuesForm5.witness1age}
+                  onChange={handleChangeForm5}
+                  onBlur={handleBlurForm5}
+                />
+                {errorsForm5.witness1age && touchedForm5.witness1age ? (
+                  <span style={{ color: "red" }}>
+                    {errorsForm5.witness1age}
+                  </span>
+                ) : null}
               </Grid>
               <Grid item xs={6}>
                 <InputLabel>Address</InputLabel>
-                <TextField variant="outlined" sx={{ width: "100%" }} />
+                <TextField
+                  variant="outlined"
+                  sx={{ width: "100%" }}
+                  name="witness1address"
+                  value={valuesForm5.witness1address}
+                  onChange={handleChangeForm5}
+                  onBlur={handleBlurForm5}
+                />
+                {errorsForm5.witness1address && touchedForm5.witness1address ? (
+                  <span style={{ color: "red" }}>
+                    {errorsForm5.witness1address}
+                  </span>
+                ) : null}
               </Grid>
               <Button
+                onClick={() => handleSubmitForm5()}
                 variant="contained"
                 color="success"
                 sx={{ m: "20px", width: "7%" }}
@@ -1039,21 +1198,71 @@ const MainForm = () => {
             <Grid container spacing={2}>
               <Grid item xs={6}>
                 <InputLabel>Name</InputLabel>
-                <TextField variant="outlined" sx={{ width: "100%" }} />
+                <TextField
+                  variant="outlined"
+                  sx={{ width: "100%" }}
+                  name="witness2name"
+                  value={valuesForm6.witness2name}
+                  onChange={handleChangeForm6}
+                  onBlur={handleBlurForm6}
+                />
+                {errorsForm6.witness2name && touchedForm6.witness2name ? (
+                  <span style={{ color: "red" }}>
+                    {errorsForm6.witness2name}
+                  </span>
+                ) : null}
               </Grid>
               <Grid item xs={6}>
                 <InputLabel>Date of Birth</InputLabel>
-                <TextField variant="outlined" sx={{ width: "100%" }} />
+                <TextField
+                  variant="outlined"
+                  sx={{ width: "100%" }}
+                  name="witness2birthdate"
+                  value={valuesForm6.witness2birthdate}
+                  onChange={handleChangeForm6}
+                  onBlur={handleBlurForm6}
+                />
+                {errorsForm6.witness2birthdate &&
+                touchedForm6.witness2birthdate ? (
+                  <span style={{ color: "red" }}>
+                    {errorsForm6.witness2birthdate}
+                  </span>
+                ) : null}
               </Grid>
               <Grid item xs={6}>
                 <InputLabel>Age</InputLabel>
-                <TextField variant="outlined" sx={{ width: "100%" }} />
+                <TextField
+                  variant="outlined"
+                  sx={{ width: "100%" }}
+                  name="witness2age"
+                  value={valuesForm6.witness2age}
+                  onChange={handleChangeForm6}
+                  onBlur={handleBlurForm6}
+                />
+                {errorsForm6.witness2age && touchedForm6.witness2age ? (
+                  <span style={{ color: "red" }}>
+                    {errorsForm6.witness2age}
+                  </span>
+                ) : null}
               </Grid>
               <Grid item xs={6}>
                 <InputLabel>Address</InputLabel>
-                <TextField variant="outlined" sx={{ width: "100%" }} />
+                <TextField
+                  variant="outlined"
+                  sx={{ width: "100%" }}
+                  name="witness2address"
+                  value={valuesForm6.witness2address}
+                  onChange={handleChangeForm6}
+                  onBlur={handleBlurForm6}
+                />
+                {errorsForm6.witness2address && touchedForm6.witness2address ? (
+                  <span style={{ color: "red" }}>
+                    {errorsForm6.witness2address}
+                  </span>
+                ) : null}
               </Grid>
               <Button
+                onClick={() => handleSubmitForm6()}
                 variant="contained"
                 color="success"
                 sx={{ m: "20px", width: "7%" }}
@@ -1077,27 +1286,48 @@ const MainForm = () => {
         <AccordionDetails>
           <FormGroup>
             <Grid container>
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <Grid item>
+                  <FormGroup>
+                    <FormControlLabel
+                      label="Husband School Leaving Certificate/ Birth Proof"
+                      control={<File />}
+                    />
+                  </FormGroup>
+                </Grid>
+                <Grid item>
+                  <FormGroup>
+                    <FormControlLabel
+                      label="Wife School Leaving Certificate/ Birth Proof"
+                      control={<File />}
+                    />
+                  </FormGroup>
+                </Grid>
+                <Grid item>
+                  <FormGroup>
+                    <FormControlLabel
+                      label="Witness-1 photo ID Proof"
+                      control={<File />}
+                    />
+                  </FormGroup>
+                </Grid>
+
+                <Grid item>
+                  <FormGroup>
+                    <FormControlLabel
+                      label="200+200 Agreement Stamp"
+                      control={<File />}
+                    />
+                  </FormGroup>
+                </Grid>
+              </div>
+            </Grid>
+            <div>
               <Grid item>
                 <FormGroup>
                   <FormControlLabel
-                    label="Husband School Leaving Certificate/ Birth Proof"
-                    control={<input type="file" />}
-                  />
-                </FormGroup>
-              </Grid>
-              <Grid item>
-                <FormGroup>
-                  <FormControlLabel
-                    label="Wife School Leaving Certificate/ Birth Proof"
-                    control={<input type="file" />}
-                  />
-                </FormGroup>
-              </Grid>
-              <Grid item>
-                <FormGroup>
-                  <FormControlLabel
-                    label="Witness-1 photo ID Proof"
-                    control={<input type="file" />}
+                    label="Husband photo ID Proof"
+                    control={<File />}
                   />
                 </FormGroup>
               </Grid>
@@ -1105,44 +1335,29 @@ const MainForm = () => {
               <Grid item>
                 <FormGroup>
                   <FormControlLabel
-                    label="200+200 Agreement Stamp"
-                    control={<input type="file" />}
+                    label="Wife Photo ID Proof"
+                    control={<File />}
                   />
                 </FormGroup>
               </Grid>
-            </Grid>
-            <Grid item>
-              <FormGroup>
-                <FormControlLabel
-                  label="Husband photo ID Proof"
-                  control={<input type="file" />}
-                />
-              </FormGroup>
-            </Grid>
-            <Grid item>
-              <FormGroup>
-                <FormControlLabel
-                  label="Wife Photo ID Proof"
-                  control={<input type="file" />}
-                />
-              </FormGroup>
-            </Grid>
-            <Grid item>
-              <FormGroup>
-                <FormControlLabel
-                  label="Priest photo ID Proof"
-                  control={<input type="file" />}
-                />
-              </FormGroup>
-            </Grid>
-            <Grid item>
-              <FormGroup>
-                <FormControlLabel
-                  label="Marriage Evidence"
-                  control={<input type="file" />}
-                />
-              </FormGroup>
-            </Grid>
+
+              <Grid item>
+                <FormGroup>
+                  <FormControlLabel
+                    label="Priest photo ID Proof"
+                    control={<File />}
+                  />
+                </FormGroup>
+              </Grid>
+              <Grid item>
+                <FormGroup>
+                  <FormControlLabel
+                    label="Marriage Evidence"
+                    control={<File />}
+                  />
+                </FormGroup>
+              </Grid>
+            </div>
             <div>
               <Button
                 variant="contained"
