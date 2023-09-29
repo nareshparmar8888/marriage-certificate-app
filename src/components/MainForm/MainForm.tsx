@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./MainForm.scss";
 import {
   Grid,
   TextField,
@@ -10,6 +11,7 @@ import {
   Box,
   Input,
 } from "@mui/material";
+
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 import Typography from "@mui/material/Typography";
@@ -42,6 +44,8 @@ import {
   Witness2Value,
 } from "../InitialValue/InitalValue";
 import File from "../FileUpload/File";
+import Preview from "./Preview";
+import { Details } from "@material-ui/icons";
 
 interface merriage {
   location: string;
@@ -87,6 +91,54 @@ interface witness {
 }
 
 const MainForm = () => {
+  const [document, setDocument] = useState([
+    {
+      id: 0,
+      title: "Husband School Leaving Certificate/ Birth Proof",
+      image: "",
+    },
+    {
+      id: 1,
+      title: "Wife School Leaving Certificate/ Birth Proof",
+      image: "",
+    },
+    {
+      id: 2,
+      title: "Witness-1 photo ID Proof",
+      image: "",
+    },
+    {
+      id: 3,
+      title: "Witness-2 photo ID Proof",
+      image: "",
+    },
+    {
+      id: 4,
+      title: "200+200 Agreement Stamp",
+      image: "",
+    },
+    {
+      id: 5,
+      title: "Husband photo ID Proof",
+      image: "",
+    },
+    {
+      id: 6,
+      title: "Wife photo ID Proof",
+      image: "",
+    },
+    {
+      id: 7,
+      title: "Priest photo ID Proof",
+      image: "",
+    },
+    {
+      id: 8,
+      title: "Marriage Evidence",
+      image: "",
+    },
+  ]);
+
   const [merriageDetail, setMerriageDetail] = useState<merriage>({
     location: "",
     marriageDate: null,
@@ -249,6 +301,12 @@ const MainForm = () => {
     },
   });
 
+  const handleChange = (image: any, index: number) => {
+    const data = [...document];
+    data[index].image = image;
+    setDocument(data);
+  };
+
   return (
     <>
       <Header />
@@ -292,7 +350,7 @@ const MainForm = () => {
           id="panel1bh-header"
           expandIcon={<ExpandMoreIcon />}
           sx={{
-            backgroundColor: "gray",
+            backgroundColor: "white",
           }}
         >
           Merriage Details
@@ -381,7 +439,7 @@ const MainForm = () => {
           id="panel2bh-header"
           expandIcon={<ExpandMoreIcon />}
           sx={{
-            backgroundColor: "gray",
+            backgroundColor: "white",
           }}
         >
           Husband Details
@@ -688,7 +746,7 @@ const MainForm = () => {
           id="panel3bh-header"
           expandIcon={<ExpandMoreIcon />}
           sx={{
-            backgroundColor: "gray",
+            backgroundColor: "white",
           }}
         >
           Wife Details
@@ -997,7 +1055,7 @@ const MainForm = () => {
           id="panel4bh-header"
           expandIcon={<ExpandMoreIcon />}
           sx={{
-            backgroundColor: "gray",
+            backgroundColor: "white",
           }}
         >
           Priest Details
@@ -1093,102 +1151,107 @@ const MainForm = () => {
           </FormGroup>
         </AccordionDetails>
       </Accordion>
-      <Accordion>
-        <AccordionSummary
-          id="panel5bh-header"
-          expandIcon={<ExpandMoreIcon />}
-          sx={{
-            backgroundColor: "gray",
-          }}
-        >
-          Witness-1 Details
-        </AccordionSummary>
-        <AccordionDetails>
-          <FormGroup>
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <InputLabel>Name</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="witness1detail"
-                  value={valuesForm5.witness1detail}
-                  onChange={handleChangeForm5}
-                  onBlur={handleBlurForm5}
-                />
-                {errorsForm5.witness1detail && touchedForm5.witness1detail ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm5.witness1detail}
-                  </span>
-                ) : null}
+      <Box sx={{ boxShadow: 3 }}>
+        <Accordion>
+          <AccordionSummary
+            id="panel5bh-header"
+            expandIcon={<ExpandMoreIcon />}
+            sx={{
+              backgroundColor: "white",
+              boxShadow: 20,
+            }}
+          >
+            Witness-1 Details
+          </AccordionSummary>
+          <AccordionDetails>
+            <FormGroup>
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <InputLabel>Name</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="witness1detail"
+                    value={valuesForm5.witness1detail}
+                    onChange={handleChangeForm5}
+                    onBlur={handleBlurForm5}
+                  />
+                  {errorsForm5.witness1detail && touchedForm5.witness1detail ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm5.witness1detail}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>Date of Birth</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="witness1birthdate"
+                    value={valuesForm5.witness1birthdate}
+                    onChange={handleChangeForm5}
+                    onBlur={handleBlurForm5}
+                  />
+                  {errorsForm5.witness1birthdate &&
+                  touchedForm5.witness1birthdate ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm5.witness1birthdate}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>Age</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="witness1age"
+                    value={valuesForm5.witness1age}
+                    onChange={handleChangeForm5}
+                    onBlur={handleBlurForm5}
+                  />
+                  {errorsForm5.witness1age && touchedForm5.witness1age ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm5.witness1age}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>Address</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="witness1address"
+                    value={valuesForm5.witness1address}
+                    onChange={handleChangeForm5}
+                    onBlur={handleBlurForm5}
+                  />
+                  {errorsForm5.witness1address &&
+                  touchedForm5.witness1address ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm5.witness1address}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Button
+                  onClick={() => handleSubmitForm5()}
+                  variant="contained"
+                  color="success"
+                  sx={{ m: "20px", width: "7%" }}
+                >
+                  Save
+                </Button>
               </Grid>
-              <Grid item xs={6}>
-                <InputLabel>Date of Birth</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="witness1birthdate"
-                  value={valuesForm5.witness1birthdate}
-                  onChange={handleChangeForm5}
-                  onBlur={handleBlurForm5}
-                />
-                {errorsForm5.witness1birthdate &&
-                touchedForm5.witness1birthdate ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm5.witness1birthdate}
-                  </span>
-                ) : null}
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel>Age</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="witness1age"
-                  value={valuesForm5.witness1age}
-                  onChange={handleChangeForm5}
-                  onBlur={handleBlurForm5}
-                />
-                {errorsForm5.witness1age && touchedForm5.witness1age ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm5.witness1age}
-                  </span>
-                ) : null}
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel>Address</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="witness1address"
-                  value={valuesForm5.witness1address}
-                  onChange={handleChangeForm5}
-                  onBlur={handleBlurForm5}
-                />
-                {errorsForm5.witness1address && touchedForm5.witness1address ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm5.witness1address}
-                  </span>
-                ) : null}
-              </Grid>
-              <Button
-                onClick={() => handleSubmitForm5()}
-                variant="contained"
-                color="success"
-                sx={{ m: "20px", width: "7%" }}
-              >
-                Save
-              </Button>
-            </Grid>
-          </FormGroup>
-        </AccordionDetails>
-      </Accordion>
+            </FormGroup>
+          </AccordionDetails>
+        </Accordion>
+      </Box>
+
       <Accordion>
         <AccordionSummary
           id="panel6bh-header"
           expandIcon={<ExpandMoreIcon />}
           sx={{
-            backgroundColor: "gray",
+            backgroundColor: "white",
           }}
         >
           Witness-2 Details
@@ -1278,96 +1341,17 @@ const MainForm = () => {
           id="panel7bh-header"
           expandIcon={<ExpandMoreIcon />}
           sx={{
-            backgroundColor: "gray",
+            backgroundColor: "white",
           }}
         >
           Attachment Document
         </AccordionSummary>
         <AccordionDetails>
-          <FormGroup>
-            <Grid container>
-              <div style={{ display: "flex", flexDirection: "column" }}>
-                <Grid item>
-                  <FormGroup>
-                    <FormControlLabel
-                      label="Husband School Leaving Certificate/ Birth Proof"
-                      control={<File />}
-                    />
-                  </FormGroup>
-                </Grid>
-                <Grid item>
-                  <FormGroup>
-                    <FormControlLabel
-                      label="Wife School Leaving Certificate/ Birth Proof"
-                      control={<File />}
-                    />
-                  </FormGroup>
-                </Grid>
-                <Grid item>
-                  <FormGroup>
-                    <FormControlLabel
-                      label="Witness-1 photo ID Proof"
-                      control={<File />}
-                    />
-                  </FormGroup>
-                </Grid>
-
-                <Grid item>
-                  <FormGroup>
-                    <FormControlLabel
-                      label="200+200 Agreement Stamp"
-                      control={<File />}
-                    />
-                  </FormGroup>
-                </Grid>
-              </div>
-            </Grid>
-            <div>
-              <Grid item>
-                <FormGroup>
-                  <FormControlLabel
-                    label="Husband photo ID Proof"
-                    control={<File />}
-                  />
-                </FormGroup>
-              </Grid>
-
-              <Grid item>
-                <FormGroup>
-                  <FormControlLabel
-                    label="Wife Photo ID Proof"
-                    control={<File />}
-                  />
-                </FormGroup>
-              </Grid>
-
-              <Grid item>
-                <FormGroup>
-                  <FormControlLabel
-                    label="Priest photo ID Proof"
-                    control={<File />}
-                  />
-                </FormGroup>
-              </Grid>
-              <Grid item>
-                <FormGroup>
-                  <FormControlLabel
-                    label="Marriage Evidence"
-                    control={<File />}
-                  />
-                </FormGroup>
-              </Grid>
-            </div>
-            <div>
-              <Button
-                variant="contained"
-                color="success"
-                sx={{ m: "20px", width: "7%" }}
-              >
-                Save
-              </Button>
-            </div>
-          </FormGroup>
+          <>
+            {document.map((data, index) => (
+              <Preview {...data} key={index} onChange={handleChange} />
+            ))}
+          </>
         </AccordionDetails>
       </Accordion>
       <Box textAlign="center">
