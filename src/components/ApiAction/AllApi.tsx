@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const login = async (payload: any) => {
+export const loginApi = async (payload: any) => {
   try {
     const url = "http://192.168.1.44/login";
     const response = await axios.post(url, JSON.stringify(payload));

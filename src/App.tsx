@@ -8,24 +8,15 @@ import { useState } from "react";
 import PrivateRoute from "./PrivateRoute";
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-
   return (
     <>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<MainForm />}></Route>
-          {/* <Route
-            path="/login"
-            element={<Login setIsAuthenticated={setIsAuthenticated} />}
-          />{" "} */}
           <Route path="/dashboard" element={<Dashboard />}></Route>
           <Route path="/userDashboard" element={<UserDashboard />} />
-          {/* <PrivateRoute
-            path="/dashboard"
-            element={<Dashboard />}
-            isAuthenticated={isAuthenticated}
-          /> */}
+
+          <Route path="/login" element={<Login />} />
         </Routes>
       </BrowserRouter>
     </>

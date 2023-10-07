@@ -6,6 +6,7 @@ import { loginSchema } from "../ValidationSchema/validationSchema";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { loginApi } from "../ApiAction/AllApi";
 interface login {
   email: any;
   password: string;
@@ -39,8 +40,18 @@ const Login = () => {
   });
 
   useEffect(() => {
-    dispatch(login);
-  });
+    const fetchData = async () => {
+      try {
+        const response = await dispatch(loginApi());
+        console.log("respo", response);
+      } catch (error) {
+        console.error("Error:", error);
+        // dispatch(loginError(error));
+      }
+    };
+
+    fetchData();
+  }, [dispatch]);
 
   return (
     <>

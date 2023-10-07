@@ -2,7 +2,7 @@ import * as Yup from "yup";
 
 export const MerriageSchema = Yup.object({
   location: Yup.string().required("Location is required"),
-  marriageDate: Yup.string().required("Marriage Date is required"),
+  marriageDate: Yup.date().required("Marriage Date is required"),
   marriageAddress: Yup.string().required("Marriage Address is required"),
 });
 

@@ -514,21 +514,6 @@ const MainForm = () => {
                     onChange={handleChangeForm1}
                     onBlur={handleBlurForm1}
                   />
-                  {/* <form className={classes.container} noValidate>
-                  <TextField
-                    id="date"
-                    name="Birthday"
-                    type="date"
-                    className={classes.textField}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    style={{ width: "36.7rem" }}
-                    value={valuesForm1.marriageDate}
-                    onChange={handleChangeForm1}
-                    onBlur={handleBlurForm1}
-                  />
-                </form> */}
 
                   {errorsForm1.marriageDate && touchedForm1.marriageDate ? (
                     <span style={{ color: "red" }}>
@@ -552,10 +537,7 @@ const MainForm = () => {
                       {errorsForm1.marriageAddress}
                     </span>
                   ) : (
-                    <div>
-                      <button onClick={notify}>Notify!</button>
-                      <ToastContainer />
-                    </div>
+                    ""
                   )}
                 </Grid>
                 <Button
@@ -911,7 +893,7 @@ const MainForm = () => {
                     sx={{ width: "100%" }}
                     name="husbandsurname"
                     value={valuesForm3.wifesurname}
-                    onChange={handleBlurForm3}
+                    onChange={handleChangeForm3}
                     onBlur={handleBlurForm3}
                   />
                   {errorsForm3.wifesurname && touchedForm3.wifesurname ? (
