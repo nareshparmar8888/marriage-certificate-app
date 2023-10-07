@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "react-toastify/dist/ReactToastify.css";
 import "./MainForm.scss";
 import {
   Grid,
@@ -39,6 +40,9 @@ import {
   Witness1Value,
   Witness2Value,
 } from "../InitialValue/InitalValue";
+import Preview from "./Preview";
+import { ToastContainer, toast } from "react-toastify";
+import { Toast } from "react-toastify/dist/components";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -103,46 +107,55 @@ const MainForm = () => {
       id: 0,
       title: "Husband School Leaving Certificate/ Birth Proof",
       image: "",
+      error: "",
     },
     {
       id: 1,
       title: "Wife School Leaving Certificate/ Birth Proof",
       image: "",
+      error: "",
     },
     {
       id: 2,
       title: "Witness-1 photo ID Proof",
       image: "",
+      error: "",
     },
     {
       id: 3,
       title: "Witness-2 photo ID Proof",
       image: "",
+      error: "",
     },
     {
       id: 4,
       title: "200+200 Agreement Stamp",
       image: "",
+      error: "",
     },
     {
       id: 5,
       title: "Husband photo ID Proof",
       image: "",
+      error: "",
     },
     {
       id: 6,
       title: "Wife photo ID Proof",
       image: "",
+      error: "",
     },
     {
       id: 7,
       title: "Priest photo ID Proof",
       image: "",
+      error: "",
     },
     {
       id: 8,
       title: "Marriage Evidence",
       image: "",
+      error: "",
     },
   ]);
 
@@ -236,7 +249,13 @@ const MainForm = () => {
     initialValues: MerriageValue,
     validationSchema: MerriageSchema,
     onSubmit: (valuesForm1) => {
-      console.log("Form submitted with values:", valuesForm1);
+      setMerriageDetail((prevState: any) => ({
+        ...prevState,
+        location: valuesForm1?.location,
+        marriageDate: valuesForm1?.marriageDate,
+        marriageAddress: valuesForm1?.marriageAddress,
+      }));
+      console.log(merriageDetail);
     },
   });
 
@@ -251,7 +270,28 @@ const MainForm = () => {
     initialValues: HusbandValue,
     validationSchema: HusbandSchema,
     onSubmit: (valuesForm2) => {
-      console.log("Form 2 submitted with values:", valuesForm2);
+      setHusbandDetail((prevState: any) => ({
+        ...prevState,
+        surname: valuesForm2?.husbandsurname,
+        name: valuesForm2?.husbandname,
+        birthDate: valuesForm2?.husbandbirthdate,
+        age: valuesForm2?.husbandage,
+        statusBride: valuesForm2?.husbandstatus,
+        Religions: valuesForm2?.husbandreligions,
+        location: valuesForm2?.husbandlocation,
+        address: valuesForm2?.husbandaddress,
+      }));
+      setHusbandGardian((prevState: any) => ({
+        ...prevState,
+        surname: valuesForm2?.gardianSurname,
+        name: valuesForm2?.gardianName,
+        age: valuesForm2?.gardianAge,
+        location: valuesForm2?.gardianLocation,
+        address: valuesForm2?.gardianAddress,
+        landline: valuesForm2?.gardianContact,
+        mobile: valuesForm2?.gardianMobile,
+        email: valuesForm2?.gardianEmail,
+      }));
     },
   });
 
@@ -267,6 +307,28 @@ const MainForm = () => {
     validationSchema: WifeSchema,
     onSubmit: (valuesForm3) => {
       console.log("Form 3 submitted with values:", valuesForm3);
+      setWifeDetail((prevState: any) => ({
+        ...prevState,
+        surname: valuesForm3?.wifesurname,
+        name: valuesForm3?.wifename,
+        birthDate: valuesForm3?.wifebirthdate,
+        age: valuesForm3?.wifeage,
+        statusBride: valuesForm3?.wifestatus,
+        Religions: valuesForm3?.wifereligions,
+        location: valuesForm3?.wifelocation,
+        address: valuesForm3?.wifeaddress,
+      }));
+      setWifeGardian((prevState: any) => ({
+        ...prevState,
+        surname: valuesForm3?.gardianwifeSurname,
+        name: valuesForm3?.gardianwifeName,
+        age: valuesForm3?.gardianwifeAge,
+        location: valuesForm3?.gardianwifeLocation,
+        address: valuesForm3?.gardianwifeAddress,
+        landline: valuesForm3?.gardianwifeContact,
+        mobile: valuesForm3?.gardianwifeMobile,
+        email: valuesForm3?.gardianwifeEmail,
+      }));
     },
   });
 
@@ -282,6 +344,14 @@ const MainForm = () => {
     validationSchema: PriestSchema,
     onSubmit: (valuesForm4) => {
       console.log("Form 4 submitted with values:", valuesForm4);
+      setPriestDetail((prevState: any) => ({
+        ...prevState,
+        name: valuesForm4?.priestname,
+        birthDate: valuesForm4?.priestbirthdate,
+        age: valuesForm4?.priestage,
+        location: valuesForm4?.priestlocation,
+        address: valuesForm4?.prietsaddress,
+      }));
     },
   });
 
@@ -297,6 +367,13 @@ const MainForm = () => {
     validationSchema: Witness1Schema,
     onSubmit: (valuesForm5) => {
       console.log("Form 5 submitted with values:", valuesForm5);
+      setWitness1((prevState: any) => ({
+        ...prevState,
+        name: valuesForm5?.witness1detail,
+        birthDate: valuesForm5?.witness1birthdate,
+        age: valuesForm5?.witness1age,
+        address: valuesForm5?.witness1address,
+      }));
     },
   });
 
@@ -312,8 +389,39 @@ const MainForm = () => {
     validationSchema: Witness2Schema,
     onSubmit: (values) => {
       console.log("Form 6 submitted with values:", valuesForm6);
+      setWitness2((prevState: any) => ({
+        ...prevState,
+        name: valuesForm6?.witness2name,
+        birthDate: valuesForm6?.witness2birthdate,
+        age: valuesForm6?.witness2age,
+        address: valuesForm6?.witness2address,
+      }));
     },
   });
+
+  const handleSubmit = () => {
+    const updatedDocument = [...document]; // Create a copy of the document array
+
+    // Check if the document array has enough elements to match error1
+    for (let i = 0; i < updatedDocument.length; i++) {
+      if (updatedDocument[i].image === "") {
+        updatedDocument[i].error = "Please select this image";
+      } else {
+        updatedDocument[i].error = ""; // Clear the error if image is selected
+      }
+    }
+
+    // Update the state with the modified document array
+    setDocument(updatedDocument);
+  };
+
+  const handleChange = (image: any, index: number) => {
+    const data = [...document];
+    data[index].image = image;
+    setDocument(data);
+  };
+
+  const notify = () => toast("Wow so easy!");
 
   return (
     <>
@@ -352,63 +460,61 @@ const MainForm = () => {
           </Box>
         </Box>
       </div>
+      <Box sx={{ boxShadow: 3 }}>
+        <Accordion>
+          <AccordionSummary
+            id="panel1bh-header"
+            expandIcon={<ExpandMoreIcon />}
+            sx={{
+              backgroundColor: "white",
+              boxShadow: 20,
+            }}
+          >
+            Merriage Details
+          </AccordionSummary>
 
-      <Accordion
-        expanded={expanded === "panel1"}
-        onChange={handleChange("panel1")}
-      >
-        <AccordionSummary
-          id="panel1bh-header"
-          expandIcon={<ExpandMoreIcon />}
-          sx={{
-            backgroundColor: "white",
-          }}
-        >
-          Merriage Details
-        </AccordionSummary>
+          <AccordionDetails>
+            <FormGroup>
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <InputLabel>Application Date</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="applicationDate"
+                    // value={valuesForm1.applicationDate || ""}
+                    // onChange={handleChangeForm1}
+                    // onBlur={handleBlurForm1}
+                    defaultValue={currentDate}
+                    disabled
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>Location</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="location"
+                    value={valuesForm1.location}
+                    onChange={handleChangeForm1}
+                    onBlur={handleBlurForm1}
+                  />
+                  {errorsForm1.location && touchedForm1.location ? (
+                    <span style={{ color: "red" }}>{errorsForm1.location}</span>
+                  ) : null}
+                </Grid>
 
-        <AccordionDetails>
-          <FormGroup>
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <InputLabel>Application Date</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="applicationDate"
-                  // value={valuesForm1.applicationDate || ""}
-                  // onChange={handleChangeForm1}
-                  // onBlur={handleBlurForm1}
-                  defaultValue={currentDate}
-                  disabled
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel>Location</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="location"
-                  value={valuesForm1.location}
-                  onChange={handleChangeForm1}
-                  onBlur={handleBlurForm1}
-                />
-                {errorsForm1.location && touchedForm1.location ? (
-                  <span style={{ color: "red" }}>{errorsForm1.location}</span>
-                ) : null}
-              </Grid>
-
-              <Grid item xs={6}>
-                <InputLabel>Marriage Date</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="marriageDate"
-                  value={valuesForm1.marriageDate || ""}
-                  onChange={handleChangeForm1}
-                  onBlur={handleBlurForm1}
-                />
-                {/* <form className={classes.container} noValidate>
+                <Grid item xs={6}>
+                  <InputLabel>Marriage Date</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="marriageDate"
+                    value={valuesForm1.marriageDate || ""}
+                    onChange={handleChangeForm1}
+                    onBlur={handleBlurForm1}
+                  />
+                  {/* <form className={classes.container} noValidate>
                   <TextField
                     id="date"
                     name="Birthday"
@@ -424,766 +530,791 @@ const MainForm = () => {
                   />
                 </form> */}
 
-                {errorsForm1.marriageDate && touchedForm1.marriageDate ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm1.marriageDate}
-                  </span>
-                ) : null}
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel>Marriage Address</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="marriageAddress"
-                  value={valuesForm1.marriageAddress}
-                  onChange={handleChangeForm1}
-                  onBlur={handleBlurForm1}
-                />
-                {errorsForm1.marriageAddress && touchedForm1.marriageAddress ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm1.marriageAddress}
-                  </span>
-                ) : null}
-              </Grid>
-              <Button
-                onClick={() => handleSubmitForm1()}
-                variant="contained"
-                color="success"
-                sx={{ m: "20px", width: "7%" }}
-              >
-                Save
-              </Button>
-            </Grid>
-          </FormGroup>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion
-        expanded={expanded === "panel2"}
-        onChange={handleChange("panel2")}
-      >
-        <AccordionSummary
-          id="panel2bh-header"
-          expandIcon={<ExpandMoreIcon />}
-          sx={{
-            backgroundColor: "white",
-          }}
-        >
-          Husband Details
-        </AccordionSummary>
-        <AccordionDetails>
-          <FormGroup>
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <InputLabel>Surname</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="husbandsurname"
-                  value={valuesForm2.husbandsurname}
-                  onChange={handleBlurForm2}
-                  onBlur={handleBlurForm2}
-                />
-                {errorsForm2.husbandsurname && touchedForm2.husbandsurname ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm2.husbandsurname}
-                  </span>
-                ) : null}
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel>Name</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="husbandname"
-                  value={valuesForm2.husbandname}
-                  onChange={handleChangeForm2}
-                  onBlur={handleBlurForm2}
-                />
-                {errorsForm2.husbandname && touchedForm2.husbandname ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm2.husbandname}
-                  </span>
-                ) : null}
-              </Grid>
-
-              <Grid item xs={6}>
-                <InputLabel>Birth Date</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="husbandbirthdate"
-                  value={valuesForm2.husbandbirthdate || ""}
-                  onChange={handleChangeForm2}
-                  onBlur={handleBlurForm2}
-                />
-                {errorsForm2.husbandbirthdate &&
-                touchedForm2.husbandbirthdate ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm2.husbandbirthdate}
-                  </span>
-                ) : null}
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel>Age</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="husbandage"
-                  value={valuesForm2.husbandage}
-                  onChange={handleChangeForm2}
-                  onBlur={handleBlurForm2}
-                />
-                {errorsForm2.husbandage && touchedForm2.husbandage ? (
-                  <span style={{ color: "red" }}>{errorsForm2.husbandage}</span>
-                ) : null}
-              </Grid>
-              <Grid item xs={6}>
-                {/* <Typography >Merrage Certificate details</Typography> */}
-                <InputLabel>Status of Bridegroom at the time</InputLabel>
-                <Select
-                  label="Age"
-                  sx={{ width: "100%" }}
-                  name="husbandstatus"
-                  value={valuesForm2.husbandstatus}
-                  onChange={handleChangeForm2}
-                  onBlur={handleBlurForm2}
+                  {errorsForm1.marriageDate && touchedForm1.marriageDate ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm1.marriageDate}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>Marriage Address</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="marriageAddress"
+                    value={valuesForm1.marriageAddress}
+                    onChange={handleChangeForm1}
+                    onBlur={handleBlurForm1}
+                  />
+                  {errorsForm1.marriageAddress &&
+                  touchedForm1.marriageAddress ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm1.marriageAddress}
+                    </span>
+                  ) : (
+                    <div>
+                      <button onClick={notify}>Notify!</button>
+                      <ToastContainer />
+                    </div>
+                  )}
+                </Grid>
+                <Button
+                  onClick={() => handleSubmitForm1()}
+                  variant="contained"
+                  color="success"
+                  sx={{ m: "20px", width: "7%" }}
                 >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={10}>Married</MenuItem>
-                  <MenuItem value={21}>UnMarried</MenuItem>
-                  <MenuItem value={22}>Divorced</MenuItem>
-                  <MenuItem value={22}>Widower/Widow</MenuItem>
-                </Select>
-                {errorsForm2.husbandstatus && touchedForm2.husbandstatus ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm2.husbandstatus}
-                  </span>
-                ) : null}
+                  Save
+                </Button>
               </Grid>
-              <Grid item xs={6}>
-                {/* <Typography >Merrage Certificate details</Typography> */}
-                <InputLabel>Religious</InputLabel>
-                <Select
-                  label="Age"
-                  sx={{ width: "100%" }}
-                  name="husbandreligions"
-                  value={valuesForm2.husbandreligions || ""}
-                  onChange={handleChangeForm2}
-                  onBlur={handleBlurForm2}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={10}>Hindu</MenuItem>
-                  <MenuItem value={21}>Jain</MenuItem>
-                  <MenuItem value={22}>Buddhist</MenuItem>
-                  <MenuItem value={10}>Sikh</MenuItem>
-                  <MenuItem value={21}>Christian</MenuItem>
-                  <MenuItem value={22}>Parsi</MenuItem>
-                  <MenuItem value={10}>Jewish</MenuItem>
-                  <MenuItem value={21}>Muslim</MenuItem>
-                  <MenuItem value={22}>Other</MenuItem>
-                  <MenuItem value={10}>No Religion</MenuItem>
-                  <MenuItem value={21}>Spiritual-not religious</MenuItem>
-                </Select>
-                {errorsForm2.husbandreligions &&
-                touchedForm2.husbandreligions ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm2.husbandreligions}
-                  </span>
-                ) : null}
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel>Location</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="husbandlocation"
-                  value={valuesForm2.husbandlocation}
-                  onChange={handleChangeForm2}
-                  onBlur={handleBlurForm2}
-                />
-                {errorsForm2.husbandlocation && touchedForm2.husbandlocation ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm2.husbandlocation}
-                  </span>
-                ) : null}
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel>Address</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="husbandaddress"
-                  value={valuesForm2.husbandaddress}
-                  onChange={handleChangeForm2}
-                  onBlur={handleBlurForm2}
-                />
-                {errorsForm2.husbandaddress && touchedForm2.husbandaddress ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm2.husbandaddress}
-                  </span>
-                ) : null}
-              </Grid>
+            </FormGroup>
+          </AccordionDetails>
+        </Accordion>
+      </Box>
 
-              <Grid item xs={6}>
-                <h3>Guardian/Mother/Father</h3>
-                <InputLabel>Surname</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="gardianSurname"
-                  value={valuesForm2.gardianSurname || ""}
-                  onChange={handleChangeForm2}
-                  onBlur={handleBlurForm2}
-                />
-                {errorsForm2.gardianSurname && touchedForm2.gardianSurname ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm2.gardianSurname}
-                  </span>
-                ) : null}
-              </Grid>
-              <Grid item xs={6} sx={{ width: "100%", mt: "60px" }}>
-                <InputLabel>Name</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="gardianName"
-                  value={valuesForm2.gardianName || ""}
-                  onChange={handleChangeForm2}
-                  onBlur={handleBlurForm2}
-                />
-                {errorsForm2.gardianName && touchedForm2.gardianName ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm2.gardianName}
-                  </span>
-                ) : null}
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel>Age</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="gardianAge"
-                  value={valuesForm2.gardianAge}
-                  onChange={handleChangeForm2}
-                  onBlur={handleBlurForm2}
-                />
-                {errorsForm2.gardianAge && touchedForm2.gardianAge ? (
-                  <span style={{ color: "red" }}>{errorsForm2.gardianAge}</span>
-                ) : null}
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel>Location</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="gardianLocation"
-                  value={valuesForm2.gardianLocation || ""}
-                  onChange={handleChangeForm2}
-                  onBlur={handleBlurForm2}
-                />
-                {errorsForm2.gardianLocation && touchedForm2.gardianLocation ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm2.gardianLocation}
-                  </span>
-                ) : null}
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel>Address</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="gardianAddress"
-                  value={valuesForm2.gardianAddress || ""}
-                  onChange={handleChangeForm2}
-                  onBlur={handleBlurForm2}
-                />
-                {errorsForm2.gardianAddress && touchedForm2.gardianAddress ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm2.gardianAddress}
-                  </span>
-                ) : null}
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel>Contact(Landline)</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="gardianContact"
-                  value={valuesForm2.gardianContact}
-                  onChange={handleChangeForm2}
-                  onBlur={handleBlurForm2}
-                />
-                {errorsForm2.gardianContact && touchedForm2.gardianContact ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm2.gardianContact}
-                  </span>
-                ) : null}
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel>Mobile</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="gardianMobile"
-                  value={valuesForm2.gardianMobile}
-                  onChange={handleChangeForm2}
-                  onBlur={handleBlurForm2}
-                />
-                {errorsForm2.gardianMobile && touchedForm2.gardianMobile ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm2.gardianMobile}
-                  </span>
-                ) : null}
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel>Email</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="gardianEmail"
-                  value={valuesForm2.gardianEmail || ""}
-                  onChange={handleChangeForm2}
-                  onBlur={handleBlurForm2}
-                />
-                {errorsForm2.gardianEmail && touchedForm2.gardianEmail ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm2.gardianEmail}
-                  </span>
-                ) : null}
-              </Grid>
-              <Button
-                onClick={() => handleSubmitForm2()}
-                variant="contained"
-                color="success"
-                sx={{ m: "20px", width: "7%" }}
-              >
-                Save
-              </Button>
-            </Grid>
-          </FormGroup>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion
-        expanded={expanded === "panel3"}
-        onChange={handleChange("panel3")}
-      >
-        <AccordionSummary
-          id="panel3bh-header"
-          expandIcon={<ExpandMoreIcon />}
-          sx={{
-            backgroundColor: "white",
-          }}
-        >
-          Wife Details
-        </AccordionSummary>
-        <AccordionDetails>
-          <FormGroup>
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <InputLabel>Surname</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="husbandsurname"
-                  value={valuesForm3.wifesurname}
-                  onChange={handleBlurForm3}
-                  onBlur={handleBlurForm3}
-                />
-                {errorsForm3.wifesurname && touchedForm3.wifesurname ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm3.wifesurname}
-                  </span>
-                ) : null}
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel>Name</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="husbandname"
-                  value={valuesForm3.wifename}
-                  onChange={handleChangeForm3}
-                  onBlur={handleBlurForm3}
-                />
-                {errorsForm3.wifename && touchedForm3.wifename ? (
-                  <span style={{ color: "red" }}>{errorsForm3.wifename}</span>
-                ) : null}
-              </Grid>
+      <Box sx={{ boxShadow: 3 }}>
+        <Accordion>
+          <AccordionSummary
+            id="panel2bh-header"
+            expandIcon={<ExpandMoreIcon />}
+            sx={{
+              backgroundColor: "white",
+              boxShadow: 20,
+            }}
+          >
+            Husband Details
+          </AccordionSummary>
+          <AccordionDetails>
+            <FormGroup>
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <InputLabel>Surname</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="husbandsurname"
+                    value={valuesForm2.husbandsurname}
+                    onChange={handleChangeForm2}
+                    onBlur={handleBlurForm2}
+                  />
+                  {errorsForm2.husbandsurname && touchedForm2.husbandsurname ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm2.husbandsurname}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>Name</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="husbandname"
+                    value={valuesForm2.husbandname}
+                    onChange={handleChangeForm2}
+                    onBlur={handleBlurForm2}
+                  />
+                  {errorsForm2.husbandname && touchedForm2.husbandname ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm2.husbandname}
+                    </span>
+                  ) : null}
+                </Grid>
 
-              <Grid item xs={6}>
-                <InputLabel>Birth Date</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="husbandbirthdate"
-                  value={valuesForm3.wifebirthdate || ""}
-                  onChange={handleChangeForm3}
-                  onBlur={handleBlurForm3}
-                />
-                {errorsForm3.wifebirthdate && touchedForm3.wifebirthdate ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm3.wifebirthdate}
-                  </span>
-                ) : null}
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel>Age</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="husbandage"
-                  value={valuesForm3.wifeage}
-                  onChange={handleChangeForm3}
-                  onBlur={handleBlurForm3}
-                />
-                {errorsForm3.wifeage && touchedForm3.wifeage ? (
-                  <span style={{ color: "red" }}>{errorsForm3.wifeage}</span>
-                ) : null}
-              </Grid>
-              <Grid item xs={6}>
-                {/* <Typography >Merrage Certificate details</Typography> */}
-                <InputLabel>Status of Bridegroom at the time</InputLabel>
-                <Select
-                  label="Age"
-                  sx={{ width: "100%" }}
-                  name="husbandstatus"
-                  value={valuesForm3.wifestatus}
-                  onChange={handleChangeForm3}
-                  onBlur={handleBlurForm3}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={10}>Married</MenuItem>
-                  <MenuItem value={21}>UnMarried</MenuItem>
-                  <MenuItem value={22}>Divorced</MenuItem>
-                  <MenuItem value={22}>Widower/Widow</MenuItem>
-                </Select>
-                {errorsForm3.wifestatus && touchedForm3.wifestatus ? (
-                  <span style={{ color: "red" }}>{errorsForm3.wifestatus}</span>
-                ) : null}
-              </Grid>
-              <Grid item xs={6}>
-                {/* <Typography >Merrage Certificate details</Typography> */}
-                <InputLabel>Religious</InputLabel>
-                <Select
-                  label="Age"
-                  sx={{ width: "100%" }}
-                  name="husbandreligions"
-                  value={valuesForm3.wifereligions}
-                  onChange={handleChangeForm3}
-                  onBlur={handleBlurForm3}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={10}>Hindu</MenuItem>
-                  <MenuItem value={21}>Jain</MenuItem>
-                  <MenuItem value={22}>Buddhist</MenuItem>
-                  <MenuItem value={10}>Sikh</MenuItem>
-                  <MenuItem value={21}>Christian</MenuItem>
-                  <MenuItem value={22}>Parsi</MenuItem>
-                  <MenuItem value={10}>Jewish</MenuItem>
-                  <MenuItem value={21}>Muslim</MenuItem>
-                  <MenuItem value={22}>Other</MenuItem>
-                  <MenuItem value={10}>No Religion</MenuItem>
-                  <MenuItem value={21}>Spiritual-not religious</MenuItem>
-                </Select>
-                {errorsForm3.wifereligions && touchedForm3.wifereligions ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm3.wifereligions}
-                  </span>
-                ) : null}
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel>Location</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="husbandlocation"
-                  value={valuesForm3.wifelocation}
-                  onChange={handleChangeForm3}
-                  onBlur={handleBlurForm3}
-                />
-                {errorsForm3.wifelocation && touchedForm3.wifelocation ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm3.wifelocation}
-                  </span>
-                ) : null}
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel>Address</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="husbandaddress"
-                  value={valuesForm3.wifeaddress}
-                  onChange={handleChangeForm3}
-                  onBlur={handleBlurForm3}
-                />
-                {errorsForm3.wifeaddress && touchedForm3.wifeaddress ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm3.wifeaddress}
-                  </span>
-                ) : null}
-              </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>Birth Date</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="husbandbirthdate"
+                    value={valuesForm2.husbandbirthdate || ""}
+                    onChange={handleChangeForm2}
+                    onBlur={handleBlurForm2}
+                  />
+                  {errorsForm2.husbandbirthdate &&
+                  touchedForm2.husbandbirthdate ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm2.husbandbirthdate}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>Age</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="husbandage"
+                    value={valuesForm2.husbandage}
+                    onChange={handleChangeForm2}
+                    onBlur={handleBlurForm2}
+                  />
+                  {errorsForm2.husbandage && touchedForm2.husbandage ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm2.husbandage}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  {/* <Typography >Merrage Certificate details</Typography> */}
+                  <InputLabel>Status of Bridegroom at the time</InputLabel>
+                  <Select
+                    label="Age"
+                    sx={{ width: "100%" }}
+                    name="husbandstatus"
+                    value={valuesForm2.husbandstatus}
+                    onChange={handleChangeForm2}
+                    onBlur={handleBlurForm2}
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    <MenuItem value={10}>Married</MenuItem>
+                    <MenuItem value={21}>UnMarried</MenuItem>
+                    <MenuItem value={22}>Divorced</MenuItem>
+                    <MenuItem value={22}>Widower/Widow</MenuItem>
+                  </Select>
+                  {errorsForm2.husbandstatus && touchedForm2.husbandstatus ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm2.husbandstatus}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  {/* <Typography >Merrage Certificate details</Typography> */}
+                  <InputLabel>Religious</InputLabel>
+                  <Select
+                    label="Age"
+                    sx={{ width: "100%" }}
+                    name="husbandreligions"
+                    value={valuesForm2.husbandreligions || ""}
+                    onChange={handleChangeForm2}
+                    onBlur={handleBlurForm2}
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    <MenuItem value={10}>Hindu</MenuItem>
+                    <MenuItem value={21}>Jain</MenuItem>
+                    <MenuItem value={22}>Buddhist</MenuItem>
+                    <MenuItem value={10}>Sikh</MenuItem>
+                    <MenuItem value={21}>Christian</MenuItem>
+                    <MenuItem value={22}>Parsi</MenuItem>
+                    <MenuItem value={10}>Jewish</MenuItem>
+                    <MenuItem value={21}>Muslim</MenuItem>
+                    <MenuItem value={22}>Other</MenuItem>
+                    <MenuItem value={10}>No Religion</MenuItem>
+                    <MenuItem value={21}>Spiritual-not religious</MenuItem>
+                  </Select>
+                  {errorsForm2.husbandreligions &&
+                  touchedForm2.husbandreligions ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm2.husbandreligions}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>Location</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="husbandlocation"
+                    value={valuesForm2.husbandlocation}
+                    onChange={handleChangeForm2}
+                    onBlur={handleBlurForm2}
+                  />
+                  {errorsForm2.husbandlocation &&
+                  touchedForm2.husbandlocation ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm2.husbandlocation}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>Address</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="husbandaddress"
+                    value={valuesForm2.husbandaddress}
+                    onChange={handleChangeForm2}
+                    onBlur={handleBlurForm2}
+                  />
+                  {errorsForm2.husbandaddress && touchedForm2.husbandaddress ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm2.husbandaddress}
+                    </span>
+                  ) : null}
+                </Grid>
 
-              <Grid item xs={6}>
-                <h3>Guardian/Mother/Father</h3>
-                <InputLabel>Surname</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="gardianSurname"
-                  value={valuesForm3.gardianwifeSurname}
-                  onChange={handleChangeForm3}
-                  onBlur={handleBlurForm3}
-                />
-                {errorsForm3.gardianwifeSurname &&
-                touchedForm3.gardianwifeSurname ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm3.gardianwifeSurname}
-                  </span>
-                ) : null}
+                <Grid item xs={6}>
+                  <h3>Guardian/Mother/Father</h3>
+                  <InputLabel>Surname</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="gardianSurname"
+                    value={valuesForm2.gardianSurname || ""}
+                    onChange={handleChangeForm2}
+                    onBlur={handleBlurForm2}
+                  />
+                  {errorsForm2.gardianSurname && touchedForm2.gardianSurname ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm2.gardianSurname}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6} sx={{ width: "100%", mt: "60px" }}>
+                  <InputLabel>Name</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="gardianName"
+                    value={valuesForm2.gardianName || ""}
+                    onChange={handleChangeForm2}
+                    onBlur={handleBlurForm2}
+                  />
+                  {errorsForm2.gardianName && touchedForm2.gardianName ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm2.gardianName}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>Age</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="gardianAge"
+                    value={valuesForm2.gardianAge}
+                    onChange={handleChangeForm2}
+                    onBlur={handleBlurForm2}
+                  />
+                  {errorsForm2.gardianAge && touchedForm2.gardianAge ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm2.gardianAge}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>Location</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="gardianLocation"
+                    value={valuesForm2.gardianLocation || ""}
+                    onChange={handleChangeForm2}
+                    onBlur={handleBlurForm2}
+                  />
+                  {errorsForm2.gardianLocation &&
+                  touchedForm2.gardianLocation ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm2.gardianLocation}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>Address</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="gardianAddress"
+                    value={valuesForm2.gardianAddress || ""}
+                    onChange={handleChangeForm2}
+                    onBlur={handleBlurForm2}
+                  />
+                  {errorsForm2.gardianAddress && touchedForm2.gardianAddress ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm2.gardianAddress}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>Contact(Landline)</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="gardianContact"
+                    value={valuesForm2.gardianContact}
+                    onChange={handleChangeForm2}
+                    onBlur={handleBlurForm2}
+                  />
+                  {errorsForm2.gardianContact && touchedForm2.gardianContact ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm2.gardianContact}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>Mobile</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="gardianMobile"
+                    value={valuesForm2.gardianMobile}
+                    onChange={handleChangeForm2}
+                    onBlur={handleBlurForm2}
+                  />
+                  {errorsForm2.gardianMobile && touchedForm2.gardianMobile ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm2.gardianMobile}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>Email</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="gardianEmail"
+                    value={valuesForm2.gardianEmail || ""}
+                    onChange={handleChangeForm2}
+                    onBlur={handleBlurForm2}
+                  />
+                  {errorsForm2.gardianEmail && touchedForm2.gardianEmail ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm2.gardianEmail}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Button
+                  onClick={() => handleSubmitForm2()}
+                  variant="contained"
+                  color="success"
+                  sx={{ m: "20px", width: "7%" }}
+                >
+                  Save
+                </Button>
               </Grid>
-              <Grid item xs={6} sx={{ width: "100%", mt: "60px" }}>
-                <InputLabel>Name</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="gardianName"
-                  value={valuesForm3.gardianwifeName}
-                  onChange={handleChangeForm3}
-                  onBlur={handleBlurForm3}
-                />
-                {errorsForm3.gardianwifeName && touchedForm3.gardianwifeName ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm3.gardianwifeName}
-                  </span>
-                ) : null}
+            </FormGroup>
+          </AccordionDetails>
+        </Accordion>
+      </Box>
+
+      <Box sx={{ boxShadow: 3 }}>
+        <Accordion>
+          <AccordionSummary
+            id="panel3bh-header"
+            expandIcon={<ExpandMoreIcon />}
+            sx={{
+              backgroundColor: "white",
+              boxShadow: 20,
+            }}
+          >
+            Wife Details
+          </AccordionSummary>
+          <AccordionDetails>
+            <FormGroup>
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <InputLabel>Surname</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="husbandsurname"
+                    value={valuesForm3.wifesurname}
+                    onChange={handleBlurForm3}
+                    onBlur={handleBlurForm3}
+                  />
+                  {errorsForm3.wifesurname && touchedForm3.wifesurname ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm3.wifesurname}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>Name</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="husbandname"
+                    value={valuesForm3.wifename}
+                    onChange={handleChangeForm3}
+                    onBlur={handleBlurForm3}
+                  />
+                  {errorsForm3.wifename && touchedForm3.wifename ? (
+                    <span style={{ color: "red" }}>{errorsForm3.wifename}</span>
+                  ) : null}
+                </Grid>
+
+                <Grid item xs={6}>
+                  <InputLabel>Birth Date</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="husbandbirthdate"
+                    value={valuesForm3.wifebirthdate || ""}
+                    onChange={handleChangeForm3}
+                    onBlur={handleBlurForm3}
+                  />
+                  {errorsForm3.wifebirthdate && touchedForm3.wifebirthdate ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm3.wifebirthdate}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>Age</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="husbandage"
+                    value={valuesForm3.wifeage}
+                    onChange={handleChangeForm3}
+                    onBlur={handleBlurForm3}
+                  />
+                  {errorsForm3.wifeage && touchedForm3.wifeage ? (
+                    <span style={{ color: "red" }}>{errorsForm3.wifeage}</span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  {/* <Typography >Merrage Certificate details</Typography> */}
+                  <InputLabel>Status of Bridegroom at the time</InputLabel>
+                  <Select
+                    label="Age"
+                    sx={{ width: "100%" }}
+                    name="husbandstatus"
+                    value={valuesForm3.wifestatus}
+                    onChange={handleChangeForm3}
+                    onBlur={handleBlurForm3}
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    <MenuItem value={10}>Married</MenuItem>
+                    <MenuItem value={21}>UnMarried</MenuItem>
+                    <MenuItem value={22}>Divorced</MenuItem>
+                    <MenuItem value={22}>Widower/Widow</MenuItem>
+                  </Select>
+                  {errorsForm3.wifestatus && touchedForm3.wifestatus ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm3.wifestatus}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  {/* <Typography >Merrage Certificate details</Typography> */}
+                  <InputLabel>Religious</InputLabel>
+                  <Select
+                    label="Age"
+                    sx={{ width: "100%" }}
+                    name="husbandreligions"
+                    value={valuesForm3.wifereligions}
+                    onChange={handleChangeForm3}
+                    onBlur={handleBlurForm3}
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    <MenuItem value={10}>Hindu</MenuItem>
+                    <MenuItem value={21}>Jain</MenuItem>
+                    <MenuItem value={22}>Buddhist</MenuItem>
+                    <MenuItem value={10}>Sikh</MenuItem>
+                    <MenuItem value={21}>Christian</MenuItem>
+                    <MenuItem value={22}>Parsi</MenuItem>
+                    <MenuItem value={10}>Jewish</MenuItem>
+                    <MenuItem value={21}>Muslim</MenuItem>
+                    <MenuItem value={22}>Other</MenuItem>
+                    <MenuItem value={10}>No Religion</MenuItem>
+                    <MenuItem value={21}>Spiritual-not religious</MenuItem>
+                  </Select>
+                  {errorsForm3.wifereligions && touchedForm3.wifereligions ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm3.wifereligions}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>Location</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="husbandlocation"
+                    value={valuesForm3.wifelocation}
+                    onChange={handleChangeForm3}
+                    onBlur={handleBlurForm3}
+                  />
+                  {errorsForm3.wifelocation && touchedForm3.wifelocation ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm3.wifelocation}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>Address</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="husbandaddress"
+                    value={valuesForm3.wifeaddress}
+                    onChange={handleChangeForm3}
+                    onBlur={handleBlurForm3}
+                  />
+                  {errorsForm3.wifeaddress && touchedForm3.wifeaddress ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm3.wifeaddress}
+                    </span>
+                  ) : null}
+                </Grid>
+
+                <Grid item xs={6}>
+                  <h3>Guardian/Mother/Father</h3>
+                  <InputLabel>Surname</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="gardianSurname"
+                    value={valuesForm3.gardianwifeSurname}
+                    onChange={handleChangeForm3}
+                    onBlur={handleBlurForm3}
+                  />
+                  {errorsForm3.gardianwifeSurname &&
+                  touchedForm3.gardianwifeSurname ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm3.gardianwifeSurname}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6} sx={{ width: "100%", mt: "60px" }}>
+                  <InputLabel>Name</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="gardianName"
+                    value={valuesForm3.gardianwifeName}
+                    onChange={handleChangeForm3}
+                    onBlur={handleBlurForm3}
+                  />
+                  {errorsForm3.gardianwifeName &&
+                  touchedForm3.gardianwifeName ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm3.gardianwifeName}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>Age</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="gardianAge"
+                    value={valuesForm3.gardianwifeAge}
+                    onChange={handleChangeForm3}
+                    onBlur={handleBlurForm3}
+                  />
+                  {errorsForm3.gardianwifeAge && touchedForm3.gardianwifeAge ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm3.gardianwifeAge}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>Location</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="gardianLocation"
+                    value={valuesForm3.gardianwifeLocation}
+                    onChange={handleChangeForm3}
+                    onBlur={handleBlurForm3}
+                  />
+                  {errorsForm3.gardianwifeLocation &&
+                  touchedForm3.gardianwifeLocation ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm3.gardianwifeLocation}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>Address</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="gardianAddress"
+                    value={valuesForm3.gardianwifeAddress}
+                    onChange={handleChangeForm3}
+                    onBlur={handleBlurForm3}
+                  />
+                  {errorsForm3.gardianwifeAddress &&
+                  touchedForm3.gardianwifeAddress ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm3.gardianwifeAddress}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>Contact(Landline)</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="gardianContact"
+                    value={valuesForm3.gardianwifeContact}
+                    onChange={handleChangeForm3}
+                    onBlur={handleBlurForm3}
+                  />
+                  {errorsForm3.gardianwifeContact &&
+                  touchedForm3.gardianwifeContact ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm3.gardianwifeContact}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>Mobile</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="gardianMobile"
+                    value={valuesForm3.gardianwifeMobile}
+                    onChange={handleChangeForm3}
+                    onBlur={handleBlurForm3}
+                  />
+                  {errorsForm3.gardianwifeMobile &&
+                  touchedForm3.gardianwifeMobile ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm3.gardianwifeMobile}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>Email</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="gardianEmail"
+                    value={valuesForm3.gardianwifeEmail}
+                    onChange={handleChangeForm3}
+                    onBlur={handleBlurForm3}
+                  />
+                  {errorsForm3.gardianwifeEmail &&
+                  touchedForm3.gardianwifeEmail ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm3.gardianwifeEmail}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Button
+                  onClick={() => handleSubmitForm3()}
+                  variant="contained"
+                  color="success"
+                  sx={{ m: "20px", width: "7%" }}
+                >
+                  Save
+                </Button>
               </Grid>
-              <Grid item xs={6}>
-                <InputLabel>Age</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="gardianAge"
-                  value={valuesForm3.gardianwifeAge}
-                  onChange={handleChangeForm3}
-                  onBlur={handleBlurForm3}
-                />
-                {errorsForm3.gardianwifeAge && touchedForm3.gardianwifeAge ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm3.gardianwifeAge}
-                  </span>
-                ) : null}
+            </FormGroup>
+          </AccordionDetails>
+        </Accordion>
+      </Box>
+
+      <Box sx={{ boxShadow: 3 }}>
+        <Accordion>
+          <AccordionSummary
+            id="panel4bh-header"
+            expandIcon={<ExpandMoreIcon />}
+            sx={{
+              backgroundColor: "white",
+              boxShadow: 20,
+            }}
+          >
+            Priest Details
+          </AccordionSummary>
+          <AccordionDetails>
+            <FormGroup>
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <InputLabel>Name</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="priestname"
+                    value={valuesForm4.priestname}
+                    onChange={handleChangeForm4}
+                    onBlur={handleBlurForm4}
+                  />
+                  {errorsForm4.priestname && touchedForm4.priestname ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm4.priestname}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>Date of Birth</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="priestbirthdate"
+                    value={valuesForm4.priestbirthdate}
+                    onChange={handleChangeForm4}
+                    onBlur={handleBlurForm4}
+                  />
+                  {errorsForm4.priestbirthdate &&
+                  touchedForm4.priestbirthdate ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm4.priestbirthdate}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>Age</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="priestage"
+                    value={valuesForm4.priestage}
+                    onChange={handleChangeForm4}
+                    onBlur={handleBlurForm4}
+                  />
+                  {errorsForm4.priestage && touchedForm4.priestage ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm4.priestage}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>Priest Location</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="priestlocation"
+                    value={valuesForm4.priestlocation}
+                    onChange={handleChangeForm4}
+                    onBlur={handleBlurForm4}
+                  />
+                  {errorsForm4.priestlocation && touchedForm4.priestlocation ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm4.priestlocation}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={12}>
+                  <InputLabel>Address</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="prietsaddress"
+                    value={valuesForm4.prietsaddress}
+                    onChange={handleChangeForm4}
+                    onBlur={handleBlurForm4}
+                  />
+                  {errorsForm4.prietsaddress && touchedForm4.prietsaddress ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm4.prietsaddress}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Button
+                  onClick={() => handleSubmitForm4()}
+                  variant="contained"
+                  color="success"
+                  sx={{ m: "20px", width: "7%" }}
+                >
+                  Save
+                </Button>
               </Grid>
-              <Grid item xs={6}>
-                <InputLabel>Location</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="gardianLocation"
-                  value={valuesForm3.gardianwifeLocation}
-                  onChange={handleChangeForm3}
-                  onBlur={handleBlurForm3}
-                />
-                {errorsForm3.gardianwifeLocation &&
-                touchedForm3.gardianwifeLocation ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm3.gardianwifeLocation}
-                  </span>
-                ) : null}
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel>Address</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="gardianAddress"
-                  value={valuesForm3.gardianwifeAddress}
-                  onChange={handleChangeForm3}
-                  onBlur={handleBlurForm3}
-                />
-                {errorsForm3.gardianwifeAddress &&
-                touchedForm3.gardianwifeAddress ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm3.gardianwifeAddress}
-                  </span>
-                ) : null}
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel>Contact(Landline)</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="gardianContact"
-                  value={valuesForm3.gardianwifeContact}
-                  onChange={handleChangeForm3}
-                  onBlur={handleBlurForm3}
-                />
-                {errorsForm3.gardianwifeContact &&
-                touchedForm3.gardianwifeContact ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm3.gardianwifeContact}
-                  </span>
-                ) : null}
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel>Mobile</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="gardianMobile"
-                  value={valuesForm3.gardianwifeMobile}
-                  onChange={handleChangeForm3}
-                  onBlur={handleBlurForm3}
-                />
-                {errorsForm3.gardianwifeMobile &&
-                touchedForm3.gardianwifeMobile ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm3.gardianwifeMobile}
-                  </span>
-                ) : null}
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel>Email</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="gardianEmail"
-                  value={valuesForm3.gardianwifeEmail}
-                  onChange={handleChangeForm3}
-                  onBlur={handleBlurForm3}
-                />
-                {errorsForm3.gardianwifeEmail &&
-                touchedForm3.gardianwifeEmail ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm3.gardianwifeEmail}
-                  </span>
-                ) : null}
-              </Grid>
-              <Button
-                onClick={() => handleSubmitForm3()}
-                variant="contained"
-                color="success"
-                sx={{ m: "20px", width: "7%" }}
-              >
-                Save
-              </Button>
-            </Grid>
-          </FormGroup>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion
-        expanded={expanded === "panel4"}
-        onChange={handleChange("panel4")}
-      >
-        <AccordionSummary
-          id="panel4bh-header"
-          expandIcon={<ExpandMoreIcon />}
-          sx={{
-            backgroundColor: "white",
-          }}
-        >
-          Priest Details
-        </AccordionSummary>
-        <AccordionDetails>
-          <FormGroup>
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <InputLabel>Name</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="priestname"
-                  value={valuesForm4.priestname}
-                  onChange={handleChangeForm4}
-                  onBlur={handleBlurForm4}
-                />
-                {errorsForm4.priestname && touchedForm4.priestname ? (
-                  <span style={{ color: "red" }}>{errorsForm4.priestname}</span>
-                ) : null}
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel>Date of Birth</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="priestbirthdate"
-                  value={valuesForm4.priestbirthdate}
-                  onChange={handleChangeForm4}
-                  onBlur={handleBlurForm4}
-                />
-                {errorsForm4.priestbirthdate && touchedForm4.priestbirthdate ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm4.priestbirthdate}
-                  </span>
-                ) : null}
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel>Age</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="priestage"
-                  value={valuesForm4.priestage}
-                  onChange={handleChangeForm4}
-                  onBlur={handleBlurForm4}
-                />
-                {errorsForm4.priestage && touchedForm4.priestage ? (
-                  <span style={{ color: "red" }}>{errorsForm4.priestage}</span>
-                ) : null}
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel>Priest Location</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="priestlocation"
-                  value={valuesForm4.priestlocation}
-                  onChange={handleChangeForm4}
-                  onBlur={handleBlurForm4}
-                />
-                {errorsForm4.priestlocation && touchedForm4.priestlocation ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm4.priestlocation}
-                  </span>
-                ) : null}
-              </Grid>
-              <Grid item xs={12}>
-                <InputLabel>Address</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="prietsaddress"
-                  value={valuesForm4.prietsaddress}
-                  onChange={handleChangeForm4}
-                  onBlur={handleBlurForm4}
-                />
-                {errorsForm4.prietsaddress && touchedForm4.prietsaddress ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm4.prietsaddress}
-                  </span>
-                ) : null}
-              </Grid>
-              <Button
-                onClick={() => handleSubmitForm4()}
-                variant="contained"
-                color="success"
-                sx={{ m: "20px", width: "7%" }}
-              >
-                Save
-              </Button>
-            </Grid>
-          </FormGroup>
-        </AccordionDetails>
-      </Accordion>
+            </FormGroup>
+          </AccordionDetails>
+        </Accordion>
+      </Box>
+
       <Box sx={{ boxShadow: 3 }}>
         <Accordion>
           <AccordionSummary
@@ -1278,118 +1409,136 @@ const MainForm = () => {
           </AccordionDetails>
         </Accordion>
       </Box>
+      <Box sx={{ boxShadow: 3 }}>
+        <Accordion>
+          <AccordionSummary
+            id="panel6bh-header"
+            expandIcon={<ExpandMoreIcon />}
+            sx={{
+              backgroundColor: "white",
+              boxShadow: 20,
+            }}
+          >
+            Witness-2 Details
+          </AccordionSummary>
+          <AccordionDetails>
+            <FormGroup>
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <InputLabel>Name</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="witness2name"
+                    value={valuesForm6.witness2name}
+                    onChange={handleChangeForm6}
+                    onBlur={handleBlurForm6}
+                  />
+                  {errorsForm6.witness2name && touchedForm6.witness2name ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm6.witness2name}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>Date of Birth</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="witness2birthdate"
+                    value={valuesForm6.witness2birthdate}
+                    onChange={handleChangeForm6}
+                    onBlur={handleBlurForm6}
+                  />
+                  {errorsForm6.witness2birthdate &&
+                  touchedForm6.witness2birthdate ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm6.witness2birthdate}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>Age</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="witness2age"
+                    value={valuesForm6.witness2age}
+                    onChange={handleChangeForm6}
+                    onBlur={handleBlurForm6}
+                  />
+                  {errorsForm6.witness2age && touchedForm6.witness2age ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm6.witness2age}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>Address</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="witness2address"
+                    value={valuesForm6.witness2address}
+                    onChange={handleChangeForm6}
+                    onBlur={handleBlurForm6}
+                  />
+                  {errorsForm6.witness2address &&
+                  touchedForm6.witness2address ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm6.witness2address}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Button
+                  onClick={() => handleSubmitForm6()}
+                  variant="contained"
+                  color="success"
+                  sx={{ m: "20px", width: "7%" }}
+                >
+                  Save
+                </Button>
+              </Grid>
+            </FormGroup>
+          </AccordionDetails>
+        </Accordion>
+      </Box>
+      <Box sx={{ boxShadow: 3 }}>
+        <Accordion>
+          <AccordionSummary
+            id="panel7bh-header"
+            expandIcon={<ExpandMoreIcon />}
+            sx={{
+              backgroundColor: "white",
+              boxShadow: 20,
+            }}
+          >
+            Attachment Document
+          </AccordionSummary>
+          <center>
+            <AccordionDetails>
+              <div className="row">
+                {document.map((data, index) => (
+                  <div className="col-md-4" key={index}>
+                    <Preview {...data} onChange={handleChange} />
+                    <span style={{ color: "red" }}>{data.error}</span>
+                  </div>
+                ))}
+              </div>
+            </AccordionDetails>
+          </center>
+          <Box textAlign="center">
+            <Button
+              onClick={() => handleSubmit()}
+              variant="contained"
+              sx={{ width: "10%", height: "50px", mt: "20px", mb: "20px" }}
+            >
+              Submit
+            </Button>
+          </Box>
+        </Accordion>
+      </Box>
 
-      <Accordion>
-        <AccordionSummary
-          id="panel6bh-header"
-          expandIcon={<ExpandMoreIcon />}
-          sx={{
-            backgroundColor: "white",
-          }}
-        >
-          Witness-2 Details
-        </AccordionSummary>
-        <AccordionDetails>
-          <FormGroup>
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <InputLabel>Name</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="witness2name"
-                  value={valuesForm6.witness2name}
-                  onChange={handleChangeForm6}
-                  onBlur={handleBlurForm6}
-                />
-                {errorsForm6.witness2name && touchedForm6.witness2name ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm6.witness2name}
-                  </span>
-                ) : null}
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel>Date of Birth</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="witness2birthdate"
-                  value={valuesForm6.witness2birthdate}
-                  onChange={handleChangeForm6}
-                  onBlur={handleBlurForm6}
-                />
-                {errorsForm6.witness2birthdate &&
-                touchedForm6.witness2birthdate ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm6.witness2birthdate}
-                  </span>
-                ) : null}
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel>Age</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="witness2age"
-                  value={valuesForm6.witness2age}
-                  onChange={handleChangeForm6}
-                  onBlur={handleBlurForm6}
-                />
-                {errorsForm6.witness2age && touchedForm6.witness2age ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm6.witness2age}
-                  </span>
-                ) : null}
-              </Grid>
-              <Grid item xs={6}>
-                <InputLabel>Address</InputLabel>
-                <TextField
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  name="witness2address"
-                  value={valuesForm6.witness2address}
-                  onChange={handleChangeForm6}
-                  onBlur={handleBlurForm6}
-                />
-                {errorsForm6.witness2address && touchedForm6.witness2address ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm6.witness2address}
-                  </span>
-                ) : null}
-              </Grid>
-              <Button
-                onClick={() => handleSubmitForm6()}
-                variant="contained"
-                color="success"
-                sx={{ m: "20px", width: "7%" }}
-              >
-                Save
-              </Button>
-            </Grid>
-          </FormGroup>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion
-        expanded={expanded === "panel7"}
-        onChange={handleChange("panel7")}
-      >
-        <AccordionSummary
-          id="panel7bh-header"
-          expandIcon={<ExpandMoreIcon />}
-          sx={{
-            backgroundColor: "white",
-          }}
-        >
-          Attachment Document
-        </AccordionSummary>
-        <AccordionDetails>
-          <>
-            {document.map((data, index) => (
-              <Preview {...data} key={index} onChange={handleChange} />
-            ))}
-          </>
-        </AccordionDetails>
-      </Accordion>
       <Box textAlign="center">
         <Button
           variant="contained"

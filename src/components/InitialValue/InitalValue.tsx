@@ -65,3 +65,8 @@ export const Witness2Value = {
   witness2age: 0,
   witness2address: "",
 };
+
+export const login = {
+  email: "",
+  password: "",
+};

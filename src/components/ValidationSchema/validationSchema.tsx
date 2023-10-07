@@ -20,7 +20,7 @@ export const HusbandSchema = Yup.object({
   gardianAge: Yup.number().required("Gardian Age is required"),
   gardianLocation: Yup.string().required("Gardian Location is required"),
   gardianAddress: Yup.string().required("Gardian Address is required"),
-  gardianContact: Yup.number().max(8).required("Gardian Contact is required"),
+  gardianContact: Yup.number().required("Gardian Contact is required"),
   gardianMobile: Yup.string().max(10).required("Gardian Mobile is required"),
   gardianEmail: Yup.string().email().required("Not proper email"),
 });
@@ -68,4 +68,9 @@ export const Witness2Schema = Yup.object({
   witness2birthdate: Yup.string().required("Witness-2 birthdate is required"),
   witness2age: Yup.number().min(18).required("Witness-2 age is required"),
   witness2address: Yup.string().required("Witness-2 Address is required"),
+});
+
+export const loginSchema = Yup.object({
+  email: Yup.string().required("Email is required"),
+  password: Yup.string().min(7).max(12).required("Password is required"),
 });
