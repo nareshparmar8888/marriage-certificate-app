@@ -1,9 +1,8 @@
 import * as Yup from "yup";
 
 export const MerriageSchema = Yup.object({
-  applicationDate: Yup.date().required("Application Date is required"),
   location: Yup.string().required("Location is required"),
-  marriageDate: Yup.date().required("Marriage Date is required"),
+  marriageDate: Yup.string().required("Marriage Date is required"),
   marriageAddress: Yup.string().required("Marriage Address is required"),
 });
 
@@ -11,9 +10,9 @@ export const HusbandSchema = Yup.object({
   husbandsurname: Yup.string().required("Husband surname is required"),
   husbandname: Yup.string().required("Husband name is required"),
   husbandbirthdate: Yup.string().required("Husband birthdate is required"),
-  husbandreligions: Yup.number().required("Husband religions is required"),
+  husbandreligions: Yup.string().required("Husband religions is required"),
   husbandage: Yup.number().required("Husband age is required"),
-  husbandstatus: Yup.number().required("Husband status is required"),
+  husbandstatus: Yup.string().required("Husband status is required"),
   husbandlocation: Yup.string().required("Husband Location is required"),
   husbandaddress: Yup.string().required("Husband address is required"),
   gardianSurname: Yup.string().required("Gardian surname is required"),
@@ -30,9 +29,9 @@ export const WifeSchema = Yup.object({
   wifesurname: Yup.string().required("Wife surname is required"),
   wifename: Yup.string().required("Wife name is required"),
   wifebirthdate: Yup.string().required("Wife birthdate is required"),
-  wifereligions: Yup.number().required("Wife religions is required"),
+  wifereligions: Yup.string().required("Wife religions is required"),
   wifeage: Yup.number().required("Wife age is required"),
-  wifestatus: Yup.number().required("Wife status is required"),
+  wifestatus: Yup.string().required("Wife status is required"),
   wifelocation: Yup.string().required("Wife Location is required"),
   wifeaddress: Yup.string().required("Wife address is required"),
   gardianwifeSurname: Yup.string().required("Gardian surname is required"),

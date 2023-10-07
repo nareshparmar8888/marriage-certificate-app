@@ -1,7 +1,6 @@
 import { number } from "yup";
 
 export const MerriageValue = {
-  applicationDate: "",
   location: "",
   marriageDate: "",
   marriageAddress: "",
@@ -10,26 +9,26 @@ export const MerriageValue = {
 export const HusbandValue = {
   husbandsurname: "",
   husbandname: "",
-  husbandbirthdate: null,
+  husbandbirthdate: "",
   husbandreligions: "",
-  husbandage: 0,
+  husbandage: "",
   husbandstatus: "",
   husbandlocation: "",
   husbandaddress: "",
   gardianSurname: "",
   gardianName: "",
-  gardianAge: 0,
+  gardianAge: "",
   gardianLocation: "",
   gardianAddress: "",
-  gardianContact: 0,
-  gardianMobile: 0,
+  gardianContact: "",
+  gardianMobile: "",
   gardianEmail: "",
 };
 
 export const WifeValue = {
   wifesurname: "",
   wifename: "",
-  wifebirthdate: null,
+  wifebirthdate: "",
   wifereligions: "",
   wifeage: 0,
   wifestatus: "",
@@ -47,7 +46,7 @@ export const WifeValue = {
 
 export const PrietsValue = {
   priestname: "",
-  priestbirthdate: null,
+  priestbirthdate: "",
   priestage: 0,
   priestlocation: "",
   prietsaddress: "",
@@ -55,14 +54,14 @@ export const PrietsValue = {
 
 export const Witness1Value = {
   witness1detail: "",
-  witness1birthdate: null,
+  witness1birthdate: "",
   witness1age: 0,
   witness1address: "",
 };
 
 export const Witness2Value = {
   witness2name: "",
-  witness2birthdate: null,
+  witness2birthdate: "",
   witness2age: 0,
   witness2address: "",
 };

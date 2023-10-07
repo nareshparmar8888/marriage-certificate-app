@@ -4,29 +4,24 @@ import {
   Grid,
   TextField,
   FormGroup,
-  FormControl,
   InputLabel,
   Select,
   MenuItem,
   Box,
-  Input,
 } from "@mui/material";
-
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-
-import Typography from "@mui/material/Typography";
+import "react-datepicker/dist/react-datepicker.css";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Button from "@mui/material/Button";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Header from "../Shared/Header/Header";
 import Footer from "../Shared/Footer/footer";
-import { ErrorMessage, Formik, useFormik } from "formik";
-import * as Yup from "yup";
-import { DatePicker } from "@material-ui/pickers";
+import { useFormik } from "formik";
+import File from "../FileUpload/File";
+
 import {
   HusbandSchema,
   MerriageSchema,
@@ -35,6 +30,7 @@ import {
   Witness1Schema,
   Witness2Schema,
 } from "../ValidationSchema/validationSchema";
+
 import {
   HusbandValue,
   MerriageValue,
@@ -43,9 +39,20 @@ import {
   Witness1Value,
   Witness2Value,
 } from "../InitialValue/InitalValue";
-import File from "../FileUpload/File";
-import Preview from "./Preview";
-import { Details } from "@material-ui/icons";
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    container: {
+      display: "flex",
+      flexWrap: "wrap",
+    },
+    textField: {
+      marginLeft: theme.spacing(1),
+      marginRight: theme.spacing(1),
+      width: 200,
+    },
+  })
+);
 
 interface merriage {
   location: string;
@@ -139,6 +146,13 @@ const MainForm = () => {
     },
   ]);
 
+  const classes = useStyles();
+  const date = new Date();
+  let day = date.getDate();
+  let month = date.getMonth() + 1;
+  let year = date.getFullYear();
+  let currentDate = `${day}-${month}-${year}`;
+
   const [merriageDetail, setMerriageDetail] = useState<merriage>({
     location: "",
     marriageDate: null,
@@ -221,8 +235,8 @@ const MainForm = () => {
   } = useFormik({
     initialValues: MerriageValue,
     validationSchema: MerriageSchema,
-    onSubmit: (values) => {
-      console.log("Form submitted with values:", values);
+    onSubmit: (valuesForm1) => {
+      console.log("Form submitted with values:", valuesForm1);
     },
   });
 
@@ -236,7 +250,7 @@ const MainForm = () => {
   } = useFormik({
     initialValues: HusbandValue,
     validationSchema: HusbandSchema,
-    onSubmit: (values) => {
+    onSubmit: (valuesForm2) => {
       console.log("Form 2 submitted with values:", valuesForm2);
     },
   });
@@ -251,7 +265,7 @@ const MainForm = () => {
   } = useFormik({
     initialValues: WifeValue,
     validationSchema: WifeSchema,
-    onSubmit: (values) => {
+    onSubmit: (valuesForm3) => {
       console.log("Form 3 submitted with values:", valuesForm3);
     },
   });
@@ -266,7 +280,7 @@ const MainForm = () => {
   } = useFormik({
     initialValues: PrietsValue,
     validationSchema: PriestSchema,
-    onSubmit: (values) => {
+    onSubmit: (valuesForm4) => {
       console.log("Form 4 submitted with values:", valuesForm4);
     },
   });
@@ -281,7 +295,7 @@ const MainForm = () => {
   } = useFormik({
     initialValues: Witness1Value,
     validationSchema: Witness1Schema,
-    onSubmit: (values) => {
+    onSubmit: (valuesForm5) => {
       console.log("Form 5 submitted with values:", valuesForm5);
     },
   });
@@ -300,12 +314,6 @@ const MainForm = () => {
       console.log("Form 6 submitted with values:", valuesForm6);
     },
   });
-
-  const handleChange = (image: any, index: number) => {
-    const data = [...document];
-    data[index].image = image;
-    setDocument(data);
-  };
 
   return (
     <>
@@ -345,7 +353,10 @@ const MainForm = () => {
         </Box>
       </div>
 
-      <Accordion>
+      <Accordion
+        expanded={expanded === "panel1"}
+        onChange={handleChange("panel1")}
+      >
         <AccordionSummary
           id="panel1bh-header"
           expandIcon={<ExpandMoreIcon />}
@@ -365,15 +376,12 @@ const MainForm = () => {
                   variant="outlined"
                   sx={{ width: "100%" }}
                   name="applicationDate"
-                  value={valuesForm1.applicationDate || ""}
-                  onChange={handleChangeForm1}
-                  onBlur={handleBlurForm1}
+                  // value={valuesForm1.applicationDate || ""}
+                  // onChange={handleChangeForm1}
+                  // onBlur={handleBlurForm1}
+                  defaultValue={currentDate}
+                  disabled
                 />
-                {errorsForm1.applicationDate && touchedForm1.applicationDate ? (
-                  <span style={{ color: "red" }}>
-                    {errorsForm1.applicationDate}
-                  </span>
-                ) : null}
               </Grid>
               <Grid item xs={6}>
                 <InputLabel>Location</InputLabel>
@@ -400,6 +408,22 @@ const MainForm = () => {
                   onChange={handleChangeForm1}
                   onBlur={handleBlurForm1}
                 />
+                {/* <form className={classes.container} noValidate>
+                  <TextField
+                    id="date"
+                    name="Birthday"
+                    type="date"
+                    className={classes.textField}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    style={{ width: "36.7rem" }}
+                    value={valuesForm1.marriageDate}
+                    onChange={handleChangeForm1}
+                    onBlur={handleBlurForm1}
+                  />
+                </form> */}
+
                 {errorsForm1.marriageDate && touchedForm1.marriageDate ? (
                   <span style={{ color: "red" }}>
                     {errorsForm1.marriageDate}
@@ -434,7 +458,10 @@ const MainForm = () => {
           </FormGroup>
         </AccordionDetails>
       </Accordion>
-      <Accordion>
+      <Accordion
+        expanded={expanded === "panel2"}
+        onChange={handleChange("panel2")}
+      >
         <AccordionSummary
           id="panel2bh-header"
           expandIcon={<ExpandMoreIcon />}
@@ -741,7 +768,10 @@ const MainForm = () => {
           </FormGroup>
         </AccordionDetails>
       </Accordion>
-      <Accordion>
+      <Accordion
+        expanded={expanded === "panel3"}
+        onChange={handleChange("panel3")}
+      >
         <AccordionSummary
           id="panel3bh-header"
           expandIcon={<ExpandMoreIcon />}
@@ -1050,7 +1080,10 @@ const MainForm = () => {
           </FormGroup>
         </AccordionDetails>
       </Accordion>
-      <Accordion>
+      <Accordion
+        expanded={expanded === "panel4"}
+        onChange={handleChange("panel4")}
+      >
         <AccordionSummary
           id="panel4bh-header"
           expandIcon={<ExpandMoreIcon />}
@@ -1336,7 +1369,10 @@ const MainForm = () => {
           </FormGroup>
         </AccordionDetails>
       </Accordion>
-      <Accordion>
+      <Accordion
+        expanded={expanded === "panel7"}
+        onChange={handleChange("panel7")}
+      >
         <AccordionSummary
           id="panel7bh-header"
           expandIcon={<ExpandMoreIcon />}
