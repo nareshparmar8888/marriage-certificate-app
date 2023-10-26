@@ -1,4 +1,3 @@
-// dashboardReducer.js
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -15,8 +14,7 @@ const applicationSlice = createSlice({
   },
 });
 
-// Extract the reducer function from the slice
+
 export const applicationReducer = applicationSlice.reducer;
 
-// Export the action creator as well, if needed
 export const { setLoginData } = applicationSlice.actions;

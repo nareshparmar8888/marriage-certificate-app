@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginApi } from "../ApiAction/AllApi";
+import { ThunkAction } from "@reduxjs/toolkit";
 interface login {
   email: any;
   password: string;
@@ -39,19 +40,16 @@ const Login = () => {
     },
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await dispatch(loginApi());
-        console.log("respo", response);
-      } catch (error) {
-        console.error("Error:", error);
-        // dispatch(loginError(error));
-      }
-    };
+  // loginActions.js
+const loginSuccess = (user:any) => ({
+  type: 'LOGIN_SUCCESS',
+  payload: user,
+});
 
-    fetchData();
-  }, [dispatch]);
+ const loginError = (error:any) => ({
+  type: 'LOGIN_ERROR',
+  payload: error,
+});
 
   return (
     <>
