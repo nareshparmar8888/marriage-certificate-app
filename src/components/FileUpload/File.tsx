@@ -12,7 +12,6 @@ export default function File() {
     setFiles(files.filter((x) => x.id !== id));
   };
   const handleFinishUpload = (uploadedFiles: ExtFile[]) => {
-    console.log("Upload has finished", uploadedFiles);
   };
   return (
     <div

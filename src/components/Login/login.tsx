@@ -1,24 +1,39 @@
 import { Typography, Box, TextField, Button } from "@mui/material";
 import "./login.scss";
 import { useFormik } from "formik";
-import { login } from "../InitialValue/InitalValue";
-import { loginSchema } from "../ValidationSchema/validationSchema";
+import { login } from "../Formik/InitalValue";
+import { loginSchema } from "../Formik/validationSchema";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { loginApi } from "../ApiAction/AllApi";
-import { ThunkAction } from "@reduxjs/toolkit";
+
+import axios from "axios";
+import { Link } from "react-router-dom";
+import UserDashboard from "../UserDashboard/UserDashboard";
+import { applicationReducer } from "../reducer/dashboardReducer";
 interface login {
   email: any;
   password: string;
 }
 const Login = () => {
-  const [loginForm, setLoginForm] = useState({
-    email: "",
-    password: null,
-  });
+  const [loginData, setLoginData] = useState([]);
 
-  const dispatch = useDispatch();
+  const loginApi = async (payload: any) => {
+    const url = "https://marriage-portal-api.onrender.com/login";
+
+    try {
+      const response = await axios.post(url, payload);
+
+      if (response && response.status === 200) {
+        // setLoginData(response?.data);
+        return response.data;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
 
   const {
     values: valuesForm1,
@@ -31,25 +46,27 @@ const Login = () => {
     initialValues: login,
     validationSchema: loginSchema,
     onSubmit: (valuesForm1) => {
-      setLoginForm((prevState: any) => ({
-        ...prevState,
-        location: valuesForm1?.email,
-        marriageDate: valuesForm1?.password,
-      }));
-      console.log(loginForm);
+      const obj = {
+        email: valuesForm1?.email,
+        password: valuesForm1?.password,
+      };
+
+      loginApi(obj)
+        .then((response) => {
+          setLoginData(response.data);
+          localStorage.setItem("email", valuesForm1?.email);
+          localStorage.setItem("LoginToken", response.data.loginToken);
+          const destination =
+            response && response.data.role === "User"
+              ? "/UserDashboard"
+              : "/dashboard";
+          window.location.href = destination;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
   });
-
-  // loginActions.js
-const loginSuccess = (user:any) => ({
-  type: 'LOGIN_SUCCESS',
-  payload: user,
-});
-
- const loginError = (error:any) => ({
-  type: 'LOGIN_ERROR',
-  payload: error,
-});
 
   return (
     <>
@@ -101,19 +118,18 @@ const loginSuccess = (user:any) => ({
             {errorsForm1.password && touchedForm1.password ? (
               <span style={{ color: "red" }}>{errorsForm1.password}</span>
             ) : null}
-            <Link to="/UserDashboard">
-              <Button
-                onClick={() => handleSubmitForm1()}
-                sx={{ marginTop: 3, width: 10, alignSelf: "center" }}
-                variant="contained"
-                color="warning"
-              >
-                Login
-              </Button>
-            </Link>
+            <Button
+              onClick={() => handleSubmitForm1()}
+              sx={{ marginTop: 3, width: 10, alignSelf: "center" }}
+              variant="contained"
+              color="warning"
+            >
+              Login
+            </Button>
           </Box>
         </form>
       </div>
+      <UserDashboard loginData={loginData} />
     </>
   );
 };

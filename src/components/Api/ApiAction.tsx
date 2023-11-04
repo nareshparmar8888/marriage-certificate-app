@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const loginApi = async (payload: any) => {
   try {
-    const url = "http://192.168.1.44/login";
+    const url = "https://marriage-portal-api.onrender.com/login";
     const response = await axios.post(url, JSON.stringify(payload));
     if (response && response.status) {
       switch (response?.status) {

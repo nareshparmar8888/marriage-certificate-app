@@ -28,7 +28,7 @@ export const HusbandValue = {
 export const WifeValue = {
   wifesurname: "",
   wifename: "",
-  wifebirthdate: "",
+  wifebirthdate:"",
   wifereligions: "",
   wifeage: 0,
   wifestatus: "",

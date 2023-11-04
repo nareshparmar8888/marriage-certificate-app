@@ -30,7 +30,7 @@ import {
   WifeSchema,
   Witness1Schema,
   Witness2Schema,
-} from "../ValidationSchema/validationSchema";
+} from "../Formik/validationSchema";
 
 import {
   HusbandValue,
@@ -39,10 +39,8 @@ import {
   WifeValue,
   Witness1Value,
   Witness2Value,
-} from "../InitialValue/InitalValue";
+} from "../Formik/InitalValue";
 import Preview from "./Preview";
-import { ToastContainer, toast } from "react-toastify";
-import { Toast } from "react-toastify/dist/components";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -255,7 +253,6 @@ const MainForm = () => {
         marriageDate: valuesForm1?.marriageDate,
         marriageAddress: valuesForm1?.marriageAddress,
       }));
-      console.log(merriageDetail);
     },
   });
 
@@ -306,7 +303,6 @@ const MainForm = () => {
     initialValues: WifeValue,
     validationSchema: WifeSchema,
     onSubmit: (valuesForm3) => {
-      console.log("Form 3 submitted with values:", valuesForm3);
       setWifeDetail((prevState: any) => ({
         ...prevState,
         surname: valuesForm3?.wifesurname,
@@ -343,7 +339,6 @@ const MainForm = () => {
     initialValues: PrietsValue,
     validationSchema: PriestSchema,
     onSubmit: (valuesForm4) => {
-      console.log("Form 4 submitted with values:", valuesForm4);
       setPriestDetail((prevState: any) => ({
         ...prevState,
         name: valuesForm4?.priestname,
@@ -366,7 +361,6 @@ const MainForm = () => {
     initialValues: Witness1Value,
     validationSchema: Witness1Schema,
     onSubmit: (valuesForm5) => {
-      console.log("Form 5 submitted with values:", valuesForm5);
       setWitness1((prevState: any) => ({
         ...prevState,
         name: valuesForm5?.witness1detail,
@@ -388,7 +382,6 @@ const MainForm = () => {
     initialValues: Witness2Value,
     validationSchema: Witness2Schema,
     onSubmit: (values) => {
-      console.log("Form 6 submitted with values:", valuesForm6);
       setWitness2((prevState: any) => ({
         ...prevState,
         name: valuesForm6?.witness2name,
@@ -400,18 +393,16 @@ const MainForm = () => {
   });
 
   const handleSubmit = () => {
-    const updatedDocument = [...document]; // Create a copy of the document array
-
-    // Check if the document array has enough elements to match error1
+    const updatedDocument = [...document]; 
     for (let i = 0; i < updatedDocument.length; i++) {
       if (updatedDocument[i].image === "") {
         updatedDocument[i].error = "Please select this image";
       } else {
-        updatedDocument[i].error = ""; // Clear the error if image is selected
+        updatedDocument[i].error = ""; 
       }
     }
 
-    // Update the state with the modified document array
+   
     setDocument(updatedDocument);
   };
 
@@ -420,8 +411,6 @@ const MainForm = () => {
     data[index].image = image;
     setDocument(data);
   };
-
-  const notify = () => toast("Wow so easy!");
 
   return (
     <>
@@ -482,9 +471,7 @@ const MainForm = () => {
                     variant="outlined"
                     sx={{ width: "100%" }}
                     name="applicationDate"
-                    // value={valuesForm1.applicationDate || ""}
-                    // onChange={handleChangeForm1}
-                    // onBlur={handleBlurForm1}
+                    
                     defaultValue={currentDate}
                     disabled
                   />
@@ -507,7 +494,13 @@ const MainForm = () => {
                 <Grid item xs={6}>
                   <InputLabel>Marriage Date</InputLabel>
                   <TextField
-                    variant="outlined"
+                  type="date"
+                  InputProps={{
+                    inputProps: {
+                      min: "1956-01-01",
+                      max: currentDate
+                    }
+                  }}                    variant="outlined"
                     sx={{ width: "100%" }}
                     name="marriageDate"
                     value={valuesForm1.marriageDate || ""}
@@ -605,6 +598,7 @@ const MainForm = () => {
                 <Grid item xs={6}>
                   <InputLabel>Birth Date</InputLabel>
                   <TextField
+                  type="date"
                     variant="outlined"
                     sx={{ width: "100%" }}
                     name="husbandbirthdate"
@@ -636,7 +630,6 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  {/* <Typography >Merrage Certificate details</Typography> */}
                   <InputLabel>Status of Bridegroom at the time</InputLabel>
                   <Select
                     label="Age"
@@ -661,7 +654,6 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  {/* <Typography >Merrage Certificate details</Typography> */}
                   <InputLabel>Religious</InputLabel>
                   <Select
                     label="Age"
@@ -891,7 +883,7 @@ const MainForm = () => {
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
-                    name="husbandsurname"
+                    name="wifesurname"
                     value={valuesForm3.wifesurname}
                     onChange={handleChangeForm3}
                     onBlur={handleBlurForm3}
@@ -907,7 +899,7 @@ const MainForm = () => {
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
-                    name="husbandname"
+                    name="wifename"
                     value={valuesForm3.wifename}
                     onChange={handleChangeForm3}
                     onBlur={handleBlurForm3}
@@ -920,13 +912,15 @@ const MainForm = () => {
                 <Grid item xs={6}>
                   <InputLabel>Birth Date</InputLabel>
                   <TextField
+                   type="date"
                     variant="outlined"
                     sx={{ width: "100%" }}
-                    name="husbandbirthdate"
+                    name="wifebirthdate"
                     value={valuesForm3.wifebirthdate || ""}
                     onChange={handleChangeForm3}
                     onBlur={handleBlurForm3}
                   />
+                   
                   {errorsForm3.wifebirthdate && touchedForm3.wifebirthdate ? (
                     <span style={{ color: "red" }}>
                       {errorsForm3.wifebirthdate}
@@ -938,7 +932,7 @@ const MainForm = () => {
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
-                    name="husbandage"
+                    name="wifeage"
                     value={valuesForm3.wifeage}
                     onChange={handleChangeForm3}
                     onBlur={handleBlurForm3}
@@ -948,12 +942,11 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  {/* <Typography >Merrage Certificate details</Typography> */}
                   <InputLabel>Status of Bridegroom at the time</InputLabel>
                   <Select
                     label="Age"
                     sx={{ width: "100%" }}
-                    name="husbandstatus"
+                    name="wifestatus"
                     value={valuesForm3.wifestatus}
                     onChange={handleChangeForm3}
                     onBlur={handleBlurForm3}
@@ -973,12 +966,11 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  {/* <Typography >Merrage Certificate details</Typography> */}
                   <InputLabel>Religious</InputLabel>
                   <Select
                     label="Age"
                     sx={{ width: "100%" }}
-                    name="husbandreligions"
+                    name="wifereligions"
                     value={valuesForm3.wifereligions}
                     onChange={handleChangeForm3}
                     onBlur={handleBlurForm3}
@@ -1009,7 +1001,7 @@ const MainForm = () => {
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
-                    name="husbandlocation"
+                    name="wifelocation"
                     value={valuesForm3.wifelocation}
                     onChange={handleChangeForm3}
                     onBlur={handleBlurForm3}
@@ -1025,7 +1017,7 @@ const MainForm = () => {
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
-                    name="husbandaddress"
+                    name="wifeaddress"
                     value={valuesForm3.wifeaddress}
                     onChange={handleChangeForm3}
                     onBlur={handleBlurForm3}
@@ -1043,7 +1035,7 @@ const MainForm = () => {
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
-                    name="gardianSurname"
+                    name="gardianwifeSurname"
                     value={valuesForm3.gardianwifeSurname}
                     onChange={handleChangeForm3}
                     onBlur={handleBlurForm3}
@@ -1060,7 +1052,7 @@ const MainForm = () => {
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
-                    name="gardianName"
+                    name="gardianwifeName"
                     value={valuesForm3.gardianwifeName}
                     onChange={handleChangeForm3}
                     onBlur={handleBlurForm3}
@@ -1077,7 +1069,7 @@ const MainForm = () => {
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
-                    name="gardianAge"
+                    name="gardianwifeAge"
                     value={valuesForm3.gardianwifeAge}
                     onChange={handleChangeForm3}
                     onBlur={handleBlurForm3}
@@ -1093,7 +1085,7 @@ const MainForm = () => {
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
-                    name="gardianLocation"
+                    name="gardianwifeLocation"
                     value={valuesForm3.gardianwifeLocation}
                     onChange={handleChangeForm3}
                     onBlur={handleBlurForm3}
@@ -1110,7 +1102,7 @@ const MainForm = () => {
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
-                    name="gardianAddress"
+                    name="gardianwifeAddress"
                     value={valuesForm3.gardianwifeAddress}
                     onChange={handleChangeForm3}
                     onBlur={handleBlurForm3}
@@ -1127,7 +1119,7 @@ const MainForm = () => {
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
-                    name="gardianContact"
+                    name="gardianwifeContact"
                     value={valuesForm3.gardianwifeContact}
                     onChange={handleChangeForm3}
                     onBlur={handleBlurForm3}
@@ -1144,7 +1136,7 @@ const MainForm = () => {
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
-                    name="gardianMobile"
+                    name="gardianwifeMobile"
                     value={valuesForm3.gardianwifeMobile}
                     onChange={handleChangeForm3}
                     onBlur={handleBlurForm3}
@@ -1161,7 +1153,7 @@ const MainForm = () => {
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
-                    name="gardianEmail"
+                    name="gardianwifeEmail"
                     value={valuesForm3.gardianwifeEmail}
                     onChange={handleChangeForm3}
                     onBlur={handleBlurForm3}
@@ -1221,6 +1213,7 @@ const MainForm = () => {
                 <Grid item xs={6}>
                   <InputLabel>Date of Birth</InputLabel>
                   <TextField
+                  type="date"
                     variant="outlined"
                     sx={{ width: "100%" }}
                     name="priestbirthdate"
@@ -1331,6 +1324,7 @@ const MainForm = () => {
                 <Grid item xs={6}>
                   <InputLabel>Date of Birth</InputLabel>
                   <TextField
+                  type="date"
                     variant="outlined"
                     sx={{ width: "100%" }}
                     name="witness1birthdate"
@@ -1425,6 +1419,7 @@ const MainForm = () => {
                 <Grid item xs={6}>
                   <InputLabel>Date of Birth</InputLabel>
                   <TextField
+                  type="date"
                     variant="outlined"
                     sx={{ width: "100%" }}
                     name="witness2birthdate"
