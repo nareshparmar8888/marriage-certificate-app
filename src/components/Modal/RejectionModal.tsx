@@ -7,14 +7,9 @@ import {
   Button,
   TextareaAutosize,
 } from "@material-ui/core";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import { DatePicker } from "@mui/x-date-pickers";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
+import { FormGroup, FormControlLabel, Checkbox } from "@mui/material";
+import { Reject } from "../Api/DashBoardAction";
+
 const customModalStyle = {
   position: "absolute",
   top: "50%",
@@ -28,18 +23,59 @@ const customModalStyle = {
 };
 
 const RejectModal = (props: any) => {
-  const { open, handleClose } = props;
-  const [certificateData, setCertificateData] = useState();
+  const { open, handleClose, currentIndex } = props;
+  const [commentdata, setCommentData] = useState("");
+  const [checkboxState, setCheckboxState] = useState({
+    husbandSchoolLeavingCertificateStatus: false,
+    wifeSchoolLeavingCertificateStatus: false,
+    witnessOnePhotoProofStatus: false,
+    witnessTwoPhotoProofStatus: false,
+    agreementStampStatus: false,
+    husbandPhotoIdProofStatus: false,
+    wifePhotoIdProofStatus: false,
+    priestPhotoIdProofStatus: false,
+    marriageEvidenceStatus: false,
+  });
 
-  const [commentdata, setCommentData] = useState();
+  useEffect(() => {
+    console.log("checkBoxState", checkboxState);
+  }, [checkboxState]);
 
-  const handleChnage = (e: any) => {
-    setCommentData(e?.target?.value);
+  const handleCheckboxChange = (event: any) => {
+    const { name } = event.target;
+    setCheckboxState((prev: any) => ({
+      ...prev,
+      [name]: !prev[name],
+    }));
   };
 
-  const handleCertificateValue = (e: any) => {
-    setCertificateData(e?.target?.value);
+  const handleChnage = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setCommentData(e.target.value);
   };
+
+  const handleRejectModal1 = () => {
+    const Logintoken = localStorage.getItem("LoginToken");
+    const obj = {
+      loginToken: Logintoken,
+      userId: currentIndex,
+      rejectedMessage: commentdata,
+      husbandSchoolLeavingCertificateStatus:
+        checkboxState.husbandSchoolLeavingCertificateStatus,
+      wifeSchoolLeavingCertificateStatus:
+        checkboxState.wifeSchoolLeavingCertificateStatus,
+      witnessOnePhotoProofStatus: checkboxState.witnessOnePhotoProofStatus,
+      witnessTwoPhotoProofStatus: checkboxState.witnessTwoPhotoProofStatus,
+      agreementStampStatus: checkboxState.agreementStampStatus,
+      husbandPhotoIdProofStatus: checkboxState.husbandPhotoIdProofStatus,
+      wifePhotoIdProofStatus: checkboxState.wifePhotoIdProofStatus,
+      priestPhotoIdProofStatus: checkboxState.priestPhotoIdProofStatus,
+      marriageEvidenceStatus: checkboxState.marriageEvidenceStatus,
+    };
+    Reject(obj).then((response) => {
+      console.log("response", response);
+    });
+  };
+
   return (
     <Modal
       open={open}
@@ -53,13 +89,13 @@ const RejectModal = (props: any) => {
             <Typography id="modal-modal-title" variant="h6" component="h2">
               Reject Application
             </Typography>
+            <hr />
           </div>
           <div
             style={{
               flex: 2,
               display: "flex",
               flexDirection: "column",
-              marginTop: "1rem",
             }}
           >
             <div
@@ -68,53 +104,30 @@ const RejectModal = (props: any) => {
                 marginTop: "0.5rem",
               }}
             >
-              Rejection Message :
+              Rejection Message:
               <TextareaAutosize
                 style={{ width: "100%", marginTop: "0.7rem" }}
                 minRows={5}
                 value={commentdata}
-                onChange={(e) => handleChnage(e.target.value)}
+                onChange={handleChnage}
               />
             </div>
           </div>
         </div>
         <FormGroup style={{ marginLeft: "0.7rem" }}>
-          <FormControlLabel
-            control={<Checkbox />}
-            label="husbandSchoolLeavingCertificateStatus"
-          />
-          <FormControlLabel
-            control={<Checkbox />}
-            label="wifeSchoolLeavingCertificateStatus"
-          />
-          <FormControlLabel
-            control={<Checkbox />}
-            label="witnessOnePhotoProofStatus"
-          />
-          <FormControlLabel
-            control={<Checkbox />}
-            label="witnessTwoPhotoProofStatus"
-          />
-          <FormControlLabel
-            control={<Checkbox />}
-            label="agreementStampStatus"
-          />
-          <FormControlLabel
-            control={<Checkbox />}
-            label="husbandPhotoIdProofStatus"
-          />
-          <FormControlLabel
-            control={<Checkbox />}
-            label="wifePhotoIdProofStatus"
-          />
-          <FormControlLabel
-            control={<Checkbox />}
-            label="priestPhotoIdProofStatus"
-          />
-          <FormControlLabel
-            control={<Checkbox />}
-            label="marriageEvidenceStatus"
-          />
+          {Object.entries(checkboxState).map(([name, checked]) => (
+            <FormControlLabel
+              key={name}
+              control={
+                <Checkbox
+                  checked={checked}
+                  onChange={handleCheckboxChange}
+                  name={name}
+                />
+              }
+              label={name}
+            />
+          ))}
         </FormGroup>
 
         <div
@@ -128,9 +141,9 @@ const RejectModal = (props: any) => {
             variant="contained"
             color="primary"
             style={{ marginRight: "10px" }}
-            // onClick={handleApprove}
+            onClick={handleRejectModal1}
           >
-            Approve
+            Reject
           </Button>
           <Button variant="contained" color="secondary" onClick={handleClose}>
             Cancel

@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Typography, Box, TextField, Button } from "@material-ui/core";
+import {
+  Modal,
+  Typography,
+  Box,
+  TextField,
+  Button,
+  TextareaAutosize,
+} from "@material-ui/core";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { DatePicker } from "@mui/x-date-pickers";
+import { Approve } from "../Api/DashBoardAction";
 
 const customModalStyle = {
   position: "absolute",
@@ -19,18 +27,40 @@ const customModalStyle = {
 };
 
 const CustomModal = (props: any) => {
-  const { open, handleClose } = props;
+  const { open, handleClose, currentIndex } = props;
   const [certificateData, setCertificateData] = useState();
 
   const [commentdata, setCommentData] = useState();
 
-  const handleChnage = (e: any) => {
-    setCommentData(e?.target?.value);
-  };
-
   const handleCertificateValue = (e: any) => {
     setCertificateData(e?.target?.value);
   };
+
+  const handleApprove = () => {
+    const Logintoken = localStorage.getItem("LoginToken");
+
+    const obj = {
+      loginToken: Logintoken,
+      userId: currentIndex,
+      approveAppointmentDate: "09-20-2023",
+      approveRequestCertificate: certificateData,
+      approveMessage: commentdata,
+    };
+    console.log("data", obj.approveMessage);
+    Approve(obj)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const handleChnage = (e: any) => {
+    console.log("e", e?.target?.value);
+    setCommentData(e);
+  };
+
   return (
     <Modal
       open={open}
@@ -44,16 +74,17 @@ const CustomModal = (props: any) => {
             <Typography id="modal-modal-title" variant="h6" component="h2">
               Approve Application
             </Typography>
+            <hr />
           </div>
           <div
             style={{
               flex: 2,
               display: "flex",
               flexDirection: "column",
-              marginTop: "2rem",
+              marginTop: "0.5rem",
             }}
           >
-            <div style={{ display: "flex", alignItems: "center" }}>
+            <div style={{ alignItems: "center" }}>
               Date/Time:
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={["DatePicker"]}>
@@ -64,32 +95,32 @@ const CustomModal = (props: any) => {
 
             <div
               style={{
-                display: "flex",
                 alignItems: "center",
                 marginTop: "1rem",
               }}
             >
-              Request certificate:
+              Number of documents:
               <TextField
-                style={{ width: "100%" }}
-                maxRows={4}
+                variant="outlined"
+                style={{ width: "100%", marginTop: "0.7rem" }}
                 value={certificateData}
+                type="Number"
+                onChange={handleCertificateValue}
               />
             </div>
 
             <div
               style={{
-                display: "flex",
                 alignItems: "center",
                 marginTop: "1rem",
               }}
             >
               Comments:
-              <TextField
-                style={{ width: "100%" }}
-                maxRows={4}
+              <TextareaAutosize
+                style={{ width: "100%", marginTop: "0.7rem" }}
+                minRows={5}
                 value={commentdata}
-                onChange={(e) => handleChnage(e.target.value)}
+                onChange={(e) => handleChnage(e?.target?.value)}
               />
             </div>
           </div>
@@ -106,7 +137,7 @@ const CustomModal = (props: any) => {
             variant="contained"
             color="primary"
             style={{ marginRight: "10px" }}
-            // onClick={handleApprove}
+            onClick={handleApprove}
           >
             Approve
           </Button>

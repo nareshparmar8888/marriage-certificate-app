@@ -10,14 +10,16 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import UserDashboard from "../UserDashboard/UserDashboard";
 import { applicationReducer } from "../reducer/dashboardReducer";
+import Loader from "../Loader";
 interface login {
   email: any;
   password: string;
 }
 const Login = () => {
   const [loginData, setLoginData] = useState([]);
-
+  const [loading, setLoading] = useState(false);
   const loginApi = async (payload: any) => {
+    setLoading(true);
     const url = "https://marriage-portal-api.onrender.com/login";
 
     try {
@@ -33,6 +35,7 @@ const Login = () => {
       console.error(error);
       return false;
     }
+    setLoading(false);
   };
 
   const {
@@ -129,7 +132,7 @@ const Login = () => {
           </Box>
         </form>
       </div>
-      <UserDashboard loginData={loginData} />
+      <Loader open={loading} />
     </>
   );
 };

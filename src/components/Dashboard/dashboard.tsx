@@ -27,6 +27,8 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { Approve, UserCount, userDetail } from "../Api/DashBoardAction";
 import CustomModal from "../Modal/ApproveModal";
 import RejectModal from "../Modal/RejectionModal";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
 const customModalStyle = {
   position: "absolute",
@@ -50,17 +52,23 @@ const Dashboard = () => {
   const [certificateData, setCertificateData] = useState();
   const [open, setOpen] = React.useState(false);
   const [openRejectModal, setOpenRejectModal] = useState(false);
+
   const handleClose = () => setOpen(false);
+
   const handleCloseModal = () => setOpenRejectModal(false);
+
   const handleOpen = (index: any) => {
     setOpen(true);
     setcurrentIndex(index);
   };
-
+  console.log("userDetails", userDetails);
   const handleRejectMOdal = (index: any) => {
     setOpenRejectModal(true);
     setcurrentIndex(index);
   };
+
+  let paginationSize = userDetails.length / 3;
+  console.log("page", paginationSize);
 
   const handleChnage = (e: any) => {
     setCommentData(e?.target?.value);
@@ -102,24 +110,6 @@ const Dashboard = () => {
       });
   }, []);
 
-  const handleApprove = () => {
-    const Logintoken = localStorage.getItem("LoginToken");
-
-    const obj = {
-      loginToken: Logintoken,
-      userId: currentIndex,
-      approveAppointmentDate: "09-20-2023",
-      approveRequestCertificate: certificateData,
-      approveMessage: commentdata,
-    };
-    Approve(obj)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
   return (
     <>
       <Header />
@@ -226,11 +216,12 @@ const Dashboard = () => {
               <TableCell align="center" sx={{ color: "white" }}>
                 Wife Name
               </TableCell>
-              <TableCell align="center" sx={{ color: "white" }}>
-                Email
-              </TableCell>
+
               <TableCell align="center" sx={{ color: "white" }}>
                 Mobile No
+              </TableCell>
+              <TableCell align="center" sx={{ color: "white" }}>
+                Status
               </TableCell>
               <TableCell align="center" sx={{ color: "white" }}>
                 Action
@@ -249,37 +240,38 @@ const Dashboard = () => {
                   <TableCell align="center">
                     {item?.wifeDetails?.surname} {item?.wifeDetails?.name}
                   </TableCell>
-                  <TableCell align="center">
-                    {item?.husbandDetails?.emailId}
-                  </TableCell>
+
                   <TableCell align="center">
                     {item?.husbandDetails?.mobileNumber}
+                  </TableCell>
+                  <TableCell align="center">
+                    {item?.applicationStatus}
                   </TableCell>
                   <TableCell align="center">
                     <Button
                       variant="contained"
                       color="success"
                       sx={{ marginRight: "10px" }}
-                      onClick={handleOpen}
+                      onClick={() => handleOpen(item?._id)}
                     >
                       Approve
                     </Button>{" "}
                     <Button
                       variant="contained"
-                      color="success"
+                      color="error"
                       sx={{ marginRight: "10px" }}
-                      onClick={handleRejectMOdal}
+                      onClick={() => handleRejectMOdal(item?._id)}
                     >
                       Reject
                     </Button>
                     <Button
                       variant="contained"
-                      color="success"
+                      color="info"
                       sx={{ marginRight: "10px" }}
                     >
                       View
                     </Button>
-                    <Button variant="contained" color="success">
+                    <Button variant="contained" color="info">
                       Download
                     </Button>
                   </TableCell>
@@ -289,8 +281,29 @@ const Dashboard = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <CustomModal open={open} handleClose={handleClose} />
-      <RejectModal open={openRejectModal} handleClose={handleCloseModal} />
+      <CustomModal
+        open={open}
+        handleClose={handleClose}
+        currentIndex={currentIndex}
+      />
+      <RejectModal
+        open={openRejectModal}
+        handleClose={handleCloseModal}
+        currentIndex={currentIndex}
+      />
+      <Pagination
+        count={paginationSize}
+        variant="outlined"
+        shape="rounded"
+        size="large"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          marginTop: "20px",
+          marginBottom: "20px",
+        }}
+      />
     </>
   );
 };

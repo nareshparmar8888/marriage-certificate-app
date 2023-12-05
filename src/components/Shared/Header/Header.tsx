@@ -11,6 +11,10 @@ const Header = () => {
   const handleChange = (event: any, newValue: any) => {
     setTabValue(newValue);
   };
+  const clearLocalStorage = () => {
+    localStorage.removeItem("LoginToken");
+    localStorage.removeItem("email");
+  };
   return (
     <>
       <div className="header">
@@ -33,9 +37,21 @@ const Header = () => {
               >
                 <Tab label="Registration" value={0} />
 
-                <Link to="/login">
-                  <Tab label="Login" value={2} />
-                </Link>
+                {localStorage.getItem("LoginToken") &&
+                localStorage.getItem("email") ? (
+                  <Link to="/login">
+                    <Tab
+                      label="Logout"
+                      value={2}
+                      style={{ color: "white" }}
+                      onClick={clearLocalStorage}
+                    />
+                  </Link>
+                ) : (
+                  <Link to="/login">
+                    <Tab label="Login" value={2} style={{ color: "white" }} />
+                  </Link>
+                )}
               </Tabs>
             </Toolbar>
           </AppBar>
