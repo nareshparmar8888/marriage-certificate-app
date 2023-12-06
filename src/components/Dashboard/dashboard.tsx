@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { ChangeEvent } from "react";
 
 import {
@@ -29,6 +29,8 @@ import CustomModal from "../Modal/ApproveModal";
 import RejectModal from "../Modal/RejectionModal";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
+import { TablePagination } from "@material-ui/core";
+import Loader from "../Loader";
 
 const customModalStyle = {
   position: "absolute",
@@ -42,16 +44,32 @@ const customModalStyle = {
   width: "40rem",
 };
 
+interface UserDetails {
+  husbandDetails: {
+    name: string;
+    surname: string;
+    mobileNumber: number;
+  };
+  wifeDetails: {
+    name: string;
+    surname: string;
+  };
+  applicationStatus: any;
+}
+
 const Dashboard = () => {
-  const [userData, setUserData] = useState();
+  const [userData, setUserData] = useState(0);
   const [totalUserApprove, setTotalUserApprove] = useState();
   const [totalUserReject, setTotalUserReject] = useState();
-  const [userDetails, setUserDetails] = useState([]);
+  const [userDetails, setUserDetails] = useState<UserDetails[]>([]);
   const [commentdata, setCommentData] = useState();
   const [currentIndex, setcurrentIndex] = useState();
   const [certificateData, setCertificateData] = useState();
   const [open, setOpen] = React.useState(false);
   const [openRejectModal, setOpenRejectModal] = useState(false);
+  const [startIndex, setStartIndex] = useState(0);
+  const [EndIndex, setEndIndex] = useState(3);
+  const [loading, setLoading] = useState(false);
 
   const handleClose = () => setOpen(false);
 
@@ -61,22 +79,12 @@ const Dashboard = () => {
     setOpen(true);
     setcurrentIndex(index);
   };
-  console.log("userDetails", userDetails);
   const handleRejectMOdal = (index: any) => {
     setOpenRejectModal(true);
     setcurrentIndex(index);
   };
 
-  let paginationSize = userDetails.length / 3;
-  console.log("page", paginationSize);
-
-  const handleChnage = (e: any) => {
-    setCommentData(e?.target?.value);
-  };
-
-  const handleCertificateValue = (e: any) => {
-    setCertificateData(e?.target?.value);
-  };
+  let paginationSize = Math.ceil(userData / 3);
 
   useEffect(() => {
     const Logintoken = localStorage.getItem("LoginToken");
@@ -95,10 +103,29 @@ const Dashboard = () => {
       });
   }, []);
 
+  let lastIndex: number;
+  const handleClickPage = (e: any, page: number) => {
+    if (page == 1) {
+      setStartIndex(0);
+      setEndIndex(3);
+    } else if (page == 2) {
+      setStartIndex(startIndex + 3);
+      setEndIndex(page * 3);
+      lastIndex = startIndex + 3;
+    } else {
+      setStartIndex(lastIndex + 3);
+      setEndIndex(page * 3);
+    }
+  };
+
   useEffect(() => {
+    setLoading(true);
+
     const Logintoken = localStorage.getItem("LoginToken");
     const obj = {
       loginToken: Logintoken,
+      start: startIndex,
+      end: EndIndex,
     };
 
     userDetail(obj)
@@ -108,7 +135,8 @@ const Dashboard = () => {
       .catch((error) => {
         console.error(error);
       });
-  }, []);
+    setLoading(false);
+  }, [startIndex, EndIndex]);
 
   return (
     <>
@@ -230,8 +258,6 @@ const Dashboard = () => {
           </TableHead>
           <TableBody>
             {userDetails?.map((item: any, index: any) => {
-              console.log("itrem", item);
-
               return (
                 <TableRow key={index}>
                   <TableCell align="center">
@@ -293,6 +319,7 @@ const Dashboard = () => {
       />
       <Pagination
         count={paginationSize}
+        onChange={handleClickPage}
         variant="outlined"
         shape="rounded"
         size="large"
@@ -304,6 +331,7 @@ const Dashboard = () => {
           marginBottom: "20px",
         }}
       />
+      <Loader open={loading} />
     </>
   );
 };
