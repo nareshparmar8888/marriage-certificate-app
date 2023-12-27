@@ -157,7 +157,6 @@ const MainForm = () => {
     },
   ]);
 
-  const classes = useStyles();
   const date = new Date();
   let day = date.getDate();
   let month = date.getMonth() + 1;
@@ -393,16 +392,15 @@ const MainForm = () => {
   });
 
   const handleSubmit = () => {
-    const updatedDocument = [...document]; 
+    const updatedDocument = [...document];
     for (let i = 0; i < updatedDocument.length; i++) {
       if (updatedDocument[i].image === "") {
         updatedDocument[i].error = "Please select this image";
       } else {
-        updatedDocument[i].error = ""; 
+        updatedDocument[i].error = "";
       }
     }
 
-   
     setDocument(updatedDocument);
   };
 
@@ -471,7 +469,6 @@ const MainForm = () => {
                     variant="outlined"
                     sx={{ width: "100%" }}
                     name="applicationDate"
-                    
                     defaultValue={currentDate}
                     disabled
                   />
@@ -494,13 +491,14 @@ const MainForm = () => {
                 <Grid item xs={6}>
                   <InputLabel>Marriage Date</InputLabel>
                   <TextField
-                  type="date"
-                  InputProps={{
-                    inputProps: {
-                      min: "1956-01-01",
-                      max: currentDate
-                    }
-                  }}                    variant="outlined"
+                    type="date"
+                    InputProps={{
+                      inputProps: {
+                        min: "1956-01-01",
+                        max: currentDate,
+                      },
+                    }}
+                    variant="outlined"
                     sx={{ width: "100%" }}
                     name="marriageDate"
                     value={valuesForm1.marriageDate || ""}
@@ -598,7 +596,7 @@ const MainForm = () => {
                 <Grid item xs={6}>
                   <InputLabel>Birth Date</InputLabel>
                   <TextField
-                  type="date"
+                    type="date"
                     variant="outlined"
                     sx={{ width: "100%" }}
                     name="husbandbirthdate"
@@ -912,7 +910,7 @@ const MainForm = () => {
                 <Grid item xs={6}>
                   <InputLabel>Birth Date</InputLabel>
                   <TextField
-                   type="date"
+                    type="date"
                     variant="outlined"
                     sx={{ width: "100%" }}
                     name="wifebirthdate"
@@ -920,7 +918,7 @@ const MainForm = () => {
                     onChange={handleChangeForm3}
                     onBlur={handleBlurForm3}
                   />
-                   
+
                   {errorsForm3.wifebirthdate && touchedForm3.wifebirthdate ? (
                     <span style={{ color: "red" }}>
                       {errorsForm3.wifebirthdate}
@@ -1213,7 +1211,7 @@ const MainForm = () => {
                 <Grid item xs={6}>
                   <InputLabel>Date of Birth</InputLabel>
                   <TextField
-                  type="date"
+                    type="date"
                     variant="outlined"
                     sx={{ width: "100%" }}
                     name="priestbirthdate"
@@ -1324,7 +1322,7 @@ const MainForm = () => {
                 <Grid item xs={6}>
                   <InputLabel>Date of Birth</InputLabel>
                   <TextField
-                  type="date"
+                    type="date"
                     variant="outlined"
                     sx={{ width: "100%" }}
                     name="witness1birthdate"
@@ -1419,7 +1417,7 @@ const MainForm = () => {
                 <Grid item xs={6}>
                   <InputLabel>Date of Birth</InputLabel>
                   <TextField
-                  type="date"
+                    type="date"
                     variant="outlined"
                     sx={{ width: "100%" }}
                     name="witness2birthdate"

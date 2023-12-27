@@ -31,6 +31,9 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { TablePagination } from "@material-ui/core";
 import Loader from "../Loader";
+import ProfileModal from "../../ProfileModal/ProfileModal";
+import { useDispatch } from "react-redux";
+// import ProfileModal from "../../ProfileModal/ProfileModal";
 
 const customModalStyle = {
   position: "absolute",
@@ -62,17 +65,16 @@ const Dashboard = () => {
   const [totalUserApprove, setTotalUserApprove] = useState();
   const [totalUserReject, setTotalUserReject] = useState();
   const [userDetails, setUserDetails] = useState<UserDetails[]>([]);
-  const [commentdata, setCommentData] = useState();
   const [currentIndex, setcurrentIndex] = useState();
-  const [certificateData, setCertificateData] = useState();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const [openRejectModal, setOpenRejectModal] = useState(false);
   const [startIndex, setStartIndex] = useState(0);
   const [EndIndex, setEndIndex] = useState(3);
-  const [loading, setLoading] = useState(false);
-
+  const [loadingPage, setLoadingPage] = useState(false);
+  const [openProfileModal, setOpenProfileModel] = useState(false);
+  const [storeId, setStoreId] = useState();
   const handleClose = () => setOpen(false);
-
+  const dispatch = useDispatch();
   const handleCloseModal = () => setOpenRejectModal(false);
 
   const handleOpen = (index: any) => {
@@ -84,9 +86,17 @@ const Dashboard = () => {
     setcurrentIndex(index);
   };
 
+  const handleOpenProfileModal = (value: any) => {
+    setOpenProfileModel(true);
+    setStoreId(value);
+  };
+
+  const handleCloseProfileModal = () => setOpenProfileModel(false);
+
   let paginationSize = Math.ceil(userData / 3);
 
   useEffect(() => {
+    setLoadingPage(true);
     const Logintoken = localStorage.getItem("LoginToken");
     const obj = {
       loginToken: Logintoken,
@@ -101,6 +111,7 @@ const Dashboard = () => {
       .catch((error) => {
         console.error(error);
       });
+    setLoadingPage(false);
   }, []);
 
   let lastIndex: number;
@@ -119,7 +130,7 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    setLoading(true);
+    setLoadingPage(true);
 
     const Logintoken = localStorage.getItem("LoginToken");
     const obj = {
@@ -127,15 +138,16 @@ const Dashboard = () => {
       start: startIndex,
       end: EndIndex,
     };
-
     userDetail(obj)
       .then((response) => {
         setUserDetails(response.data);
       })
       .catch((error) => {
         console.error(error);
+      })
+      .finally(() => {
+        setLoadingPage(false);
       });
-    setLoading(false);
   }, [startIndex, EndIndex]);
 
   return (
@@ -294,6 +306,7 @@ const Dashboard = () => {
                       variant="contained"
                       color="info"
                       sx={{ marginRight: "10px" }}
+                      onClick={() => handleOpenProfileModal(item?._id)}
                     >
                       View
                     </Button>
@@ -317,6 +330,12 @@ const Dashboard = () => {
         handleClose={handleCloseModal}
         currentIndex={currentIndex}
       />
+      <ProfileModal
+        open={openProfileModal}
+        handleClose={handleCloseProfileModal}
+        storeId={storeId}
+      />
+
       <Pagination
         count={paginationSize}
         onChange={handleClickPage}
@@ -331,7 +350,7 @@ const Dashboard = () => {
           marginBottom: "20px",
         }}
       />
-      <Loader open={loading} />
+      <Loader open={loadingPage} />
     </>
   );
 };

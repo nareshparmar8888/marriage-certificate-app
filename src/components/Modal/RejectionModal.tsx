@@ -22,6 +22,10 @@ const customModalStyle = {
   width: "40rem",
 };
 
+const backdropStyle = {
+  backgroundColor: "rgba(0, 0, 0, 0.7)",
+};
+
 const RejectModal = (props: any) => {
   const { open, handleClose, currentIndex } = props;
   const [commentdata, setCommentData] = useState("");
@@ -37,9 +41,7 @@ const RejectModal = (props: any) => {
     marriageEvidenceStatus: false,
   });
 
-  useEffect(() => {
-    console.log("checkBoxState", checkboxState);
-  }, [checkboxState]);
+  useEffect(() => {}, [checkboxState]);
 
   const handleCheckboxChange = (event: any) => {
     const { name } = event.target;
@@ -72,7 +74,7 @@ const RejectModal = (props: any) => {
       marriageEvidenceStatus: checkboxState.marriageEvidenceStatus,
     };
     Reject(obj).then((response) => {
-      console.log("response", response);
+      handleClose();
     });
   };
 
@@ -82,6 +84,7 @@ const RejectModal = (props: any) => {
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
+      style={{ zIndex: 9999, ...backdropStyle }}
     >
       <Box sx={customModalStyle}>
         <div style={{ display: "flex", flexDirection: "column" }}>

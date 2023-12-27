@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Modal,
   Typography,
@@ -10,7 +10,6 @@ import {
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { DatePicker } from "@mui/x-date-pickers";
 import { Approve } from "../Api/DashBoardAction";
 
@@ -26,15 +25,31 @@ const customModalStyle = {
   width: "40rem",
 };
 
+const backdropStyle = {
+  backgroundColor: "rgba(0, 0, 0, 0.7)",
+};
+
 const CustomModal = (props: any) => {
   const { open, handleClose, currentIndex } = props;
   const [certificateData, setCertificateData] = useState();
-
+  const [disable, setDisble] = useState(true);
   const [commentdata, setCommentData] = useState();
-
+  const [approveDate, setApproveDate] = useState();
   const handleCertificateValue = (e: any) => {
     setCertificateData(e?.target?.value);
   };
+
+  useEffect(() => {
+    if (
+      approveDate !== null &&
+      certificateData !== null &&
+      commentdata !== null
+    ) {
+      setDisble(false);
+    } else {
+      setDisble(true);
+    }
+  }, []);
 
   const handleApprove = () => {
     const Logintoken = localStorage.getItem("LoginToken");
@@ -42,14 +57,15 @@ const CustomModal = (props: any) => {
     const obj = {
       loginToken: Logintoken,
       userId: currentIndex,
-      approveAppointmentDate: "09-20-2023",
+      approveAppointmentDate: approveDate,
       approveRequestCertificate: certificateData,
       approveMessage: commentdata,
     };
-    console.log("data", obj.approveMessage);
     Approve(obj)
       .then((response) => {
-        console.log(response);
+        if (response) {
+          handleClose();
+        }
       })
       .catch((error) => {
         console.error(error);
@@ -57,8 +73,11 @@ const CustomModal = (props: any) => {
   };
 
   const handleChnage = (e: any) => {
-    console.log("e", e?.target?.value);
     setCommentData(e);
+  };
+
+  const handleDateChange = (e: any) => {
+    setApproveDate(e);
   };
 
   return (
@@ -67,6 +86,7 @@ const CustomModal = (props: any) => {
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
+      style={{ zIndex: 9999, ...backdropStyle }}
     >
       <Box sx={customModalStyle}>
         <div style={{ display: "flex", flexDirection: "column" }}>
@@ -88,7 +108,11 @@ const CustomModal = (props: any) => {
               Date/Time:
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={["DatePicker"]}>
-                  <DatePicker label="Enter Date" />
+                  <DatePicker
+                    label="Enter Date"
+                    value={approveDate}
+                    onChange={handleDateChange}
+                  />
                 </DemoContainer>
               </LocalizationProvider>
             </div>
@@ -138,6 +162,7 @@ const CustomModal = (props: any) => {
             color="primary"
             style={{ marginRight: "10px" }}
             onClick={handleApprove}
+            disabled={disable}
           >
             Approve
           </Button>

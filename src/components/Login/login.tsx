@@ -7,26 +7,27 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import UserDashboard from "../UserDashboard/UserDashboard";
-import { applicationReducer } from "../reducer/dashboardReducer";
+import { applicationReducer, setLoginDatas } from "../reducer/dashboardReducer";
 import Loader from "../Loader";
 interface login {
   email: any;
   password: string;
 }
 const Login = () => {
+  const navigate = useNavigate();
   const [loginData, setLoginData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const loginApi = async (payload: any) => {
+  const dispatch = useDispatch();
+  const loginApi = async (payload: any, dispatch: any) => {
     setLoading(true);
     const url = "https://marriage-portal-api.onrender.com/login";
 
     try {
-      const response = await axios.post(url, payload);
+      const response: any = await axios.post(url, payload);
 
       if (response && response.status === 200) {
-        // setLoginData(response?.data);
         return response.data;
       } else {
         return false;
@@ -34,8 +35,9 @@ const Login = () => {
     } catch (error) {
       console.error(error);
       return false;
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const {
@@ -54,16 +56,19 @@ const Login = () => {
         password: valuesForm1?.password,
       };
 
-      loginApi(obj)
+      loginApi(obj, dispatch)
         .then((response) => {
+          dispatch(setLoginDatas(response?.data));
+          setLoginData(response);
           setLoginData(response.data);
+          sessionStorage.setItem("LoginData", JSON.stringify(response?.data));
           localStorage.setItem("email", valuesForm1?.email);
           localStorage.setItem("LoginToken", response.data.loginToken);
           const destination =
             response && response.data.role === "User"
               ? "/UserDashboard"
               : "/dashboard";
-          window.location.href = destination;
+          navigate(destination);
         })
         .catch((error) => {
           console.error(error);

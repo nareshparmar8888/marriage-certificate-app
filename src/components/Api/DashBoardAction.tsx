@@ -56,7 +56,6 @@ export const Approve = async (payload: any) => {
 };
 
 export const Reject = async (payload: any) => {
-  console.log("DATA");
   const url = "https://marriage-portal-api.onrender.com/reject";
 
   try {
