@@ -55,7 +55,7 @@ const RejectModal = (props: any) => {
   };
 
   const handleRejectModal1 = () => {
-    const Logintoken = localStorage.getItem("LoginToken");
+    const Logintoken = sessionStorage.getItem("LoginToken");
     const obj = {
       loginToken: Logintoken,
       userId: currentIndex,

@@ -96,7 +96,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     setLoadingPage(true);
-    const Logintoken = localStorage.getItem("LoginToken");
+    const Logintoken = sessionStorage.getItem("LoginToken");
     const obj = {
       loginToken: Logintoken,
     };
@@ -131,7 +131,7 @@ const Dashboard = () => {
   useEffect(() => {
     setLoadingPage(true);
 
-    const Logintoken = localStorage.getItem("LoginToken");
+    const Logintoken = sessionStorage.getItem("LoginToken");
     const obj = {
       loginToken: Logintoken,
       start: startIndex,

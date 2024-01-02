@@ -1,17 +1,24 @@
 .modal {
   height: 100%;
+  --bs-modal-width: 60%;
+  transition: opacity 0.1s ease-in-out, transform 0.1s ease-in-out;
 }
-
 #exampleModalLong {
   margin-top: 3rem;
   min-width: 100%;
   max-width: fit-content;
+  --bs-modal-width: 60%;
+  margin-bottom: 3rem;
+}
+
+.close {
+  font-size: 30px;
 }
 
 .modal-header {
-  padding-bottom: 0;
-  padding-top: 0;
   cursor: pointer;
+  padding-bottom: 10px;
+  padding-top: 10px;
 }
 
 .application {
@@ -20,6 +27,10 @@
 
 .data-dispaly {
   background-color: rgba(59, 55, 55, 0.4);
-  // -webkit-backdrop-filter: blur(5px);
-  // backdrop-filter: blur(5px);
+  transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+}
+
+.model-date {
+  display: flex;
+  align-items: center;
 }

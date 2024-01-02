@@ -52,7 +52,7 @@ const CustomModal = (props: any) => {
   }, []);
 
   const handleApprove = () => {
-    const Logintoken = localStorage.getItem("LoginToken");
+    const Logintoken = sessionStorage.getItem("LoginToken");
 
     const obj = {
       loginToken: Logintoken,

@@ -6,7 +6,7 @@ interface PrivateRouteProps {
 }
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
-  const authCredential = localStorage.getItem("token");
+  const authCredential = sessionStorage.getItem("token");
   const [validToken, setValidToken] = useState(true);
 
   useEffect(() => {

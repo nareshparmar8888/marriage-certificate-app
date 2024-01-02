@@ -62,8 +62,8 @@ const Login = () => {
           setLoginData(response);
           setLoginData(response.data);
           sessionStorage.setItem("LoginData", JSON.stringify(response?.data));
-          localStorage.setItem("email", valuesForm1?.email);
-          localStorage.setItem("LoginToken", response.data.loginToken);
+          sessionStorage.setItem("email", valuesForm1?.email);
+          sessionStorage.setItem("LoginToken", response.data.loginToken);
           const destination =
             response && response.data.role === "User"
               ? "/UserDashboard"

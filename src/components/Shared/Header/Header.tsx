@@ -12,8 +12,8 @@ const Header = () => {
     setTabValue(newValue);
   };
   const clearLocalStorage = () => {
-    localStorage.removeItem("LoginToken");
-    localStorage.removeItem("email");
+    sessionStorage.removeItem("LoginToken");
+    sessionStorage.removeItem("email");
   };
   return (
     <>
@@ -37,8 +37,8 @@ const Header = () => {
               >
                 <Tab label="Registration" value={0} />
 
-                {localStorage.getItem("LoginToken") &&
-                localStorage.getItem("email") ? (
+                {sessionStorage.getItem("LoginToken") &&
+                sessionStorage.getItem("email") ? (
                   <Link to="/login">
                     <Tab
                       label="Logout"
