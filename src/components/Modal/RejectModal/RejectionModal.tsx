@@ -7,7 +7,8 @@ import {
   TextareaAutosize,
 } from "@material-ui/core";
 import { FormGroup, FormControlLabel, Checkbox } from "@mui/material";
-import { Reject } from "../Api/DashBoardAction";
+import { Reject } from "../../Api/DashBoardAction";
+import "./styles.scss";
 
 const customModalStyle = {
   position: "absolute",
@@ -19,10 +20,6 @@ const customModalStyle = {
   borderRadius: "5px",
   boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.2)",
   width: "40rem",
-};
-
-const backdropStyle = {
-  backgroundColor: "rgba(0, 0, 0, 0.7)",
 };
 
 const RejectModal = (props: any) => {
@@ -39,8 +36,7 @@ const RejectModal = (props: any) => {
     priestPhotoIdProofStatus: false,
     marriageEvidenceStatus: false,
   });
-
-  useEffect(() => {}, [checkboxState]);
+  const [disable, setDisable] = useState(true);
 
   const handleCheckboxChange = (event: any) => {
     const { name } = event.target;
@@ -49,6 +45,33 @@ const RejectModal = (props: any) => {
       [name]: !prev[name],
     }));
   };
+
+  useEffect(() => {
+    if (commentdata && checkboxState) {
+      setDisable(false);
+    }
+  }, [commentdata, checkboxState]);
+
+  const resetState = () => {
+    setCommentData("");
+    setCheckboxState({
+      husbandSchoolLeavingCertificateStatus: false,
+      wifeSchoolLeavingCertificateStatus: false,
+      witnessOnePhotoProofStatus: false,
+      witnessTwoPhotoProofStatus: false,
+      agreementStampStatus: false,
+      husbandPhotoIdProofStatus: false,
+      wifePhotoIdProofStatus: false,
+      priestPhotoIdProofStatus: false,
+      marriageEvidenceStatus: false,
+    });
+  };
+
+  useEffect(() => {
+    if (!open) {
+      resetState();
+    }
+  }, [open]);
 
   const handleChnage = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setCommentData(e.target.value);
@@ -83,32 +106,21 @@ const RejectModal = (props: any) => {
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
-      style={{ zIndex: 9999, ...backdropStyle }}
+      className="reject-modal"
     >
       <Box sx={customModalStyle}>
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ flex: 1 }}>
+        <div className="reject-modal-inner">
+          <div className="modal-title">
             <Typography id="modal-modal-title" variant="h6" component="h2">
               Reject Application
             </Typography>
             <hr />
           </div>
-          <div
-            style={{
-              flex: 2,
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            <div
-              style={{
-                alignItems: "center",
-                marginTop: "0.5rem",
-              }}
-            >
+          <div className="reject-modal-body">
+            <div className="text-area-heading">
               Rejection Message:
               <TextareaAutosize
-                style={{ width: "100%", marginTop: "0.7rem" }}
+                className="text-area"
                 minRows={5}
                 value={commentdata}
                 onChange={handleChnage}
@@ -116,7 +128,7 @@ const RejectModal = (props: any) => {
             </div>
           </div>
         </div>
-        <FormGroup style={{ marginLeft: "0.7rem" }}>
+        <FormGroup className="check-box-group">
           {Object.entries(checkboxState).map(([name, checked]) => (
             <FormControlLabel
               key={name}
@@ -132,18 +144,13 @@ const RejectModal = (props: any) => {
           ))}
         </FormGroup>
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            marginTop: "20px",
-          }}
-        >
+        <div className="modal-button">
           <Button
             variant="contained"
             color="primary"
-            style={{ marginRight: "10px" }}
+            className="reject-button"
             onClick={handleRejectModal1}
+            disabled={disable}
           >
             Reject
           </Button>

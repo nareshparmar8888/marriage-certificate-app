@@ -16,35 +16,17 @@ import {
   TextField,
 } from "@mui/material";
 import Header from "../Shared/Header/Header";
-// import axios from "axios";
-// import Modal from "@material-ui/core/Modal";
-// import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-// import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-// import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-// import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-// import { DatePicker } from "@mui/x-date-pickers";
 import { Approve, UserCount, userDetail } from "../Api/DashBoardAction";
-import CustomModal from "../Modal/ApproveModal";
-import RejectModal from "../Modal/RejectionModal";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-// import { TablePagination } from "@material-ui/core";
 import Loader from "../Loader";
-import ProfileModal from "../../ProfileModal/ProfileModal";
-import { useDispatch } from "react-redux";
-// import ProfileModal from "../../ProfileModal/ProfileModal";
 
-const customModalStyle = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  backgroundColor: "white",
-  padding: "20px",
-  borderRadius: "5px",
-  boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.2)",
-  width: "40rem",
-};
+import { useDispatch } from "react-redux";
+import ProfileModal from "../../ProfileModal/ProfileModal";
+import { setUserDatas } from "../reducer/dashboardReducer";
+import CustomModal from "../Modal/ApproveModal/ApproveModal";
+import RejectModal from "../Modal/RejectModal/RejectionModal";
+import { isEmpty } from "../../isEmpty";
 
 interface UserDetails {
   husbandDetails: {
@@ -71,10 +53,17 @@ const Dashboard = () => {
   const [EndIndex, setEndIndex] = useState(3);
   const [loadingPage, setLoadingPage] = useState(false);
   const [openProfileModal, setOpenProfileModel] = useState(false);
+  const [apiNeeded, setApiNeeded] = useState(false);
   const [storeId, setStoreId] = useState();
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setApiNeeded(true);
+    setOpen(false);
+  };
   const dispatch = useDispatch();
-  const handleCloseModal = () => setOpenRejectModal(false);
+  const handleCloseModal = () => {
+    setApiNeeded(true);
+    setOpenRejectModal(false);
+  };
 
   const handleOpen = (index: any) => {
     setOpen(true);
@@ -129,25 +118,34 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    setLoadingPage(true);
+    const userDataApi = () => {
+      setLoadingPage(true);
 
-    const Logintoken = sessionStorage.getItem("LoginToken");
-    const obj = {
-      loginToken: Logintoken,
-      start: startIndex,
-      end: EndIndex,
+      const Logintoken = sessionStorage.getItem("LoginToken");
+      const obj = {
+        loginToken: Logintoken,
+        start: startIndex,
+        end: EndIndex,
+      };
+
+      userDetail(obj)
+        .then((response) => {
+          dispatch(setUserDatas(response.data));
+          setUserDetails(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          setLoadingPage(false);
+        });
     };
-    userDetail(obj)
-      .then((response) => {
-        setUserDetails(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      })
-      .finally(() => {
-        setLoadingPage(false);
-      });
-  }, [startIndex, EndIndex]);
+    userDataApi();
+
+    if (apiNeeded) {
+      userDataApi();
+    }
+  }, [startIndex, EndIndex, apiNeeded, dispatch]);
 
   return (
     <>
@@ -268,54 +266,90 @@ const Dashboard = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {userDetails?.map((item: any, index: any) => {
-              return (
-                <TableRow key={index}>
-                  <TableCell align="center">
-                    {item?.husbandDetails?.surname} {item?.husbandDetails?.name}
-                  </TableCell>
-                  <TableCell align="center">
-                    {item?.wifeDetails?.surname} {item?.wifeDetails?.name}
-                  </TableCell>
+            {loadingPage ? (
+              <TableRow>
+                <TableCell colSpan={5} align="center">
+                  <div
+                    style={{
+                      fontSize: "30px",
+                      height: "11rem",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {" "}
+                    Loading...{" "}
+                  </div>
+                </TableCell>
+              </TableRow>
+            ) : !isEmpty(userDetail) ? (
+              userDetails?.map((item: any, index: any) => {
+                return (
+                  <TableRow key={index}>
+                    <TableCell align="center">
+                      {item?.husbandDetails?.surname}{" "}
+                      {item?.husbandDetails?.name}
+                    </TableCell>
+                    <TableCell align="center">
+                      {item?.wifeDetails?.surname} {item?.wifeDetails?.name}
+                    </TableCell>
 
-                  <TableCell align="center">
-                    {item?.husbandDetails?.mobileNumber}
-                  </TableCell>
-                  <TableCell align="center">
-                    {item?.applicationStatus}
-                  </TableCell>
-                  <TableCell align="center">
-                    <Button
-                      variant="contained"
-                      color="success"
-                      sx={{ marginRight: "10px" }}
-                      onClick={() => handleOpen(item?._id)}
-                    >
-                      Approve
-                    </Button>{" "}
-                    <Button
-                      variant="contained"
-                      color="error"
-                      sx={{ marginRight: "10px" }}
-                      onClick={() => handleRejectMOdal(item?._id)}
-                    >
-                      Reject
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="info"
-                      sx={{ marginRight: "10px" }}
-                      onClick={() => handleOpenProfileModal(item?._id)}
-                    >
-                      View
-                    </Button>
-                    <Button variant="contained" color="info">
-                      Download
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+                    <TableCell align="center">
+                      {item?.husbandDetails?.mobileNumber}
+                    </TableCell>
+                    <TableCell align="center">
+                      {item?.applicationStatus}
+                    </TableCell>
+                    <TableCell align="center">
+                      <Button
+                        variant="contained"
+                        color="success"
+                        sx={{ marginRight: "10px" }}
+                        onClick={() => handleOpen(item?._id)}
+                      >
+                        Approve
+                      </Button>{" "}
+                      <Button
+                        variant="contained"
+                        color="error"
+                        sx={{ marginRight: "10px" }}
+                        onClick={() => handleRejectMOdal(item?._id)}
+                      >
+                        Reject
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="info"
+                        sx={{ marginRight: "10px" }}
+                        onClick={() => handleOpenProfileModal(item?._id)}
+                      >
+                        View
+                      </Button>
+                      <Button variant="contained" color="info">
+                        Download
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                );
+              })
+            ) : (
+              <TableRow>
+                <TableCell colSpan={5} align="center">
+                  <div
+                    style={{
+                      fontSize: "30px",
+                      height: "11rem",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    No Data
+                  </div>
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </TableContainer>

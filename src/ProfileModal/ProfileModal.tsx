@@ -1,34 +1,20 @@
 import "./style.scss";
 import { useEffect, useState } from "react";
-import { userDetail } from "../components/Api/DashBoardAction";
 import { formatDate } from "../config";
+import { useSelector } from "react-redux";
+
+interface RootState {
+  application: any;
+}
 
 export default function ProfileModal(props: any) {
+  const datas = useSelector((state: RootState) => state?.application?.useData);
   const { open, handleClose, storeId } = props;
-  const [data, setData] = useState([]);
   const [filterData, setFilterData] = useState<any>();
-  useEffect(() => {
-    const Logintoken = sessionStorage.getItem("LoginToken");
-    const obj = {
-      loginToken: Logintoken,
-      start: 0,
-      end: 3,
-    };
 
-    userDetail(obj)
-      .then((response) => {
-        setData(response.data);
-        if (storeId && response.data.length > 0) {
-          const filteredData = response.data.filter(
-            (item: any) => item._id === storeId
-          );
-          setFilterData(filteredData);
-          console.log("Filtered data:", filteredData);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+  useEffect(() => {
+    const filteredData = datas?.filter((item: any) => item?._id === storeId);
+    setFilterData(filteredData);
   }, [open, storeId, handleClose]);
 
   const date = new Date();
@@ -77,7 +63,9 @@ export default function ProfileModal(props: any) {
                   </div>
                   <div style={{ marginLeft: "4rem" }}>
                     Merriage Date :{" "}
-                    {formatDate(filterData[0]?.approveAppointmentDate)}
+                    {filterData[0]?.approveAppointmentDate
+                      ? formatDate(filterData[0]?.approveAppointmentDate)
+                      : ""}
                   </div>
                 </div>
                 <hr />
@@ -182,9 +170,11 @@ export default function ProfileModal(props: any) {
                         </div>
                         <div>
                           Priest Birthdate :{" "}
-                          {formatDate(
-                            filterData[0]?.priestDetails?.dateOfBirth
-                          )}{" "}
+                          {filterData[0]?.priestDetails?.dateOfBirth
+                            ? formatDate(
+                                filterData[0]?.priestDetails?.dateOfBirth
+                              )
+                            : ""}{" "}
                         </div>
                         <div>
                           Priest address :{" "}

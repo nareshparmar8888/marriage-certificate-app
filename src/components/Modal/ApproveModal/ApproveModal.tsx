@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   Typography,
@@ -11,7 +11,16 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers";
-import { Approve } from "../Api/DashBoardAction";
+import { Approve } from "../../Api/DashBoardAction";
+import "./style.scss";
+import { convertDateFormat, formatDate } from "../../../config";
+
+interface ModalState {
+  certificateData: string | undefined;
+  disable: boolean;
+  commentdata: string | undefined;
+  approveDate: any;
+}
 
 const customModalStyle = {
   position: "absolute",
@@ -25,31 +34,41 @@ const customModalStyle = {
   width: "40rem",
 };
 
-const backdropStyle = {
-  backgroundColor: "rgba(0, 0, 0, 0.7)",
-};
-
-const CustomModal = (props: any) => {
+const CustomModal: React.FC<any> = (props) => {
   const { open, handleClose, currentIndex } = props;
-  const [certificateData, setCertificateData] = useState();
-  const [disable, setDisble] = useState(true);
-  const [commentdata, setCommentData] = useState();
-  const [approveDate, setApproveDate] = useState();
-  const handleCertificateValue = (e: any) => {
-    setCertificateData(e?.target?.value);
-  };
+
+  const [modalState, setModalState] = useState<ModalState>({
+    certificateData: undefined,
+    disable: true,
+    commentdata: undefined,
+    approveDate: undefined,
+  });
 
   useEffect(() => {
     if (
-      approveDate !== null &&
-      certificateData !== null &&
-      commentdata !== null
+      modalState.certificateData &&
+      modalState.commentdata &&
+      modalState.approveDate
     ) {
-      setDisble(false);
-    } else {
-      setDisble(true);
+      setModalState((prevState) => ({
+        ...prevState,
+        disable: false,
+      }));
     }
-  }, []);
+  }, [
+    modalState.certificateData,
+    modalState.commentdata,
+    modalState.approveDate,
+  ]);
+
+  const resetState = () => {
+    setModalState({
+      certificateData: undefined,
+      disable: true,
+      commentdata: undefined,
+      approveDate: undefined,
+    });
+  };
 
   const handleApprove = () => {
     const Logintoken = sessionStorage.getItem("LoginToken");
@@ -57,14 +76,15 @@ const CustomModal = (props: any) => {
     const obj = {
       loginToken: Logintoken,
       userId: currentIndex,
-      approveAppointmentDate: approveDate,
-      approveRequestCertificate: certificateData,
-      approveMessage: commentdata,
+      approveAppointmentDate: convertDateFormat(modalState.approveDate),
+      approveRequestCertificate: modalState.certificateData,
+      approveMessage: modalState.commentdata,
     };
     Approve(obj)
       .then((response) => {
         if (response) {
           handleClose();
+          resetState();
         }
       })
       .catch((error) => {
@@ -72,13 +92,26 @@ const CustomModal = (props: any) => {
       });
   };
 
-  const handleChnage = (e: any) => {
-    setCommentData(e);
+  const handleChnage = (e: string) => {
+    setModalState((prevState) => ({ ...prevState, commentdata: e }));
   };
 
-  const handleDateChange = (e: any) => {
-    setApproveDate(e);
+  const handleDateChange = (e: Date | null) => {
+    setModalState((prevState) => ({ ...prevState, approveDate: e }));
   };
+
+  const handleCertificateValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setModalState((prevState) => ({
+      ...prevState,
+      certificateData: e.target.value,
+    }));
+  };
+
+  useEffect(() => {
+    if (!open) {
+      resetState();
+    }
+  }, [open]);
 
   return (
     <Modal
@@ -86,83 +119,63 @@ const CustomModal = (props: any) => {
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
-      style={{ zIndex: 9999, ...backdropStyle }}
+      className="approve-modal"
+      BackdropProps={{
+        timeout: 500,
+      }}
     >
       <Box sx={customModalStyle}>
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ flex: 1 }}>
+        <div className="approve-model-inner">
+          <div className="modal-title">
             <Typography id="modal-modal-title" variant="h6" component="h2">
               Approve Application
             </Typography>
             <hr />
           </div>
-          <div
-            style={{
-              flex: 2,
-              display: "flex",
-              flexDirection: "column",
-              marginTop: "0.5rem",
-            }}
-          >
-            <div style={{ alignItems: "center" }}>
+          <div className="modal-body">
+            <div className="date-time">
               Date/Time:
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={["DatePicker"]}>
                   <DatePicker
                     label="Enter Date"
-                    value={approveDate}
+                    value={modalState?.approveDate}
                     onChange={handleDateChange}
                   />
                 </DemoContainer>
               </LocalizationProvider>
             </div>
 
-            <div
-              style={{
-                alignItems: "center",
-                marginTop: "1rem",
-              }}
-            >
+            <div className="document-number">
               Number of documents:
               <TextField
+                className="document-input-box"
                 variant="outlined"
-                style={{ width: "100%", marginTop: "0.7rem" }}
-                value={certificateData}
+                value={modalState?.certificateData}
                 type="Number"
                 onChange={handleCertificateValue}
               />
             </div>
 
-            <div
-              style={{
-                alignItems: "center",
-                marginTop: "1rem",
-              }}
-            >
+            <div className="comment-box">
               Comments:
               <TextareaAutosize
-                style={{ width: "100%", marginTop: "0.7rem" }}
+                className="comment-box-text-area"
                 minRows={5}
-                value={commentdata}
+                value={modalState?.commentdata}
                 onChange={(e) => handleChnage(e?.target?.value)}
               />
             </div>
           </div>
         </div>
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            marginTop: "20px",
-          }}
-        >
+        <div className="modal-button">
           <Button
+            className="approve-button"
             variant="contained"
             color="primary"
-            style={{ marginRight: "10px" }}
             onClick={handleApprove}
-            disabled={disable}
+            disabled={modalState?.disable}
           >
             Approve
           </Button>

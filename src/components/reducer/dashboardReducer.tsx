@@ -18,13 +18,13 @@ const applicationSlice = createSlice({
       state.isLoginData = action.payload;
       console.log("action", action?.payload);
     },
-    setUserData: (state, action: PayloadAction<any[]>) => {
-      state.isLoginData = action.payload;
+    setUserDatas: (state, action: PayloadAction<any[]>) => {
+      state.useData = action.payload;
       console.log("Data", action?.payload);
     },
   },
 });
 
 export const { setLoginDatas } = applicationSlice.actions;
-export const { setUserData } = applicationSlice.actions;
+export const { setUserDatas } = applicationSlice.actions;
 export const applicationReducer = applicationSlice.reducer;
