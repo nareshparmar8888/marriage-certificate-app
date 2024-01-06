@@ -1,6 +1,5 @@
 import React from "react";
-import { AppBar, Toolbar, Typography, Tabs, Tab, Box } from "@mui/material";
-import RemoveShoppingCartIcon from "@mui/icons-material/RemoveShoppingCart";
+import { AppBar, Toolbar, Tabs, Tab, Box } from "@mui/material";
 import Logo from "./Logo.png";
 import "./header.scss";
 import { Link } from "react-router-dom";

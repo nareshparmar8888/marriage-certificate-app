@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import uploadpic from "./upload.png";
 import "./Preview.scss";
 import { Interface } from "readline";

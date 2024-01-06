@@ -10,7 +10,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import UserDashboard from "../UserDashboard/UserDashboard";
 import { applicationReducer, setLoginDatas } from "../reducer/dashboardReducer";
-import Loader from "../Loader";
+import Loader from "../../Loader/Loader";
 interface login {
   email: any;
   password: string;
@@ -78,12 +78,20 @@ const Login = () => {
 
   return (
     <>
-      <div>
+      <div
+        style={{
+          width: "100vw",
+          height: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <form>
           <Box
             display="flex"
             flexDirection={"column"}
-            maxWidth={400}
+            width={"29rem"}
             alignContent="center"
             justifyContent={"center"}
             margin="auto"
@@ -128,9 +136,9 @@ const Login = () => {
             ) : null}
             <Button
               onClick={() => handleSubmitForm1()}
-              sx={{ marginTop: 3, width: 10, alignSelf: "center" }}
+              sx={{ marginTop: 3, width: 84, alignSelf: "center" }}
               variant="contained"
-              color="warning"
+              color="info"
             >
               Login
             </Button>

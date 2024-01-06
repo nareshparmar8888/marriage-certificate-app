@@ -1,6 +1,4 @@
-import React, { Suspense, useEffect, useState } from "react";
-// import { ChangeEvent } from "react";
-
+import { useEffect, useState } from "react";
 import {
   Box,
   Grid,
@@ -19,7 +17,6 @@ import Header from "../Shared/Header/Header";
 import { Approve, UserCount, userDetail } from "../Api/DashBoardAction";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import Loader from "../Loader";
 
 import { useDispatch } from "react-redux";
 import ProfileModal from "../../ProfileModal/ProfileModal";
@@ -27,6 +24,7 @@ import { setUserDatas } from "../reducer/dashboardReducer";
 import CustomModal from "../Modal/ApproveModal/ApproveModal";
 import RejectModal from "../Modal/RejectModal/RejectionModal";
 import { isEmpty } from "../../isEmpty";
+import Loader from "../../Loader/Loader";
 
 interface UserDetails {
   husbandDetails: {
@@ -141,11 +139,7 @@ const Dashboard = () => {
         });
     };
     userDataApi();
-
-    if (apiNeeded) {
-      userDataApi();
-    }
-  }, [startIndex, EndIndex, apiNeeded, dispatch]);
+  }, [startIndex, EndIndex, dispatch]);
 
   return (
     <>

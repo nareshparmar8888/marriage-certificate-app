@@ -4,15 +4,12 @@ import * as React from "react";
 export default function File() {
   const [files, setFiles] = React.useState<ExtFile[]>([]);
   const updateFiles = (incommingFiles: ExtFile[]) => {
-    //do something with the files
     setFiles(incommingFiles);
-    //even your own upload implementation
   };
   const removeFile = (id: number | string | undefined) => {
     setFiles(files.filter((x) => x.id !== id));
   };
-  const handleFinishUpload = (uploadedFiles: ExtFile[]) => {
-  };
+  const handleFinishUpload = (uploadedFiles: ExtFile[]) => {};
   return (
     <div
       style={{
