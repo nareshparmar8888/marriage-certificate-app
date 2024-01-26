@@ -1,20 +1,24 @@
-import React from "react";
 import "./App.scss";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
+import MainForm from "./components/MainForm/MainForm";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./components/Login/login";
+import Dashboard from "./components/Dashboard/dashboard";
+import UserDashboard from "./components/UserDashboard/UserDashboard";
+import { useState } from "react";
+import PrivateRoute from "./PrivateRoute";
 
 const App = () => {
   return (
-    <div className="scssClass">
-      <Card sx={{ minWidth: 275 }}>
-        <CardContent>
-          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-            <h1> Welcome To React</h1>
-          </Typography>
-        </CardContent>
-      </Card>
-    </div>
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<MainForm />}></Route>
+          <Route path="/dashboard" element={<Dashboard />}></Route>
+          <Route path="/userDashboard" element={<UserDashboard />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 };
 
