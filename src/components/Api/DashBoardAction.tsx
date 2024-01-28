@@ -76,3 +76,47 @@ export const Reject = async (payload: any) => {
     return false;
   }
 };
+
+export const registration = async (payload: any) => {
+  const url = "https://marriage-portal-api.onrender.com/registration";
+
+  try {
+    const response = await axios.post(url, JSON.stringify(payload), {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response && response.status === 200) {
+      return response.data;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};
+
+export const DownloadData = async (payload: any) => {
+  const url = "https://marriage-portal-api.onrender.com/download";
+
+  try {
+    const response = await axios.post(url, JSON.stringify(payload), {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response && response.status === 200) {
+      return response.data;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};

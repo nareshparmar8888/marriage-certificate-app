@@ -14,6 +14,9 @@ const Header = () => {
     sessionStorage.removeItem("LoginToken");
     sessionStorage.removeItem("email");
   };
+
+  const currentUrl = window.location.href;
+  const shouldHideTab = currentUrl.includes("record-download");
   return (
     <>
       <div className="header">
@@ -34,7 +37,7 @@ const Header = () => {
                 value={tabValue}
                 onChange={handleChange}
               >
-                <Tab label="Registration" value={0} />
+                {!shouldHideTab && <Tab label="Registration" value={0} />}
 
                 {sessionStorage.getItem("LoginToken") &&
                 sessionStorage.getItem("email") ? (

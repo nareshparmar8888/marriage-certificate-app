@@ -9,6 +9,7 @@ import {
 import { FormGroup, FormControlLabel, Checkbox } from "@mui/material";
 import { Reject } from "../../Api/DashBoardAction";
 import "./styles.scss";
+import { checkUserDocument } from "../../Interface/Interface";
 
 const customModalStyle = {
   position: "absolute",
@@ -22,10 +23,17 @@ const customModalStyle = {
   width: "40rem",
 };
 
-const RejectModal = (props: any) => {
+interface RejectModalProps {
+  open: boolean;
+  handleClose: () => void;
+  currentIndex: string;
+  onRejectSuccess: () => void;
+}
+
+const RejectModal: React.FC<RejectModalProps> = (props: any) => {
   const { open, handleClose, currentIndex } = props;
-  const [commentdata, setCommentData] = useState("");
-  const [checkboxState, setCheckboxState] = useState({
+  const [commentdata, setCommentData] = useState<string>("");
+  const [checkboxState, setCheckboxState] = useState<checkUserDocument>({
     husbandSchoolLeavingCertificateStatus: false,
     wifeSchoolLeavingCertificateStatus: false,
     witnessOnePhotoProofStatus: false,
@@ -36,7 +44,7 @@ const RejectModal = (props: any) => {
     priestPhotoIdProofStatus: false,
     marriageEvidenceStatus: false,
   });
-  const [disable, setDisable] = useState(true);
+  const [disable, setDisable] = useState<boolean>(true);
 
   const handleCheckboxChange = (event: any) => {
     const { name } = event.target;
@@ -95,8 +103,9 @@ const RejectModal = (props: any) => {
       priestPhotoIdProofStatus: checkboxState.priestPhotoIdProofStatus,
       marriageEvidenceStatus: checkboxState.marriageEvidenceStatus,
     };
-    Reject(obj).then((response) => {
+    Reject(obj).then(() => {
       handleClose();
+      props.onRejectSuccess();
     });
   };
 
@@ -134,7 +143,7 @@ const RejectModal = (props: any) => {
               key={name}
               control={
                 <Checkbox
-                  checked={checked}
+                  checked={checked as boolean}
                   onChange={handleCheckboxChange}
                   name={name}
                 />

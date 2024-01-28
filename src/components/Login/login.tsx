@@ -3,22 +3,16 @@ import "./login.scss";
 import { useFormik } from "formik";
 import { login } from "../Formik/InitalValue";
 import { loginSchema } from "../Formik/validationSchema";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
-
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
-import UserDashboard from "../UserDashboard/UserDashboard";
-import { applicationReducer, setLoginDatas } from "../reducer/dashboardReducer";
+import { useNavigate } from "react-router-dom";
+import { setLoginDatas } from "../reducer/dashboardReducer";
 import Loader from "../../Loader/Loader";
-interface login {
-  email: any;
-  password: string;
-}
+
 const Login = () => {
   const navigate = useNavigate();
-  const [loginData, setLoginData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
   const loginApi = async (payload: any, dispatch: any) => {
     setLoading(true);
@@ -59,8 +53,6 @@ const Login = () => {
       loginApi(obj, dispatch)
         .then((response) => {
           dispatch(setLoginDatas(response?.data));
-          setLoginData(response);
-          setLoginData(response.data);
           sessionStorage.setItem("LoginData", JSON.stringify(response?.data));
           sessionStorage.setItem("email", valuesForm1?.email);
           sessionStorage.setItem("LoginToken", response.data.loginToken);

@@ -3,11 +3,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface ApplicationState {
   isLoginData: any[];
   useData: any[];
+  userDetails: any[];
 }
 
 const initialState: ApplicationState = {
   isLoginData: [],
   useData: [],
+  userDetails: [],
 };
 
 const applicationSlice = createSlice({
@@ -16,7 +18,6 @@ const applicationSlice = createSlice({
   reducers: {
     setLoginDatas: (state, action: PayloadAction<any[]>) => {
       state.isLoginData = action.payload;
-      console.log("action", action?.payload);
     },
     setUserDatas: (state, action: PayloadAction<any[]>) => {
       state.useData = action.payload;

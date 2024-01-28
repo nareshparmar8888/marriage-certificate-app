@@ -1,6 +1,6 @@
 import "./style.scss";
 import { useEffect, useState } from "react";
-import { formatDate } from "../config";
+import { formatDate } from "../../../config";
 import { useSelector } from "react-redux";
 
 interface RootState {
@@ -25,7 +25,7 @@ export default function ProfileModal(props: any) {
 
   return (
     <div
-      className={`modal ${open ? "fade show model fade data-dispaly" : ""}`}
+      className={`modal ${open ? "fade show model fade data-display" : ""}`}
       id="exampleModalLong"
       role="dialog"
       aria-labelledby="exampleModalLongTitle"

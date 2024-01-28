@@ -41,31 +41,20 @@ import {
   Witness2Value,
 } from "../Formik/InitalValue";
 import Preview from "./Preview";
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    container: {
-      display: "flex",
-      flexWrap: "wrap",
-    },
-    textField: {
-      marginLeft: theme.spacing(1),
-      marginRight: theme.spacing(1),
-      width: 200,
-    },
-  })
-);
+import { registration } from "../Api/DashBoardAction";
+import { toast } from "react-toastify";
+import SnackBar from "../SnackBar";
 
 interface merriage {
   location: string;
-  marriageDate: Date | null;
+  marriageDate: string;
   marriageAddress: string;
 }
 
 interface husband {
   surname: string;
   name: string;
-  birthDate: Date | null;
+  birthDate: string;
   age: Number;
   statusBride: string;
   Religions: string;
@@ -79,14 +68,14 @@ interface husbandGardian {
   age: number;
   location: string;
   address: string;
-  landline: number;
+  landline: string;
   mobile: string;
   email: string;
 }
 
 interface priest {
   name: string;
-  birthDate: Date | null;
+  birthDate: string;
   age: number;
   location: string;
   address: string;
@@ -94,7 +83,7 @@ interface priest {
 
 interface witness {
   name: string;
-  birthDate: Date | null;
+  birthDate: string;
   age: number;
   address: String;
 }
@@ -165,14 +154,14 @@ const MainForm = () => {
 
   const [merriageDetail, setMerriageDetail] = useState<merriage>({
     location: "",
-    marriageDate: null,
+    marriageDate: "",
     marriageAddress: "",
   });
 
   const [husbandDetail, setHusbandDetail] = useState<husband>({
     surname: "",
     name: "",
-    birthDate: null,
+    birthDate: "",
     age: 0,
     statusBride: "",
     Religions: "",
@@ -186,7 +175,7 @@ const MainForm = () => {
     age: 0,
     location: "",
     address: "",
-    landline: 0,
+    landline: "",
     mobile: "",
     email: "",
   });
@@ -194,7 +183,7 @@ const MainForm = () => {
   const [wifeDetail, setWifeDetail] = useState<husband>({
     surname: "",
     name: "",
-    birthDate: null,
+    birthDate: "",
     age: 0,
     statusBride: "",
     Religions: "",
@@ -208,14 +197,14 @@ const MainForm = () => {
     age: 0,
     location: "",
     address: "",
-    landline: 0,
+    landline: "",
     mobile: "",
     email: "",
   });
 
   const [priestDetail, setPriestDetail] = useState<priest>({
     name: "",
-    birthDate: null,
+    birthDate: "",
     age: 0,
     location: "",
     address: "",
@@ -223,14 +212,14 @@ const MainForm = () => {
 
   const [witness1, setWitness1] = useState<witness>({
     name: "",
-    birthDate: null,
+    birthDate: "",
     age: 0,
     address: "",
   });
 
   const [witness2, setWitness2] = useState<witness>({
     name: "",
-    birthDate: null,
+    birthDate: "",
     age: 0,
     address: "",
   });
@@ -252,6 +241,7 @@ const MainForm = () => {
         marriageDate: valuesForm1?.marriageDate,
         marriageAddress: valuesForm1?.marriageAddress,
       }));
+      console.log("valuesForm1", valuesForm1);
     },
   });
 
@@ -288,6 +278,7 @@ const MainForm = () => {
         mobile: valuesForm2?.gardianMobile,
         email: valuesForm2?.gardianEmail,
       }));
+      console.log("valuesForm2", valuesForm2);
     },
   });
 
@@ -324,6 +315,7 @@ const MainForm = () => {
         mobile: valuesForm3?.gardianwifeMobile,
         email: valuesForm3?.gardianwifeEmail,
       }));
+      console.log("valueForm3", valuesForm3);
     },
   });
 
@@ -346,6 +338,7 @@ const MainForm = () => {
         location: valuesForm4?.priestlocation,
         address: valuesForm4?.prietsaddress,
       }));
+      console.log("valueForm4", valuesForm4);
     },
   });
 
@@ -367,6 +360,7 @@ const MainForm = () => {
         age: valuesForm5?.witness1age,
         address: valuesForm5?.witness1address,
       }));
+      console.log("valueForm5", valuesForm5);
     },
   });
 
@@ -388,6 +382,7 @@ const MainForm = () => {
         age: valuesForm6?.witness2age,
         address: valuesForm6?.witness2address,
       }));
+      console.log("valueForm6", valuesForm6);
     },
   });
 
@@ -402,12 +397,125 @@ const MainForm = () => {
     }
 
     setDocument(updatedDocument);
+    console.log("updatedDocument", updatedDocument);
   };
 
   const handleChange = (image: any, index: number) => {
     const data = [...document];
     data[index].image = image;
     setDocument(data);
+  };
+
+  const submitData = () => {
+    // setLoadingPage(true);
+    const formData = new FormData();
+    formData.append(
+      "marriageDetails.marriageDate",
+      merriageDetail?.marriageDate
+    );
+    formData.append("marriageDetails.location", merriageDetail?.location);
+    formData.append("marriageDetails.location", merriageDetail?.location);
+    formData.append("husbandDetails.name", husbandDetail.name);
+    formData.append("husbandDetails.surname", husbandDetail.surname);
+    formData.append("husbandDetails.dateOfBirth", husbandDetail?.birthDate);
+    formData.append("husbandDetails.age", String(husbandDetail?.age));
+    formData.append(
+      "husbandDetails.statusOfBridegroom",
+      husbandDetail?.statusBride
+    );
+    formData.append("husbandDetails.religious", husbandDetail?.Religions);
+    formData.append("husbandDetails.location", husbandDetail?.location);
+    formData.append("husbandDetails.address", husbandDetail?.address);
+    formData.append("husbandDetails.mobileNumber", husbandGardian?.mobile);
+    formData.append("husbandDetails.emailId", "mail@gmail.com"); //husbandGardian?.email
+    formData.append(
+      "husbandDetails.guardianDetails.name",
+      husbandGardian?.name
+    );
+    formData.append(
+      "husbandDetails.guardianDetails.surname",
+      husbandGardian?.surname
+    );
+    formData.append(
+      "husbandDetails.guardianDetails.age",
+      String(husbandGardian?.age)
+    );
+    formData.append(
+      "husbandDetails.guardianDetails.location",
+      husbandGardian?.location
+    );
+    formData.append(
+      "husbandDetails.guardianDetails.address",
+      husbandGardian?.address
+    );
+    formData.append(
+      "husbandDetails.guardianDetails.contactNumber",
+      String(husbandGardian?.landline)
+    );
+    formData.append("wifeDetails.name", wifeDetail?.name);
+    formData.append("wifeDetails.surname", wifeDetail?.surname);
+    formData.append("wifeDetails.dateOfBirth", wifeDetail?.birthDate);
+    formData.append("wifeDetails.age", String(wifeDetail?.age));
+    formData.append("wifeDetails.statusOfBridegroom", wifeDetail?.statusBride);
+    formData.append("wifeDetails.religious", wifeDetail?.Religions);
+    formData.append("wifeDetails.location", wifeDetail?.location);
+    formData.append("wifeDetails.address", wifeDetail?.address);
+    formData.append("wifeDetails.mobileNumber", wifeGardian?.mobile);
+    formData.append("wifeDetails.emailId", "abcd@gmail.com"); //wifeGardian?.email
+    formData.append("wifeDetails.guardianDetails.name", wifeGardian?.name);
+    formData.append(
+      "wifeDetails.guardianDetails.surname",
+      wifeGardian?.surname
+    );
+    formData.append(
+      "wifeDetails.guardianDetails.age",
+      String(wifeGardian?.age)
+    );
+    formData.append(
+      "wifeDetails.guardianDetails.location",
+      wifeGardian?.location
+    );
+    formData.append(
+      "wifeDetails.guardianDetails.address",
+      wifeGardian?.address
+    );
+    formData.append(
+      "wifeDetails.guardianDetails.contactNumber",
+      String(wifeGardian?.landline)
+    );
+    formData.append("priestDetails.name", priestDetail?.name);
+    formData.append("priestDetails.dateOfBirth", priestDetail?.birthDate);
+    formData.append("priestDetails.age", String(priestDetail?.age));
+    formData.append("priestDetails.location", priestDetail?.location);
+    formData.append("priestDetails.address", priestDetail?.address);
+    formData.append("witnessOneDetails.name", witness1?.name);
+    formData.append("witnessOneDetails.dateOfBirth", witness1?.birthDate);
+    formData.append("witnessOneDetails.age", String(witness1?.age));
+    formData.append("witnessOneDetails.address", String(witness1?.address));
+    formData.append("witnessTwoDetails.name", witness2?.name);
+    formData.append("witnessTwoDetails.dateOfBirth", witness2?.birthDate);
+    formData.append("witnessTwoDetails.age", String(witness2?.age));
+    formData.append("witnessTwoDetails.address", String(witness2?.address));
+    formData.append("HusbandSchoolLeavingCertificate", document[0]?.image);
+    formData.append("WifeSchoolLeavingCertificate", document[1]?.image);
+    formData.append("WitnessOnePhotoProof", document[2]?.image);
+    formData.append("WitnessTwoPhotoProof", document[3]?.image);
+    formData.append("AgreementStamp", document[4]?.image);
+    formData.append("HusbandPhotoIdProof", document[5]?.image);
+    formData.append("WifePhotoIdProof", document[6]?.image);
+    formData.append("PriestPhotoIdProof", document[7]?.image);
+    formData.append("MarriageEvidence", document[8]?.image);
+
+    const notify = () => toast("Wow so easy!");
+
+    registration(formData)
+      .then((response: any) => {
+        <SnackBar message="Your custom message goes here" />;
+      })
+      .catch((error) => {
+        <SnackBar message="Error" />;
+      });
+    // setLoadingPage(false);
   };
 
   return (
@@ -429,6 +537,7 @@ const MainForm = () => {
               ":hover": {
                 bgcolor: "#AF5",
                 color: "white",
+                cursor: "pointer",
               },
             }}
           >
@@ -440,6 +549,7 @@ const MainForm = () => {
               ":hover": {
                 bgcolor: "#AF5",
                 color: "white",
+                cursor: "pointer",
               },
             }}
           >
@@ -640,10 +750,10 @@ const MainForm = () => {
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
-                    <MenuItem value={10}>Married</MenuItem>
-                    <MenuItem value={21}>UnMarried</MenuItem>
-                    <MenuItem value={22}>Divorced</MenuItem>
-                    <MenuItem value={22}>Widower/Widow</MenuItem>
+                    <MenuItem value={"Married"}>Married</MenuItem>
+                    <MenuItem value={"UnMarried"}>UnMarried</MenuItem>
+                    <MenuItem value={"Divorced"}>Divorced</MenuItem>
+                    <MenuItem value={"Widower/Widow"}>Widower/Widow</MenuItem>
                   </Select>
                   {errorsForm2.husbandstatus && touchedForm2.husbandstatus ? (
                     <span style={{ color: "red" }}>
@@ -664,17 +774,19 @@ const MainForm = () => {
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
-                    <MenuItem value={10}>Hindu</MenuItem>
-                    <MenuItem value={21}>Jain</MenuItem>
-                    <MenuItem value={22}>Buddhist</MenuItem>
-                    <MenuItem value={10}>Sikh</MenuItem>
-                    <MenuItem value={21}>Christian</MenuItem>
-                    <MenuItem value={22}>Parsi</MenuItem>
-                    <MenuItem value={10}>Jewish</MenuItem>
-                    <MenuItem value={21}>Muslim</MenuItem>
-                    <MenuItem value={22}>Other</MenuItem>
-                    <MenuItem value={10}>No Religion</MenuItem>
-                    <MenuItem value={21}>Spiritual-not religious</MenuItem>
+                    <MenuItem value={"Hindu"}>Hindu</MenuItem>
+                    <MenuItem value={"Jain"}>Jain</MenuItem>
+                    <MenuItem value={"Buddhist"}>Buddhist</MenuItem>
+                    <MenuItem value={"Sikh"}>Sikh</MenuItem>
+                    <MenuItem value={"Christian"}>Christian</MenuItem>
+                    <MenuItem value={"Parsi"}>Parsi</MenuItem>
+                    <MenuItem value={"Jewish"}>Jewish</MenuItem>
+                    <MenuItem value={"Muslim"}>Muslim</MenuItem>
+                    <MenuItem value={"Other"}>Other</MenuItem>
+                    <MenuItem value={"No Religion"}>No Religion</MenuItem>
+                    <MenuItem value={"Spiritual-not religious"}>
+                      Spiritual-not religious
+                    </MenuItem>
                   </Select>
                   {errorsForm2.husbandreligions &&
                   touchedForm2.husbandreligions ? (
@@ -952,10 +1064,10 @@ const MainForm = () => {
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
-                    <MenuItem value={10}>Married</MenuItem>
-                    <MenuItem value={21}>UnMarried</MenuItem>
-                    <MenuItem value={22}>Divorced</MenuItem>
-                    <MenuItem value={22}>Widower/Widow</MenuItem>
+                    <MenuItem value={"Married"}>Married</MenuItem>
+                    <MenuItem value={"UnMarried"}>UnMarried</MenuItem>
+                    <MenuItem value={"Divorced"}>Divorced</MenuItem>
+                    <MenuItem value={"Widower/Widow"}>Widower/Widow</MenuItem>
                   </Select>
                   {errorsForm3.wifestatus && touchedForm3.wifestatus ? (
                     <span style={{ color: "red" }}>
@@ -976,17 +1088,19 @@ const MainForm = () => {
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
-                    <MenuItem value={10}>Hindu</MenuItem>
-                    <MenuItem value={21}>Jain</MenuItem>
-                    <MenuItem value={22}>Buddhist</MenuItem>
-                    <MenuItem value={10}>Sikh</MenuItem>
-                    <MenuItem value={21}>Christian</MenuItem>
-                    <MenuItem value={22}>Parsi</MenuItem>
-                    <MenuItem value={10}>Jewish</MenuItem>
-                    <MenuItem value={21}>Muslim</MenuItem>
-                    <MenuItem value={22}>Other</MenuItem>
-                    <MenuItem value={10}>No Religion</MenuItem>
-                    <MenuItem value={21}>Spiritual-not religious</MenuItem>
+                    <MenuItem value={"Hindu"}>Hindu</MenuItem>
+                    <MenuItem value={"Jain"}>Jain</MenuItem>
+                    <MenuItem value={"Buddhist"}>Buddhist</MenuItem>
+                    <MenuItem value={"Sikh"}>Sikh</MenuItem>
+                    <MenuItem value={"Christian"}>Christian</MenuItem>
+                    <MenuItem value={"Parsi"}>Parsi</MenuItem>
+                    <MenuItem value={"Jewish"}>Jewish</MenuItem>
+                    <MenuItem value={"Muslim"}>Muslim</MenuItem>
+                    <MenuItem value={"Other"}>Other</MenuItem>
+                    <MenuItem value={"No Religion"}>No Religion</MenuItem>
+                    <MenuItem value={"Spiritual-not religious"}>
+                      Spiritual-not religious
+                    </MenuItem>
                   </Select>
                   {errorsForm3.wifereligions && touchedForm3.wifereligions ? (
                     <span style={{ color: "red" }}>
@@ -1518,6 +1632,7 @@ const MainForm = () => {
         <Button
           variant="contained"
           sx={{ width: "30%", height: "70px", mt: "150px" }}
+          onClick={submitData}
         >
           Apply for marriage Registration
         </Button>

@@ -22,6 +22,13 @@ interface ModalState {
   approveDate: any;
 }
 
+interface ApproveModalProps {
+  open: boolean;
+  handleClose: () => void;
+  currentIndex: any;
+  onApproveSuccess: () => void;
+}
+
 const customModalStyle = {
   position: "absolute",
   top: "50%",
@@ -34,7 +41,7 @@ const customModalStyle = {
   width: "40rem",
 };
 
-const CustomModal: React.FC<any> = (props) => {
+const CustomModal: React.FC<ApproveModalProps> = (props: any) => {
   const { open, handleClose, currentIndex } = props;
 
   const [modalState, setModalState] = useState<ModalState>({
@@ -85,6 +92,7 @@ const CustomModal: React.FC<any> = (props) => {
         if (response) {
           handleClose();
           resetState();
+          props.onApproveSuccess();
         }
       })
       .catch((error) => {

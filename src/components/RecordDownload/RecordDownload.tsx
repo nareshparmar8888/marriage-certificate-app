@@ -23,16 +23,13 @@ import CustomModal from "../Modal/ApproveModal/ApproveModal";
 import RejectModal from "../Modal/RejectModal/RejectionModal";
 import { isEmpty } from "../../isEmpty";
 import Loader from "../../Loader/Loader";
-import "./style.scss";
 import {
   UserDetails,
   downloadUserData,
   userData,
 } from "../Interface/Interface";
-import TableData from "./Table";
-import { useNavigate } from "react-router-dom";
 
-const Dashboard: React.FC = () => {
+const RecordDownload: React.FC = () => {
   const [userData, setUserData] = useState<number>(0);
   const [totalUserApprove, setTotalUserApprove] = useState<number>(0);
   const [totalUserReject, setTotalUserReject] = useState<number>(0);
@@ -222,11 +219,6 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     handleSearch();
   }, [debounceSearchValue]);
-  const navigate = useNavigate();
-
-  const downloadRecord = () => {
-    navigate("/record-download");
-  };
 
   return (
     <>
@@ -247,7 +239,7 @@ const Dashboard: React.FC = () => {
             component="h2"
             color={"rgb(70, 70, 201)"}
           >
-            Dashboard
+            Application Record Download
           </Typography>
 
           <Box
@@ -277,49 +269,18 @@ const Dashboard: React.FC = () => {
         </Box>
       </div>
 
-      <Grid
-        container
-        sx={{ justifyContent: "space-around", marginTop: "20px" }}
+      <div
+        className="heading-date"
+        style={{ fontSize: "29px", fontWeight: "500", marginLeft: "5rem" }}
       >
-        <Grid item xs={3} sx={{ border: "1px solid green", height: "100px" }}>
-          <Typography
-            sx={{ marginTop: "20px" }}
-            align="center"
-            variant="h5"
-            component="h6"
-            color={"rgb(70, 70, 201)"}
-          >
-            {userData}
-          </Typography>
-          <Typography align="center">Number of Application Accept</Typography>
-        </Grid>
-        <Grid item xs={3} sx={{ border: "1px solid green", height: "100px" }}>
-          <Typography
-            sx={{ marginTop: "20px" }}
-            align="center"
-            variant="h5"
-            component="h6"
-            color={"rgb(70, 70, 201)"}
-          >
-            {totalUserApprove}
-          </Typography>
-          <Typography align="center">Number of Application Reject</Typography>
-        </Grid>
-        <Grid item xs={3} sx={{ border: "1px solid green", height: "100px" }}>
-          <Typography
-            sx={{ marginTop: "20px" }}
-            align="center"
-            variant="h5"
-            component="h6"
-            color={"rgb(70, 70, 201)"}
-          >
-            {totalUserReject}
-          </Typography>
-          <Typography align="center">Number of Application Receive</Typography>
-        </Grid>
-      </Grid>
+        Date :
+      </div>
 
-      <div className="search-box">
+      <div
+        className="search-box"
+        style={{ justifyContent: "flex-start", marginLeft: "7rem" }}
+      >
+        <div style={{ fontSize: "20px", fontWeight: "500" }}>From:</div>
         <TextField
           label="Search"
           id="outlined-size-small"
@@ -327,166 +288,36 @@ const Dashboard: React.FC = () => {
           onChange={handleChange}
           value={searchValue}
         />
-        <Button
-          variant="contained"
-          size="medium"
-          sx={{ marginRight: "1rem" }}
-          onClick={handleSearch}
-        >
-          Seach
-        </Button>
-        <Button
-          variant="contained"
-          color="success"
-          size="medium"
-          sx={{ marginRight: "1rem" }}
-          onClick={downloadRecord}
-        >
-          DownLoad Record
-        </Button>
       </div>
 
-      {/* <TableContainer
-        component={Paper}
-        sx={{ justifyContent: "space-around" }}
-        aria-label="customized table"
+      <div
+        className="search-box"
+        style={{ justifyContent: "flex-start", marginLeft: "7rem" }}
       >
-        <Table
-          sx={{ minWidth: 650, marginTop: "20px" }}
-          aria-label="simple table"
-        >
-          <TableHead sx={{ backgroundColor: "black" }}>
-            <TableRow>
-              <TableCell align="center" sx={{ color: "white" }}>
-                Husband Name
-              </TableCell>
-              <TableCell align="center" sx={{ color: "white" }}>
-                Wife Name
-              </TableCell>
+        <div style={{ fontSize: "20px", fontWeight: "500" }}>To:</div>
+        <TextField
+          label="Search"
+          id="outlined-size-small"
+          size="small"
+          onChange={handleChange}
+          value={searchValue}
+          style={{ marginLeft: "1.8rem" }}
+        />
+      </div>
+      <Button
+        variant="contained"
+        size="medium"
+        sx={{ marginLeft: "11.7rem", marginTop: "2rem" }}
+        onClick={handleSearch}
+      >
+        Download
+      </Button>
 
-              <TableCell align="center" sx={{ color: "white" }}>
-                Mobile No
-              </TableCell>
-              <TableCell align="center" sx={{ color: "white" }}>
-                Status
-              </TableCell>
-              <TableCell align="center" sx={{ color: "white" }}>
-                Action
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {loadingPage ? (
-              <TableRow>
-                <TableCell colSpan={5} align="center">
-                  <div className="loading_process"> Loading... </div>
-                </TableCell>
-              </TableRow>
-            ) : !isEmpty(userDetail) ? (
-              userDetails?.map((item: any, index: any) => {
-                return (
-                  <TableRow key={index}>
-                    <TableCell align="center">
-                      {item?.husbandDetails?.surname}{" "}
-                      {item?.husbandDetails?.name}
-                    </TableCell>
-                    <TableCell align="center">
-                      {item?.wifeDetails?.surname} {item?.wifeDetails?.name}
-                    </TableCell>
-
-                    <TableCell align="center">
-                      {item?.husbandDetails?.mobileNumber}
-                    </TableCell>
-                    <TableCell align="center">
-                      {item?.applicationStatus}
-                    </TableCell>
-                    <TableCell align="center">
-                      <Button
-                        variant="contained"
-                        color="success"
-                        sx={{ marginRight: "10px" }}
-                        onClick={() => handleOpen(item?._id)}
-                      >
-                        Approve
-                      </Button>{" "}
-                      <Button
-                        variant="contained"
-                        color="error"
-                        sx={{ marginRight: "10px" }}
-                        onClick={() => handleRejectMOdal(item?._id)}
-                      >
-                        Reject
-                      </Button>
-                      <Button
-                        variant="contained"
-                        color="info"
-                        sx={{ marginRight: "10px" }}
-                        onClick={() => handleOpenProfileModal(item?._id)}
-                      >
-                        View
-                      </Button>
-                      <Button
-                        variant="contained"
-                        color="info"
-                        onClick={() => downloadUserData(item?._id)}
-                      >
-                        Download
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                );
-              })
-            ) : (
-              <TableRow>
-                <TableCell colSpan={5} align="center">
-                  <div className="no_data">No Data</div>
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer> */}
       {console.log("useDetail", userDetail)}
 
-      <TableData userDetails={userDetails} />
-      <CustomModal
-        open={open}
-        handleClose={handleClose}
-        currentIndex={currentIndex}
-        onApproveSuccess={userDataApi}
-      />
-      <RejectModal
-        open={openRejectModal}
-        handleClose={handleCloseModal}
-        currentIndex={currentIndex || ""}
-        onRejectSuccess={userDataApi}
-      />
-      <ProfileModal
-        open={openProfileModal}
-        handleClose={handleCloseProfileModal}
-        storeId={storeId}
-      />
-
-      {/* {userData >= 3 && (
-        <Pagination
-          count={paginationSize}
-          onChange={handleClickPage}
-          variant="outlined"
-          shape="rounded"
-          size="large"
-          className="pagination"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            marginTop: "20px",
-            marginBottom: "20px",
-          }}
-        />
-      )} */}
       <Loader open={loadingPage} />
     </>
   );
 };
 
-export default Dashboard;
+export default RecordDownload;
