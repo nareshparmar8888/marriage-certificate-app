@@ -21,7 +21,6 @@ const applicationSlice = createSlice({
     },
     setUserDatas: (state, action: PayloadAction<any[]>) => {
       state.useData = action.payload;
-      console.log("Data", action?.payload);
     },
   },
 });

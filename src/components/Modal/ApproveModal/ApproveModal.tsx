@@ -14,6 +14,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { Approve } from "../../Api/DashBoardAction";
 import "./style.scss";
 import { convertDateFormat, formatDate } from "../../../config";
+import Loader from "../../../Loader/Loader";
 
 interface ModalState {
   certificateData: string | undefined;
@@ -43,6 +44,7 @@ const customModalStyle = {
 
 const CustomModal: React.FC<ApproveModalProps> = (props: any) => {
   const { open, handleClose, currentIndex } = props;
+  const [loadingPage, setLoadingPage] = useState<boolean>(false);
 
   const [modalState, setModalState] = useState<ModalState>({
     certificateData: undefined,
@@ -78,6 +80,7 @@ const CustomModal: React.FC<ApproveModalProps> = (props: any) => {
   };
 
   const handleApprove = () => {
+    setLoadingPage(true);
     const Logintoken = sessionStorage.getItem("LoginToken");
 
     const obj = {
@@ -93,10 +96,12 @@ const CustomModal: React.FC<ApproveModalProps> = (props: any) => {
           handleClose();
           resetState();
           props.onApproveSuccess();
+          setLoadingPage(false);
         }
       })
       .catch((error) => {
         console.error(error);
+        setLoadingPage(false);
       });
   };
 
@@ -122,77 +127,80 @@ const CustomModal: React.FC<ApproveModalProps> = (props: any) => {
   }, [open]);
 
   return (
-    <Modal
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-      className="approve-modal"
-      BackdropProps={{
-        timeout: 500,
-      }}
-    >
-      <Box sx={customModalStyle}>
-        <div className="approve-model-inner">
-          <div className="modal-title">
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              Approve Application
-            </Typography>
-            <hr />
+    <>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        className="approve-modal"
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Box sx={customModalStyle}>
+          <div className="approve-model-inner">
+            <div className="modal-title">
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                Approve Application
+              </Typography>
+              <hr />
+            </div>
+            <div className="modal-body">
+              <div className="date-time">
+                Date/Time:
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer components={["DatePicker"]}>
+                    <DatePicker
+                      label="Enter Date"
+                      value={modalState?.approveDate}
+                      onChange={handleDateChange}
+                    />
+                  </DemoContainer>
+                </LocalizationProvider>
+              </div>
+
+              <div className="document-number">
+                Number of documents:
+                <TextField
+                  className="document-input-box"
+                  variant="outlined"
+                  value={modalState?.certificateData}
+                  type="Number"
+                  onChange={handleCertificateValue}
+                />
+              </div>
+
+              <div className="comment-box">
+                Comments:
+                <TextareaAutosize
+                  className="comment-box-text-area"
+                  minRows={5}
+                  value={modalState?.commentdata}
+                  onChange={(e) => handleChnage(e?.target?.value)}
+                />
+              </div>
+            </div>
           </div>
-          <div className="modal-body">
-            <div className="date-time">
-              Date/Time:
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={["DatePicker"]}>
-                  <DatePicker
-                    label="Enter Date"
-                    value={modalState?.approveDate}
-                    onChange={handleDateChange}
-                  />
-                </DemoContainer>
-              </LocalizationProvider>
-            </div>
 
-            <div className="document-number">
-              Number of documents:
-              <TextField
-                className="document-input-box"
-                variant="outlined"
-                value={modalState?.certificateData}
-                type="Number"
-                onChange={handleCertificateValue}
-              />
-            </div>
-
-            <div className="comment-box">
-              Comments:
-              <TextareaAutosize
-                className="comment-box-text-area"
-                minRows={5}
-                value={modalState?.commentdata}
-                onChange={(e) => handleChnage(e?.target?.value)}
-              />
-            </div>
+          <div className="modal-button">
+            <Button
+              className="approve-button"
+              variant="contained"
+              color="primary"
+              onClick={handleApprove}
+              disabled={modalState?.disable}
+            >
+              Approve
+            </Button>
+            <Button variant="contained" color="secondary" onClick={handleClose}>
+              Cancel
+            </Button>
           </div>
-        </div>
-
-        <div className="modal-button">
-          <Button
-            className="approve-button"
-            variant="contained"
-            color="primary"
-            onClick={handleApprove}
-            disabled={modalState?.disable}
-          >
-            Approve
-          </Button>
-          <Button variant="contained" color="secondary" onClick={handleClose}>
-            Cancel
-          </Button>
-        </div>
-      </Box>
-    </Modal>
+        </Box>
+      </Modal>
+      <Loader open={loadingPage} />
+    </>
   );
 };
 

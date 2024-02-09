@@ -1,7 +1,5 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import uploadpic from "./upload.png";
-import "./Preview.scss";
-import { Interface } from "readline";
 
 interface props {
   id: number;
@@ -30,9 +28,19 @@ const Preview = ({ id, title, image, onChange }: props) => {
             src={URL.createObjectURL(image)}
             alt=""
             className="after-Image"
+            style={{
+              height: "100px",
+              width: "100px",
+              backgroundSize: "cover",
+            }}
           />
         ) : (
-          <img src={uploadpic} alt="" className="before-image" />
+          <img
+            src={uploadpic}
+            alt=""
+            className="before-image"
+            style={{ width: "30%" }}
+          />
         )}
         <h6>{title}</h6>
         <input

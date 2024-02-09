@@ -1,94 +1,25 @@
-import { useCallback, useEffect, useState } from "react";
-import {
-  Box,
-  Grid,
-  Typography,
-  TableContainer,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  Paper,
-  TableBody,
-  Button,
-  TextField,
-} from "@mui/material";
+import { useEffect, useState } from "react";
+import { Box, Grid, Typography, Button, TextField } from "@mui/material";
 import Header from "../Shared/Header/Header";
-import { DownloadData, UserCount, userDetail } from "../Api/DashBoardAction";
-import Pagination from "@mui/material/Pagination";
+import { UserCount, userDetail } from "../Api/DashBoardAction";
 import { useDispatch } from "react-redux";
-import ProfileModal from "../Modal/ProfileModal/ProfileModal";
 import { setUserDatas } from "../reducer/dashboardReducer";
-import CustomModal from "../Modal/ApproveModal/ApproveModal";
-import RejectModal from "../Modal/RejectModal/RejectionModal";
-import { isEmpty } from "../../isEmpty";
+
 import Loader from "../../Loader/Loader";
 import "./style.scss";
-import {
-  UserDetails,
-  downloadUserData,
-  userData,
-} from "../Interface/Interface";
-import TableData from "./Table";
+import { UserDetails, userData } from "../Interface/Interface";
 import { useNavigate } from "react-router-dom";
+import Table from "./Table";
 
 const Dashboard: React.FC = () => {
   const [userData, setUserData] = useState<number>(0);
   const [totalUserApprove, setTotalUserApprove] = useState<number>(0);
   const [totalUserReject, setTotalUserReject] = useState<number>(0);
   const [userDetails, setUserDetails] = useState<UserDetails[]>([]);
-  const [currentIndex, setcurrentIndex] = useState<string>();
-  const [open, setOpen] = useState<boolean>(false);
-  const [openRejectModal, setOpenRejectModal] = useState<boolean>(false);
-  const [startIndex, setStartIndex] = useState<number>(0);
-  const [EndIndex, setEndIndex] = useState<number>(3);
   const [loadingPage, setLoadingPage] = useState<boolean>(false);
-  const [openProfileModal, setOpenProfileModel] = useState<boolean>(false);
-  const [storeId, setStoreId] = useState<string>();
   const [searchValue, setSearchValue] = useState<string>("");
   const dispatch = useDispatch();
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const useDebounce = (value: string, delay: number) => {
-    const [debouncedValue, setDebouncedValue] = useState(value);
-
-    useEffect(() => {
-      const handler = setTimeout(() => {
-        setDebouncedValue(value);
-      }, delay);
-      return () => {
-        clearTimeout(handler);
-      };
-    }, [value, delay]);
-
-    return debouncedValue;
-  };
-
-  const debounceSearchValue = useDebounce(searchValue.trim(), 500);
-
-  const handleCloseModal = () => {
-    setOpenRejectModal(false);
-  };
-
-  const handleOpen = (index: string) => {
-    setOpen(true);
-    setcurrentIndex(index);
-  };
-  const handleRejectMOdal = (index: string) => {
-    setOpenRejectModal(true);
-    setcurrentIndex(index);
-  };
-
-  const handleOpenProfileModal = (index: string) => {
-    setOpenProfileModel(true);
-    setStoreId(index);
-  };
-
-  const handleCloseProfileModal = () => setOpenProfileModel(false);
-
-  let paginationSize = Math.ceil(userData / 3);
+  let modal = false;
 
   useEffect(() => {
     setLoadingPage(true);
@@ -109,29 +40,12 @@ const Dashboard: React.FC = () => {
     setLoadingPage(false);
   }, []);
 
-  let lastIndex: number;
-  const handleClickPage = (e: any, page: number) => {
-    if (page === 1) {
-      setStartIndex(0);
-      setEndIndex(3);
-    } else if (page === 2) {
-      setStartIndex(startIndex + 3);
-      setEndIndex(page * 3);
-      lastIndex = startIndex + 3;
-    } else {
-      setStartIndex(lastIndex + 3);
-      setEndIndex(page * 3);
-    }
-  };
-
-  const userDataApi = () => {
+  useEffect(() => {
     setLoadingPage(true);
 
     const Logintoken = sessionStorage.getItem("LoginToken");
     const obj = {
       loginToken: Logintoken,
-      start: startIndex,
-      end: EndIndex,
     };
 
     userDetail(obj)
@@ -146,6 +60,10 @@ const Dashboard: React.FC = () => {
       .finally(() => {
         setLoadingPage(false);
       });
+  }, [dispatch, modal]);
+
+  const handleChange = (e: any) => {
+    setSearchValue(e?.target?.value);
   };
 
   useEffect(() => {
@@ -154,15 +72,13 @@ const Dashboard: React.FC = () => {
     const Logintoken = sessionStorage.getItem("LoginToken");
     const obj = {
       loginToken: Logintoken,
-      start: startIndex,
-      end: EndIndex,
-    };
 
+      search: searchValue,
+    };
     userDetail(obj)
       .then((response) => {
-        dispatch(setUserDatas(response.data));
-        setUserDetails(response.data);
         setUserData(response?.data?.length);
+        setUserDetails(response.data);
       })
       .catch((error) => {
         console.error(error);
@@ -170,40 +86,12 @@ const Dashboard: React.FC = () => {
       .finally(() => {
         setLoadingPage(false);
       });
-  }, [startIndex, EndIndex, dispatch]);
-
-  const downloadUserData = (userId: string) => {
-    const Logintoken = sessionStorage.getItem("LoginToken");
-    const obj = {
-      loginToken: Logintoken,
-      userId: userId,
-    };
-    DownloadData(obj)
-      .then((response: downloadUserData) => {
-        window.open(response?.data, "_blank");
-      })
-      .catch((error: any) => {
-        console.error(error);
-      })
-      .finally(() => {
-        setLoadingPage(false);
-      });
-  };
-
-  const handleChange = (e: any) => {
-    setSearchValue(e?.target?.value);
-  };
-
-  const handleSearch = useCallback(() => {
-    if (searchValue !== "") {
+    if (searchValue === "") {
       setLoadingPage(true);
 
       const Logintoken = sessionStorage.getItem("LoginToken");
       const obj = {
         loginToken: Logintoken,
-        start: startIndex,
-        end: EndIndex,
-        search: searchValue,
       };
       userDetail(obj)
         .then((response) => {
@@ -219,9 +107,47 @@ const Dashboard: React.FC = () => {
     }
   }, [searchValue]);
 
-  useEffect(() => {
-    handleSearch();
-  }, [debounceSearchValue]);
+  const handleSearch = () => {
+    setLoadingPage(true);
+
+    const Logintoken = sessionStorage.getItem("LoginToken");
+    const obj = {
+      loginToken: Logintoken,
+
+      search: searchValue,
+    };
+    userDetail(obj)
+      .then((response) => {
+        setUserData(response?.data?.length);
+        setUserDetails(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        setLoadingPage(false);
+      });
+    if (searchValue === "") {
+      setLoadingPage(true);
+
+      const Logintoken = sessionStorage.getItem("LoginToken");
+      const obj = {
+        loginToken: Logintoken,
+      };
+      userDetail(obj)
+        .then((response) => {
+          setUserData(response?.data?.length);
+          setUserDetails(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          setLoadingPage(false);
+        });
+    }
+  };
+
   const navigate = useNavigate();
 
   const downloadRecord = () => {
@@ -446,10 +372,11 @@ const Dashboard: React.FC = () => {
           </TableBody>
         </Table>
       </TableContainer> */}
+      <Table userDetails={userDetails} modal={modal} />
       {console.log("useDetail", userDetail)}
 
-      <TableData userDetails={userDetails} />
-      <CustomModal
+      {/* <App /> */}
+      {/* <CustomModal
         open={open}
         handleClose={handleClose}
         currentIndex={currentIndex}
@@ -465,7 +392,7 @@ const Dashboard: React.FC = () => {
         open={openProfileModal}
         handleClose={handleCloseProfileModal}
         storeId={storeId}
-      />
+      /> */}
 
       {/* {userData >= 3 && (
         <Pagination

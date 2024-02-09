@@ -43,7 +43,7 @@ export const WifeSchema = Yup.object({
   gardianwifeMobile: Yup.string()
     .max(10)
     .required("Wife Gardian Mobile is required"),
-  gardianwifeEmail: Yup.string().email().required("Not proper email"),
+  gardianwifeEmail: Yup.string().email().required("Please enter proper E-mail"),
 });
 
 export const PriestSchema = Yup.object({

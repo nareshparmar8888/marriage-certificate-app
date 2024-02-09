@@ -17,7 +17,7 @@ export const UserCount = async (payload: any) => {
 };
 
 export const userDetail = async (payload: any) => {
-  const url = "https://marriage-portal-api.onrender.com/listUsers";
+  const url = "http://localhost:3000/listUsers";
 
   try {
     const response = await axios.post(url, payload);
@@ -78,7 +78,28 @@ export const Reject = async (payload: any) => {
 };
 
 export const registration = async (payload: any) => {
-  const url = "https://marriage-portal-api.onrender.com/registration";
+  const url = "http://localhost:3000/registration";
+
+  try {
+    const response = await axios.post(url, payload, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    if (response && response.status === 200) {
+      return response.data;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};
+
+export const DownloadData = async (payload: any) => {
+  const url = "https://marriage-portal-api.onrender.com/download";
 
   try {
     const response = await axios.post(url, JSON.stringify(payload), {
@@ -99,7 +120,7 @@ export const registration = async (payload: any) => {
   }
 };
 
-export const DownloadData = async (payload: any) => {
+export const shortByDate = async (payload: any) => {
   const url = "https://marriage-portal-api.onrender.com/download";
 
   try {

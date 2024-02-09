@@ -1,5 +1,4 @@
 import { Typography, Box, TextField, Button } from "@mui/material";
-import "./login.scss";
 import { useFormik } from "formik";
 import { login } from "../Formik/InitalValue";
 import { loginSchema } from "../Formik/validationSchema";
@@ -9,17 +8,28 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { setLoginDatas } from "../reducer/dashboardReducer";
 import Loader from "../../Loader/Loader";
+import CustomSnackbar from "../../utils/CustomSnackbar";
 
 const Login = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarSeverity, setSnackbarSeverity] = useState<
+    "success" | "error" | "warning" | "info"
+  >("success");
+  const [snackbarMessage, setSnackbarMessage] = useState("");
   const dispatch = useDispatch();
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
+
   const loginApi = async (payload: any, dispatch: any) => {
     setLoading(true);
     const url = "https://marriage-portal-api.onrender.com/login";
-
+    let response: any;
     try {
-      const response: any = await axios.post(url, payload);
+      response = await axios.post(url, payload);
 
       if (response && response.status === 200) {
         return response.data;
@@ -27,6 +37,10 @@ const Login = () => {
         return false;
       }
     } catch (error) {
+      console.log("reposne", response);
+      setOpenSnackbar(true);
+      setSnackbarSeverity("error");
+      setSnackbarMessage("Please enter valid Email and password");
       console.error(error);
       return false;
     } finally {
@@ -138,6 +152,12 @@ const Login = () => {
         </form>
       </div>
       <Loader open={loading} />
+      <CustomSnackbar
+        open={openSnackbar}
+        message={snackbarMessage}
+        severity={snackbarSeverity}
+        onClose={handleCloseSnackbar}
+      />
     </>
   );
 };

@@ -5,19 +5,18 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-}
-
-.userDetail {
-  height: 52vh;
-  width: 100vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  line-height: 40px;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: 25px;
-}
-.status {
-  color: orange;
+  .userDetail {
+    height: 52vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    line-height: 40px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 25px;
+    .status {
+      color: orange;
+    }
+  }
 }

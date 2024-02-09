@@ -1,7 +1,6 @@
 import React from "react";
 import { AppBar, Toolbar, Tabs, Tab, Box } from "@mui/material";
 import Logo from "./Logo.png";
-import "./header.scss";
 import { Link } from "react-router-dom";
 
 const Header = () => {
@@ -19,7 +18,7 @@ const Header = () => {
   const shouldHideTab = currentUrl.includes("record-download");
   return (
     <>
-      <div className="header">
+      <div className="header" style={{ overflow: "hidden", height: "65px" }}>
         <React.Fragment>
           <AppBar sx={{ background: "#063970" }}>
             <Toolbar>

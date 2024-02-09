@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
-import "./MainForm.scss";
 import {
   Grid,
   TextField,
@@ -11,17 +10,14 @@ import {
   Box,
 } from "@mui/material";
 import "react-datepicker/dist/react-datepicker.css";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Button from "@mui/material/Button";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import Header from "../Shared/Header/Header";
 import Footer from "../Shared/Footer/footer";
 import { useFormik } from "formik";
-import File from "../FileUpload/File";
 
 import {
   HusbandSchema,
@@ -42,8 +38,10 @@ import {
 } from "../Formik/InitalValue";
 import Preview from "./Preview";
 import { registration } from "../Api/DashBoardAction";
-import { toast } from "react-toastify";
-import SnackBar from "../SnackBar";
+import CustomSnackbar from "../../utils/CustomSnackbar";
+import { formatDates } from "../../config";
+import { useNavigate } from "react-router-dom";
+import Loader from "../../Loader/Loader";
 
 interface merriage {
   location: string;
@@ -55,7 +53,7 @@ interface husband {
   surname: string;
   name: string;
   birthDate: string;
-  age: Number;
+  age: number;
   statusBride: string;
   Religions: string;
   location: string;
@@ -89,6 +87,8 @@ interface witness {
 }
 
 const MainForm = () => {
+  const [loadingPage, setLoadingPage] = useState<boolean>(false);
+
   const [document, setDocument] = useState([
     {
       id: 0,
@@ -223,7 +223,16 @@ const MainForm = () => {
     age: 0,
     address: "",
   });
+  const navigate = useNavigate();
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarSeverity, setSnackbarSeverity] = useState<
+    "success" | "error" | "warning" | "info"
+  >("success");
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
   const {
     values: valuesForm1,
     touched: touchedForm1,
@@ -374,7 +383,7 @@ const MainForm = () => {
   } = useFormik({
     initialValues: Witness2Value,
     validationSchema: Witness2Schema,
-    onSubmit: (values) => {
+    onSubmit: (valuesForm6) => {
       setWitness2((prevState: any) => ({
         ...prevState,
         name: valuesForm6?.witness2name,
@@ -387,17 +396,18 @@ const MainForm = () => {
   });
 
   const handleSubmit = () => {
-    const updatedDocument = [...document];
+    const updatedDocument: any = [...document];
     for (let i = 0; i < updatedDocument.length; i++) {
       if (updatedDocument[i].image === "") {
         updatedDocument[i].error = "Please select this image";
+      } else if (updatedDocument[i].image?.size > 500000) {
+        updatedDocument[i].error = "Image size should not exceed 500 KB";
       } else {
         updatedDocument[i].error = "";
       }
     }
 
     setDocument(updatedDocument);
-    console.log("updatedDocument", updatedDocument);
   };
 
   const handleChange = (image: any, index: number) => {
@@ -406,18 +416,26 @@ const MainForm = () => {
     setDocument(data);
   };
 
-  const submitData = () => {
-    // setLoadingPage(true);
+  const submitData = (e: any) => {
+    setLoadingPage(true);
+    e.preventDefault();
+
     const formData = new FormData();
     formData.append(
       "marriageDetails.marriageDate",
-      merriageDetail?.marriageDate
+      formatDates(merriageDetail?.marriageDate)
     );
     formData.append("marriageDetails.location", merriageDetail?.location);
-    formData.append("marriageDetails.location", merriageDetail?.location);
+    formData.append(
+      "marriageDetails.marriageAddress",
+      merriageDetail?.marriageAddress
+    );
     formData.append("husbandDetails.name", husbandDetail.name);
     formData.append("husbandDetails.surname", husbandDetail.surname);
-    formData.append("husbandDetails.dateOfBirth", husbandDetail?.birthDate);
+    formData.append(
+      "husbandDetails.dateOfBirth",
+      formatDates(husbandDetail?.birthDate)
+    );
     formData.append("husbandDetails.age", String(husbandDetail?.age));
     formData.append(
       "husbandDetails.statusOfBridegroom",
@@ -427,7 +445,10 @@ const MainForm = () => {
     formData.append("husbandDetails.location", husbandDetail?.location);
     formData.append("husbandDetails.address", husbandDetail?.address);
     formData.append("husbandDetails.mobileNumber", husbandGardian?.mobile);
-    formData.append("husbandDetails.emailId", "mail@gmail.com"); //husbandGardian?.email
+    formData.append(
+      "husbandDetails.emailId",
+      husbandGardian?.email && husbandGardian?.email
+    ); //husbandGardian?.email
     formData.append(
       "husbandDetails.guardianDetails.name",
       husbandGardian?.name
@@ -454,14 +475,20 @@ const MainForm = () => {
     );
     formData.append("wifeDetails.name", wifeDetail?.name);
     formData.append("wifeDetails.surname", wifeDetail?.surname);
-    formData.append("wifeDetails.dateOfBirth", wifeDetail?.birthDate);
+    formData.append(
+      "wifeDetails.dateOfBirth",
+      formatDates(wifeDetail?.birthDate)
+    );
     formData.append("wifeDetails.age", String(wifeDetail?.age));
     formData.append("wifeDetails.statusOfBridegroom", wifeDetail?.statusBride);
     formData.append("wifeDetails.religious", wifeDetail?.Religions);
     formData.append("wifeDetails.location", wifeDetail?.location);
     formData.append("wifeDetails.address", wifeDetail?.address);
     formData.append("wifeDetails.mobileNumber", wifeGardian?.mobile);
-    formData.append("wifeDetails.emailId", "abcd@gmail.com"); //wifeGardian?.email
+    formData.append(
+      "wifeDetails.emailId",
+      wifeGardian?.email && wifeGardian?.email
+    ); //wifeGardian?.email
     formData.append("wifeDetails.guardianDetails.name", wifeGardian?.name);
     formData.append(
       "wifeDetails.guardianDetails.surname",
@@ -484,16 +511,25 @@ const MainForm = () => {
       String(wifeGardian?.landline)
     );
     formData.append("priestDetails.name", priestDetail?.name);
-    formData.append("priestDetails.dateOfBirth", priestDetail?.birthDate);
+    formData.append(
+      "priestDetails.dateOfBirth",
+      formatDates(priestDetail?.birthDate)
+    );
     formData.append("priestDetails.age", String(priestDetail?.age));
     formData.append("priestDetails.location", priestDetail?.location);
     formData.append("priestDetails.address", priestDetail?.address);
     formData.append("witnessOneDetails.name", witness1?.name);
-    formData.append("witnessOneDetails.dateOfBirth", witness1?.birthDate);
+    formData.append(
+      "witnessOneDetails.dateOfBirth",
+      formatDates(witness1?.birthDate)
+    );
     formData.append("witnessOneDetails.age", String(witness1?.age));
     formData.append("witnessOneDetails.address", String(witness1?.address));
     formData.append("witnessTwoDetails.name", witness2?.name);
-    formData.append("witnessTwoDetails.dateOfBirth", witness2?.birthDate);
+    formData.append(
+      "witnessTwoDetails.dateOfBirth",
+      formatDates(witness2?.birthDate)
+    );
     formData.append("witnessTwoDetails.age", String(witness2?.age));
     formData.append("witnessTwoDetails.address", String(witness2?.address));
     formData.append("HusbandSchoolLeavingCertificate", document[0]?.image);
@@ -505,21 +541,35 @@ const MainForm = () => {
     formData.append("WifePhotoIdProof", document[6]?.image);
     formData.append("PriestPhotoIdProof", document[7]?.image);
     formData.append("MarriageEvidence", document[8]?.image);
-
-    const notify = () => toast("Wow so easy!");
+    console.log("formData", Array.from(formData.entries()));
 
     registration(formData)
       .then((response: any) => {
-        <SnackBar message="Your custom message goes here" />;
+        if (response.statusCode === 200) {
+          setOpenSnackbar(true);
+          setSnackbarSeverity("success");
+          setSnackbarMessage("Registration successful!");
+          setLoadingPage(false);
+          navigate("/UserDashboard");
+
+          return;
+        } else {
+          setOpenSnackbar(true);
+          setSnackbarSeverity("error");
+          setSnackbarMessage(response?.message);
+          setLoadingPage(false);
+        }
       })
       .catch((error) => {
-        <SnackBar message="Error" />;
+        setOpenSnackbar(true);
+        setSnackbarSeverity("success");
+        setSnackbarMessage("Something went wrong!");
+        setLoadingPage(false);
       });
-    // setLoadingPage(false);
   };
 
   return (
-    <>
+    <form onSubmit={submitData}>
       <Header />
       <div style={{ width: "100%" }}>
         <Box
@@ -579,7 +629,7 @@ const MainForm = () => {
                     variant="outlined"
                     sx={{ width: "100%" }}
                     name="applicationDate"
-                    defaultValue={currentDate}
+                    defaultValue={formatDates(currentDate)}
                     disabled
                   />
                 </Grid>
@@ -654,7 +704,6 @@ const MainForm = () => {
           </AccordionDetails>
         </Accordion>
       </Box>
-
       <Box sx={{ boxShadow: 3 }}>
         <Accordion>
           <AccordionSummary
@@ -972,7 +1021,6 @@ const MainForm = () => {
           </AccordionDetails>
         </Accordion>
       </Box>
-
       <Box sx={{ boxShadow: 3 }}>
         <Accordion>
           <AccordionSummary
@@ -1290,7 +1338,6 @@ const MainForm = () => {
           </AccordionDetails>
         </Accordion>
       </Box>
-
       <Box sx={{ boxShadow: 3 }}>
         <Accordion>
           <AccordionSummary
@@ -1401,7 +1448,6 @@ const MainForm = () => {
           </AccordionDetails>
         </Accordion>
       </Box>
-
       <Box sx={{ boxShadow: 3 }}>
         <Accordion>
           <AccordionSummary
@@ -1628,17 +1674,25 @@ const MainForm = () => {
         </Accordion>
       </Box>
 
+      <CustomSnackbar
+        open={openSnackbar}
+        message={snackbarMessage}
+        severity={snackbarSeverity}
+        onClose={handleCloseSnackbar}
+      />
       <Box textAlign="center">
         <Button
           variant="contained"
           sx={{ width: "30%", height: "70px", mt: "150px" }}
-          onClick={submitData}
+          // onClick={submitData}
+          type="submit"
         >
           Apply for marriage Registration
         </Button>
       </Box>
       <Footer />
-    </>
+      <Loader open={loadingPage} />
+    </form>
   );
 };
 export default MainForm;
