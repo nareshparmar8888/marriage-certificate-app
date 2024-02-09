@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import Header from "../Shared/Header/Header";
 import { shortByDate, userDetail } from "../Api/DashBoardAction";
-import jsPDF from "jspdf";
-
+import { jsPDF } from "jspdf";
+import "jspdf-autotable";
 import Loader from "../../Loader/Loader";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
@@ -13,7 +13,8 @@ const RecordDownload: React.FC = () => {
   const [loadingPage, setLoadingPage] = useState<boolean>(false);
   const [fromDate, setFromDate] = useState<string>("");
   const [toDate, setToDate] = useState<string>("");
-
+  const [apiResponse, setApiResponse] = useState<any>([]);
+  const [downloadData, setDownloadData] = useState<boolean>(false);
   const formatDate = (dateString: any) => {
     const date = new Date(dateString);
     const day = date.getDate();
@@ -27,31 +28,105 @@ const RecordDownload: React.FC = () => {
   };
 
   const downloadUserData = async () => {
-    setLoadingPage(true);
-    const Logintoken = sessionStorage.getItem("LoginToken");
-    const obj = {
-      loginToken: Logintoken,
-      fromDate: fromDate,
-      toDate: toDate,
+    const fetchData = async () => {
+      try {
+        const Logintoken = sessionStorage.getItem("LoginToken");
+        const obj = {
+          loginToken: Logintoken,
+          fromDate: fromDate,
+          toDate: toDate,
+        };
+
+        const response = await shortByDate(obj);
+        await setApiResponse(response.data);
+        await setDownloadData(true);
+        const doc = new jsPDF();
+
+        (await apiResponse) &&
+          apiResponse.forEach((item: any, index: number) => {
+            doc.text(`Husband Details:`, 10, 10 + index * 10);
+            doc.text(`Name: ${item.husbandDetails.name}`, 10, 20 + index * 10);
+            doc.text(
+              `Surname: ${item.husbandDetails.surname}`,
+              10,
+              30 + index * 10
+            );
+            doc.text(
+              `Date of Birth: ${item.husbandDetails.dateOfBirth}`,
+              10,
+              40 + index * 10
+            );
+
+            doc.text(`Wife Details:`, 10, 60 + index * 10);
+            doc.text(`Name: ${item.wifeDetails.name}`, 10, 70 + index * 10);
+            doc.text(
+              `Surname: ${item.wifeDetails.surname}`,
+              10,
+              80 + index * 10
+            );
+            doc.text(
+              `Date of Birth: ${item.wifeDetails.dateOfBirth}`,
+              10,
+              90 + index * 10
+            );
+
+            doc.text(`Priest Details:`, 10, 110 + index * 10);
+            doc.text(`Name: ${item.priestDetails.name}`, 10, 120 + index * 10);
+            doc.text(
+              `Date of Birth: ${item.priestDetails.dateOfBirth}`,
+              10,
+              130 + index * 10
+            );
+
+            doc.text(`Witness One Details:`, 10, 150 + index * 10);
+            doc.text(
+              `name: ${item.witnessOneDetails.name}`,
+              10,
+              160 + index * 10
+            );
+            doc.text(
+              `Date of Birth: ${item.witnessOneDetails.dateOfBirth}`,
+              10,
+              170 + index * 10
+            );
+
+            doc.text(`Witness Two Details:`, 10, 190 + index * 10);
+            doc.text(
+              `name: ${item.witnessTwoDetails.name}`,
+              10,
+              200 + index * 10
+            );
+            doc.text(
+              `Date of Birth: ${item.witnessTwoDetails.dateOfBirth}`,
+              10,
+              210 + index * 10
+            );
+
+            doc.text(`Other Details:`, 10, 230 + index * 10);
+            doc.text(
+              `Application Status: ${item.applicationStatus}`,
+              10,
+              240 + index * 10
+            );
+            doc.text(
+              `Approve Appointment Date: ${item.approveAppointmentDate}`,
+              10,
+              250 + index * 10
+            );
+            doc.text(`UserID: ${item._id}`, 10, 260 + index * 10);
+
+            if (index < apiResponse.length - 1) {
+              doc.addPage();
+            }
+          });
+
+        doc.save("user_record.pdf");
+      } catch (error) {
+        console.error(error);
+      }
     };
 
-    try {
-      const response = await shortByDate(obj);
-      if (response && response.pdfUrl) {
-        const a = document.createElement("a");
-        a.href = response.pdfUrl;
-        a.download = "userData.pdf";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      } else {
-        console.error("PDF URL not found in the response.");
-      }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoadingPage(false);
-    }
+    fetchData();
   };
 
   const handleFromDateChange = (newDate: any) => {

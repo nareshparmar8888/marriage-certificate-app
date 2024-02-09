@@ -121,7 +121,7 @@ export const DownloadData = async (payload: any) => {
 };
 
 export const shortByDate = async (payload: any) => {
-  const url = "https://marriage-portal-api.onrender.com/download";
+  const url = "https://marriage-portal-api.onrender.com/shortByDate";
 
   try {
     const response = await axios.post(url, JSON.stringify(payload), {

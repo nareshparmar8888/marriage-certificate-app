@@ -70,3 +70,7 @@ export const login = {
   email: "",
   password: "",
 };
+
+export const password = {
+  password: "",
+};

@@ -72,3 +72,7 @@ export const loginSchema = Yup.object({
   email: Yup.string().required("Email is required"),
   password: Yup.string().min(7).max(12).required("Password is required"),
 });
+
+export const passwordSchema = Yup.object({
+  password: Yup.string().min(7).max(12).required("Password is required"),
+});

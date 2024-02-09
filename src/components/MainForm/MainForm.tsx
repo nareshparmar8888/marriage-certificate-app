@@ -8,6 +8,12 @@ import {
   Select,
   MenuItem,
   Box,
+  Modal,
+  Typography,
+  FormControl,
+  OutlinedInput,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
 import "react-datepicker/dist/react-datepicker.css";
 import Accordion from "@mui/material/Accordion";
@@ -18,6 +24,8 @@ import Button from "@mui/material/Button";
 import Header from "../Shared/Header/Header";
 import Footer from "../Shared/Footer/footer";
 import { useFormik } from "formik";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import {
   HusbandSchema,
@@ -26,6 +34,7 @@ import {
   WifeSchema,
   Witness1Schema,
   Witness2Schema,
+  passwordSchema,
 } from "../Formik/validationSchema";
 
 import {
@@ -35,60 +44,50 @@ import {
   WifeValue,
   Witness1Value,
   Witness2Value,
+  password,
 } from "../Formik/InitalValue";
 import Preview from "./Preview";
 import { registration } from "../Api/DashBoardAction";
 import CustomSnackbar from "../../utils/CustomSnackbar";
-import { formatDates } from "../../config";
+import { formatDateFirstMonth } from "../../config";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../Loader/Loader";
+import {
+  husband,
+  husbandGardian,
+  merriage,
+  priest,
+  witness,
+} from "../Interface/Interface";
 
-interface merriage {
-  location: string;
-  marriageDate: string;
-  marriageAddress: string;
-}
-
-interface husband {
-  surname: string;
-  name: string;
-  birthDate: string;
-  age: number;
-  statusBride: string;
-  Religions: string;
-  location: string;
-  address: string;
-}
-
-interface husbandGardian {
-  surname: string;
-  name: string;
-  age: number;
-  location: string;
-  address: string;
-  landline: string;
-  mobile: string;
-  email: string;
-}
-
-interface priest {
-  name: string;
-  birthDate: string;
-  age: number;
-  location: string;
-  address: string;
-}
-
-interface witness {
-  name: string;
-  birthDate: string;
-  age: number;
-  address: String;
-}
+const style = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid transparent",
+  boxShadow: 24,
+  p: 4,
+  borderRadius: 3,
+};
 
 const MainForm = () => {
   const [loadingPage, setLoadingPage] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(false);
+  const [userPassword, setUserPassword] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
+  const handleClose = () => setOpen(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+  };
   const [document, setDocument] = useState([
     {
       id: 0,
@@ -395,6 +394,22 @@ const MainForm = () => {
     },
   });
 
+  const {
+    values: valuesFormPassword,
+    touched: touchedFormPassword,
+    errors: errorsFormPassword,
+    handleBlur: handleBlurFormPassword,
+    handleChange: handleChangeFormPassword,
+    handleSubmit: handleSubmitFormPassword,
+  } = useFormik({
+    initialValues: password,
+    validationSchema: passwordSchema,
+    onSubmit: (valuesFormPassword) => {
+      setUserPassword(valuesFormPassword?.password);
+      setOpen(false);
+    },
+  });
+
   const handleSubmit = () => {
     const updatedDocument: any = [...document];
     for (let i = 0; i < updatedDocument.length; i++) {
@@ -423,7 +438,7 @@ const MainForm = () => {
     const formData = new FormData();
     formData.append(
       "marriageDetails.marriageDate",
-      formatDates(merriageDetail?.marriageDate)
+      formatDateFirstMonth(merriageDetail?.marriageDate)
     );
     formData.append("marriageDetails.location", merriageDetail?.location);
     formData.append(
@@ -434,7 +449,7 @@ const MainForm = () => {
     formData.append("husbandDetails.surname", husbandDetail.surname);
     formData.append(
       "husbandDetails.dateOfBirth",
-      formatDates(husbandDetail?.birthDate)
+      formatDateFirstMonth(husbandDetail?.birthDate)
     );
     formData.append("husbandDetails.age", String(husbandDetail?.age));
     formData.append(
@@ -448,7 +463,7 @@ const MainForm = () => {
     formData.append(
       "husbandDetails.emailId",
       husbandGardian?.email && husbandGardian?.email
-    ); //husbandGardian?.email
+    );
     formData.append(
       "husbandDetails.guardianDetails.name",
       husbandGardian?.name
@@ -477,7 +492,7 @@ const MainForm = () => {
     formData.append("wifeDetails.surname", wifeDetail?.surname);
     formData.append(
       "wifeDetails.dateOfBirth",
-      formatDates(wifeDetail?.birthDate)
+      formatDateFirstMonth(wifeDetail?.birthDate)
     );
     formData.append("wifeDetails.age", String(wifeDetail?.age));
     formData.append("wifeDetails.statusOfBridegroom", wifeDetail?.statusBride);
@@ -488,7 +503,7 @@ const MainForm = () => {
     formData.append(
       "wifeDetails.emailId",
       wifeGardian?.email && wifeGardian?.email
-    ); //wifeGardian?.email
+    );
     formData.append("wifeDetails.guardianDetails.name", wifeGardian?.name);
     formData.append(
       "wifeDetails.guardianDetails.surname",
@@ -513,7 +528,7 @@ const MainForm = () => {
     formData.append("priestDetails.name", priestDetail?.name);
     formData.append(
       "priestDetails.dateOfBirth",
-      formatDates(priestDetail?.birthDate)
+      formatDateFirstMonth(priestDetail?.birthDate)
     );
     formData.append("priestDetails.age", String(priestDetail?.age));
     formData.append("priestDetails.location", priestDetail?.location);
@@ -521,14 +536,14 @@ const MainForm = () => {
     formData.append("witnessOneDetails.name", witness1?.name);
     formData.append(
       "witnessOneDetails.dateOfBirth",
-      formatDates(witness1?.birthDate)
+      formatDateFirstMonth(witness1?.birthDate)
     );
     formData.append("witnessOneDetails.age", String(witness1?.age));
     formData.append("witnessOneDetails.address", String(witness1?.address));
     formData.append("witnessTwoDetails.name", witness2?.name);
     formData.append(
       "witnessTwoDetails.dateOfBirth",
-      formatDates(witness2?.birthDate)
+      formatDateFirstMonth(witness2?.birthDate)
     );
     formData.append("witnessTwoDetails.age", String(witness2?.age));
     formData.append("witnessTwoDetails.address", String(witness2?.address));
@@ -546,6 +561,8 @@ const MainForm = () => {
     registration(formData)
       .then((response: any) => {
         if (response.statusCode === 200) {
+          setOpen(true);
+
           setOpenSnackbar(true);
           setSnackbarSeverity("success");
           setSnackbarMessage("Registration successful!");
@@ -629,7 +646,7 @@ const MainForm = () => {
                     variant="outlined"
                     sx={{ width: "100%" }}
                     name="applicationDate"
-                    defaultValue={formatDates(currentDate)}
+                    defaultValue={formatDateFirstMonth(currentDate)}
                     disabled
                   />
                 </Grid>
@@ -1692,6 +1709,67 @@ const MainForm = () => {
       </Box>
       <Footer />
       <Loader open={loadingPage} />
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+            style={{ marginLeft: "11px" }}
+          >
+            Enter password
+          </Typography>
+          <FormControl
+            sx={{ m: 1, width: "25ch" }}
+            variant="outlined"
+            style={{ marginTop: "20px", width: "19rem" }}
+          >
+            <InputLabel htmlFor="outlined-adornment-password">
+              Password
+            </InputLabel>
+            <OutlinedInput
+              id="outlined-adornment-password"
+              type={showPassword ? "text" : "password"}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              label="Password"
+              name="password"
+              value={valuesFormPassword.password}
+              onChange={handleChangeFormPassword}
+              onBlur={handleBlurFormPassword}
+            />
+          </FormControl>
+          <div style={{ marginLeft: "10px" }}>
+            {errorsFormPassword.password && touchedFormPassword.password ? (
+              <span style={{ color: "red" }}>
+                {errorsFormPassword.password}
+              </span>
+            ) : null}
+          </div>
+          <Button
+            variant="contained"
+            style={{ marginTop: "20px", marginLeft: "10px" }}
+            onClick={() => handleSubmitFormPassword()}
+          >
+            Set Password
+          </Button>
+        </Box>
+      </Modal>
     </form>
   );
 };

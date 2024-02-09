@@ -17,6 +17,7 @@ export default function Table(userDetails: any, modal: any) {
   const [loadingPage, setLoadingPage] = useState<boolean>(false);
 
   const downloadUserDatas = (userId: string) => {
+    setLoadingPage(true);
     const Logintoken = sessionStorage.getItem("LoginToken");
     const obj = {
       loginToken: Logintoken,
@@ -24,9 +25,11 @@ export default function Table(userDetails: any, modal: any) {
     };
     DownloadData(obj)
       .then((response: downloadUserData) => {
+        setLoadingPage(false);
         window.open(response?.data, "_blank");
       })
       .catch((error: any) => {
+        setLoadingPage(false);
         console.error(error);
       });
   };
@@ -72,19 +75,19 @@ export default function Table(userDetails: any, modal: any) {
   };
 
   const columns: GridColDef[] = [
-    { field: "id", headerName: "UserID", width: 300 },
-    { field: "HusbandName", headerName: "Husband Name", width: 300 },
-    { field: "WifeName", headerName: "Wife Name", width: 300 },
-    { field: "MobileNo", headerName: "Mobile No", width: 200 },
+    { field: "id", headerName: "UserID", width: 250 },
+    { field: "HusbandName", headerName: "Husband Name", width: 200 },
+    { field: "WifeName", headerName: "Wife Name", width: 200 },
+    { field: "MobileNo", headerName: "Mobile No", width: 150 },
     {
       field: "Status",
       headerName: "Status",
-      width: 200,
+      width: 100,
     },
     {
       field: "actions",
       headerName: "Actions",
-      width: 450,
+      width: 424,
       sortable: false,
       renderCell: (params: GridCellParams) => (
         <div
@@ -144,7 +147,7 @@ export default function Table(userDetails: any, modal: any) {
     : [];
 
   return (
-    <div style={{ height: 400, width: "100%" }}>
+    <div style={{ height: 371, width: "100%" }}>
       <DataGrid
         rows={rows}
         columns={columns}

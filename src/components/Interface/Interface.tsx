@@ -26,6 +26,49 @@ export interface downloadUserData {
   success: boolean;
 }
 
+export interface merriage {
+  location: string;
+  marriageDate: string;
+  marriageAddress: string;
+}
+
+export interface husband {
+  surname: string;
+  name: string;
+  birthDate: string;
+  age: number;
+  statusBride: string;
+  Religions: string;
+  location: string;
+  address: string;
+}
+
+export interface husbandGardian {
+  surname: string;
+  name: string;
+  age: number;
+  location: string;
+  address: string;
+  landline: string;
+  mobile: string;
+  email: string;
+}
+
+export interface priest {
+  name: string;
+  birthDate: string;
+  age: number;
+  location: string;
+  address: string;
+}
+
+export interface witness {
+  name: string;
+  birthDate: string;
+  age: number;
+  address: String;
+}
+
 export interface UserAllDetail {
   data: {
     agreementStampStatus: boolean;

@@ -1,4 +1,4 @@
-export const formatDate = (dateString: any) => {
+export const formatDate = (dateString: string) => {
   const dateParts = dateString?.split("T");
   const date = dateParts[0];
   const [year, month, day] = date?.split("-");
@@ -23,7 +23,7 @@ export const convertDateFormat = (dateString: string): string => {
   return formattedDate;
 };
 
-export const formatDates = (dateString: any) => {
+export const formatDateFirstMonth = (dateString: string) => {
   const date = new Date(dateString);
   const day = date.getDate();
   const month = date.getMonth() + 1;
