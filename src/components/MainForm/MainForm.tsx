@@ -439,122 +439,193 @@ const MainForm = () => {
     setDocument(data);
   };
 
-  const submitData = (e: any) => {
+  const submitData = async (e: any) => {
     setLoadingPage(true);
     e.preventDefault();
 
+    const marriageDetails = {
+      marriageDate: formatDateFirstMonth(merriageDetail?.marriageDate),
+      location: merriageDetail?.location,
+      marriageAddress: merriageDetail?.marriageAddress,
+    };
+
+    const husbandDetails = {
+      name: husbandDetail.name,
+      surname: husbandDetail.surname,
+      dateOfBirth: formatDateFirstMonth(husbandDetail?.birthDate),
+      age: String(husbandDetail?.age),
+      statusOfBridegroom: husbandDetail?.statusBride,
+      religious: husbandDetail?.Religions,
+      location: husbandDetail?.location,
+      address: husbandDetail?.address,
+      mobileNumber: husbandGardian?.mobile,
+      emailId: husbandGardian?.email,
+      guardianDetails: {
+        name: husbandGardian?.name,
+        surname: husbandGardian?.surname,
+        age: String(husbandGardian?.age),
+        location: husbandGardian?.location,
+        address: husbandGardian?.address,
+        contactNumber: String(husbandGardian?.landline),
+      },
+    };
+
+    const wifeDetails = {
+      name: wifeDetail.name,
+      surname: wifeDetail.surname,
+      dateOfBirth: formatDateFirstMonth(wifeDetail?.birthDate),
+      age: String(wifeDetail?.age),
+      statusOfBridegroom: wifeDetail?.statusBride,
+      religious: wifeDetail?.Religions,
+      location: wifeDetail?.location,
+      address: wifeDetail?.address,
+      mobileNumber: wifeGardian?.mobile,
+      emailId: wifeGardian?.email,
+      guardianDetails: {
+        name: wifeGardian?.name,
+        surname: wifeGardian?.surname,
+        age: String(wifeGardian?.age),
+        location: wifeGardian?.location,
+        address: wifeGardian?.address,
+        contactNumber: String(wifeGardian?.landline),
+      },
+    };
+
+    const priestDetails = {
+      name: priestDetail?.name,
+      dateOfBirth: formatDateFirstMonth(priestDetail?.birthDate),
+      age: String(priestDetail?.age),
+      location: priestDetail?.location,
+      address: priestDetail?.address,
+    };
+
+    const witnessOneDetails = {
+      name: witness1?.name,
+      dateOfBirth: formatDateFirstMonth(witness1?.birthDate),
+      age: String(witness1?.age),
+      address: String(witness1?.address),
+    };
+
+    const witnessTwoDetails = {
+      name: witness2?.name,
+      dateOfBirth: formatDateFirstMonth(witness2?.birthDate),
+      age: String(witness2?.age),
+      address: String(witness2?.address),
+    };
+
     const formData = new FormData();
+
     formData.append(
-      "marriageDetails.marriageDate",
-      formatDateFirstMonth(merriageDetail?.marriageDate)
+      "marriageDetails[marriageDate]",
+      marriageDetails.marriageDate
     );
-    formData.append("marriageDetails.location", merriageDetail?.location);
+    formData.append("marriageDetails[location]", marriageDetails.location);
     formData.append(
-      "marriageDetails.marriageAddress",
-      merriageDetail?.marriageAddress
+      "marriageDetails[marriageAddress]",
+      marriageDetails.marriageAddress
     );
-    formData.append("husbandDetails.name", husbandDetail.name);
-    formData.append("husbandDetails.surname", husbandDetail.surname);
+
+    formData.append("husbandDetails[name]", husbandDetails.name);
+    formData.append("husbandDetails[surname]", husbandDetails.surname);
+    formData.append("husbandDetails[dateOfBirth]", husbandDetails.dateOfBirth);
+    formData.append("husbandDetails[age]", husbandDetails.age);
     formData.append(
-      "husbandDetails.dateOfBirth",
-      formatDateFirstMonth(husbandDetail?.birthDate)
+      "husbandDetails[statusOfBridegroom]",
+      husbandDetails.statusOfBridegroom
     );
-    formData.append("husbandDetails.age", String(husbandDetail?.age));
+    formData.append("husbandDetails[religious]", husbandDetails.religious);
+    formData.append("husbandDetails[location]", husbandDetails.location);
+    formData.append("husbandDetails[address]", husbandDetails.address);
     formData.append(
-      "husbandDetails.statusOfBridegroom",
-      husbandDetail?.statusBride
+      "husbandDetails[mobileNumber]",
+      husbandDetails.mobileNumber
     );
-    formData.append("husbandDetails.religious", husbandDetail?.Religions);
-    formData.append("husbandDetails.location", husbandDetail?.location);
-    formData.append("husbandDetails.address", husbandDetail?.address);
-    formData.append("husbandDetails.mobileNumber", husbandGardian?.mobile);
+    formData.append("husbandDetails[emailId]", husbandDetails.emailId);
     formData.append(
-      "husbandDetails.emailId",
-      husbandGardian?.email && husbandGardian?.email
-    );
-    formData.append(
-      "husbandDetails.guardianDetails.name",
-      husbandGardian?.name
-    );
-    formData.append(
-      "husbandDetails.guardianDetails.surname",
-      husbandGardian?.surname
+      "husbandDetails[guardianDetails][name]",
+      husbandDetails.guardianDetails.name
     );
     formData.append(
-      "husbandDetails.guardianDetails.age",
-      String(husbandGardian?.age)
+      "husbandDetails[guardianDetails][surname]",
+      husbandDetails.guardianDetails.surname
     );
     formData.append(
-      "husbandDetails.guardianDetails.location",
-      husbandGardian?.location
+      "husbandDetails[guardianDetails][age]",
+      husbandDetails.guardianDetails.age
     );
     formData.append(
-      "husbandDetails.guardianDetails.address",
-      husbandGardian?.address
+      "husbandDetails[guardianDetails][location]",
+      husbandDetails.guardianDetails.location
     );
     formData.append(
-      "husbandDetails.guardianDetails.contactNumber",
-      String(husbandGardian?.landline)
-    );
-    formData.append("wifeDetails.name", wifeDetail?.name);
-    formData.append("wifeDetails.surname", wifeDetail?.surname);
-    formData.append(
-      "wifeDetails.dateOfBirth",
-      formatDateFirstMonth(wifeDetail?.birthDate)
-    );
-    formData.append("wifeDetails.age", String(wifeDetail?.age));
-    formData.append("wifeDetails.statusOfBridegroom", wifeDetail?.statusBride);
-    formData.append("wifeDetails.religious", wifeDetail?.Religions);
-    formData.append("wifeDetails.location", wifeDetail?.location);
-    formData.append("wifeDetails.address", wifeDetail?.address);
-    formData.append("wifeDetails.mobileNumber", wifeGardian?.mobile);
-    formData.append(
-      "wifeDetails.emailId",
-      wifeGardian?.email && wifeGardian?.email
-    );
-    formData.append("wifeDetails.guardianDetails.name", wifeGardian?.name);
-    formData.append(
-      "wifeDetails.guardianDetails.surname",
-      wifeGardian?.surname
+      "husbandDetails[guardianDetails][address]",
+      husbandDetails.guardianDetails.address
     );
     formData.append(
-      "wifeDetails.guardianDetails.age",
-      String(wifeGardian?.age)
+      "husbandDetails[guardianDetails][contactNumber]",
+      husbandDetails.guardianDetails.contactNumber
+    );
+
+    formData.append("wifeDetails[name]", wifeDetail.name);
+    formData.append("wifeDetails[surname]", wifeDetail.surname);
+    formData.append(
+      "wifeDetails[dateOfBirth]",
+      formatDateFirstMonth(wifeDetail.birthDate)
+    );
+    formData.append("wifeDetails[age]", String(wifeDetail.age));
+    formData.append("wifeDetails[statusOfBridegroom]", wifeDetail.statusBride);
+    formData.append("wifeDetails[religious]", wifeDetail.Religions);
+    formData.append("wifeDetails[location]", wifeDetail.location);
+    formData.append("wifeDetails[address]", wifeDetail.address);
+    formData.append("wifeDetails[mobileNumber]", wifeDetails?.mobileNumber);
+    formData.append("wifeDetails[emailId]", wifeDetails?.emailId);
+    formData.append(
+      "wifeDetails[guardianDetails][name]",
+      wifeDetails.guardianDetails.name
     );
     formData.append(
-      "wifeDetails.guardianDetails.location",
-      wifeGardian?.location
+      "wifeDetails[guardianDetails][surname]",
+      wifeDetails.guardianDetails.surname
     );
     formData.append(
-      "wifeDetails.guardianDetails.address",
-      wifeGardian?.address
+      "wifeDetails[guardianDetails][age]",
+      wifeDetails.guardianDetails.age
     );
     formData.append(
-      "wifeDetails.guardianDetails.contactNumber",
-      String(wifeGardian?.landline)
+      "wifeDetails[guardianDetails][location]",
+      wifeDetails.guardianDetails.location
     );
-    formData.append("priestDetails.name", priestDetail?.name);
     formData.append(
-      "priestDetails.dateOfBirth",
-      formatDateFirstMonth(priestDetail?.birthDate)
+      "wifeDetails[guardianDetails][address]",
+      wifeDetails.guardianDetails.address
     );
-    formData.append("priestDetails.age", String(priestDetail?.age));
-    formData.append("priestDetails.location", priestDetail?.location);
-    formData.append("priestDetails.address", priestDetail?.address);
-    formData.append("witnessOneDetails.name", witness1?.name);
     formData.append(
-      "witnessOneDetails.dateOfBirth",
-      formatDateFirstMonth(witness1?.birthDate)
+      "wifeDetails[guardianDetails][contactNumber]",
+      wifeDetails.guardianDetails.contactNumber
     );
-    formData.append("witnessOneDetails.age", String(witness1?.age));
-    formData.append("witnessOneDetails.address", String(witness1?.address));
-    formData.append("witnessTwoDetails.name", witness2?.name);
+
+    formData.append("priestDetails[name]", priestDetails.name);
+    formData.append("priestDetails[dateOfBirth]", priestDetails.dateOfBirth);
+    formData.append("priestDetails[age]", priestDetails.age);
+    formData.append("priestDetails[location]", priestDetails.location);
+    formData.append("priestDetails[address]", priestDetails.address);
+
+    formData.append("witnessOneDetails[name]", witnessOneDetails.name);
     formData.append(
-      "witnessTwoDetails.dateOfBirth",
-      formatDateFirstMonth(witness2?.birthDate)
+      "witnessOneDetails[dateOfBirth]",
+      witnessOneDetails.dateOfBirth
     );
-    formData.append("witnessTwoDetails.age", String(witness2?.age));
-    formData.append("witnessTwoDetails.address", String(witness2?.address));
+    formData.append("witnessOneDetails[age]", witnessOneDetails.age);
+    formData.append("witnessOneDetails[address]", witnessOneDetails.address);
+
+    formData.append("witnessTwoDetails[name]", witnessTwoDetails.name);
+    formData.append(
+      "witnessTwoDetails[dateOfBirth]",
+      witnessTwoDetails.dateOfBirth
+    );
+    formData.append("witnessTwoDetails[age]", witnessTwoDetails.age);
+    formData.append("witnessTwoDetails[address]", witnessTwoDetails.address);
+
     formData.append("HusbandSchoolLeavingCertificate", document[0]?.image);
     formData.append("WifeSchoolLeavingCertificate", document[1]?.image);
     formData.append("WitnessOnePhotoProof", document[2]?.image);
@@ -564,32 +635,30 @@ const MainForm = () => {
     formData.append("WifePhotoIdProof", document[6]?.image);
     formData.append("PriestPhotoIdProof", document[7]?.image);
     formData.append("MarriageEvidence", document[8]?.image);
-    console.log("formData", Array.from(formData.entries()));
 
-    registration(formData)
-      .then((response: any) => {
-        if (response.statusCode === 200) {
-          setOpen(true);
-          setOpenSnackbar(true);
-          setSnackbarSeverity("success");
-          setSnackbarMessage("Registration successful!");
-          setLoadingPage(false);
-          navigate("/UserDashboard");
-          return;
-        } else {
-          setOpenSnackbar(true);
-          setSnackbarSeverity("error");
-          setSnackbarMessage("Please fill all field and click submit button");
-          setLoadingPage(false);
-          return;
-        }
-      })
-      .catch((error) => {
+    try {
+      const response = await registration(formData);
+
+      if (response.statusCode === 200) {
+        await setLoadingPage(false);
+        await setOpenSnackbar(true);
+        await setSnackbarSeverity("success");
+        await setSnackbarMessage("Registration successful!");
+        // setOpen(true);
+
+        navigate("/login");
+      } else {
         setOpenSnackbar(true);
         setSnackbarSeverity("error");
-        setSnackbarMessage("Something went wrong!");
+        setSnackbarMessage(response?.message);
         setLoadingPage(false);
-      });
+      }
+    } catch (error) {
+      setOpenSnackbar(true);
+      setSnackbarSeverity("error");
+      setSnackbarMessage("Something went wrong!");
+      setLoadingPage(false);
+    }
   };
 
   return (
@@ -655,7 +724,7 @@ const MainForm = () => {
                     variant="outlined"
                     sx={{ width: "100%" }}
                     name="applicationDate"
-                    defaultValue={formatDateFirstMonth(currentDate)}
+                    defaultValue={currentDate}
                     disabled
                   />
                 </Grid>
