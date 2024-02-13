@@ -4,6 +4,7 @@ import Login from "./components/Login/login";
 import Dashboard from "./components/Dashboard/dashboard";
 import UserDashboard from "./components/UserDashboard/UserDashboard";
 import RecordDownload from "./components/RecordDownload/RecordDownload";
+import Protected from "./PrivateRoute";
 
 const App = () => {
   return (
@@ -11,10 +12,19 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<MainForm />}></Route>{" "}
-          <Route path="/dashboard" element={<Dashboard />}></Route>
-          <Route path="/userDashboard" element={<UserDashboard />} />
+          <Route
+            path="/dashboard"
+            element={<Protected Component={Dashboard} />}
+          />
+          <Route
+            path="/userDashboard"
+            element={<Protected Component={UserDashboard} />}
+          />
           <Route path="/login" element={<Login />} />
-          <Route path="/record-download" element={<RecordDownload />} />
+          <Route
+            path="/record-download"
+            element={<Protected Component={RecordDownload} />}
+          />
         </Routes>
       </BrowserRouter>
     </>

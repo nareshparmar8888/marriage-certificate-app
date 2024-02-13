@@ -1,22 +1,112 @@
-import { useState } from "react";
-import { Button } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Button, TextField } from "@mui/material";
 import { DataGrid, GridCellParams, GridColDef } from "@mui/x-data-grid";
 import { DownloadData, userDetail } from "../Api/DashBoardAction";
-import { downloadUserData } from "../Interface/Interface";
+import { UserAllDetail, downloadUserData } from "../Interface/Interface";
 import CustomModal from "../Modal/ApproveModal/ApproveModal";
 import RejectModal from "../Modal/RejectModal/RejectionModal";
 import ProfileModal from "../Modal/ProfileModal/ProfileModal";
 import Loader from "../../Loader/Loader";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUserDatas } from "../reducer/dashboardReducer";
+import { t } from "i18next";
 
-export default function Table(userDetails: any, modal: any) {
+export default function Table() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [openRejectModal, setOpenRejectModal] = useState<boolean>(false);
   const [currentIndex, setcurrentIndex] = useState<string>();
   const [open, setOpen] = useState<boolean>(false);
   const [openProfileModal, setOpenProfileModel] = useState<boolean>(false);
   const [storeId, setStoreId] = useState<string>();
   const [loadingPage, setLoadingPage] = useState<boolean>(false);
+  const [userDetails, setUserDetails] = useState<any>();
+  const [searchValue, setSearchValue] = useState<string>("");
 
-  const downloadUserDatas = (userId: string) => {
+  const handleChange = (e: any) => {
+    setSearchValue(e?.target?.value);
+  };
+
+  useEffect(() => {
+    setLoadingPage(true);
+
+    const Logintoken = sessionStorage.getItem("LoginToken");
+    const obj = {
+      loginToken: Logintoken,
+
+      search: searchValue,
+    };
+    userDetail(obj)
+      .then((response: UserAllDetail) => {
+        setUserDetails(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        setLoadingPage(false);
+      });
+    if (searchValue === "") {
+      setLoadingPage(true);
+
+      const Logintoken = sessionStorage.getItem("LoginToken");
+      const obj = {
+        loginToken: Logintoken,
+      };
+      userDetail(obj)
+        .then((response: UserAllDetail) => {
+          setUserDetails(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          setLoadingPage(false);
+        });
+    }
+  }, [searchValue]);
+
+  const handleSearch = () => {
+    setLoadingPage(true);
+
+    const Logintoken = sessionStorage.getItem("LoginToken");
+    const obj = {
+      loginToken: Logintoken,
+
+      search: searchValue,
+    };
+    userDetail(obj)
+      .then((response: UserAllDetail) => {
+        setUserDetails(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        setLoadingPage(false);
+      });
+    if (searchValue === "") {
+      setLoadingPage(true);
+
+      const Logintoken = sessionStorage.getItem("LoginToken");
+      const obj = {
+        loginToken: Logintoken,
+      };
+      userDetail(obj)
+        .then((response: UserAllDetail) => {
+          setUserDetails(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          setLoadingPage(false);
+        });
+    }
+  };
+
+  const downloadUserData = (userId: string) => {
     setLoadingPage(true);
     const Logintoken = sessionStorage.getItem("LoginToken");
     const obj = {
@@ -36,7 +126,6 @@ export default function Table(userDetails: any, modal: any) {
 
   const handleCloseModal = () => {
     setOpenRejectModal(false);
-    modal = true;
   };
 
   const handleOpen = (index: string) => {
@@ -58,35 +147,66 @@ export default function Table(userDetails: any, modal: any) {
   };
 
   const handleCloseProfileModal = () => setOpenProfileModel(false);
-  const userDataApi = () => {
+
+  useEffect(() => {
+    setLoadingPage(true);
     const Logintoken = sessionStorage.getItem("LoginToken");
     const obj = {
       loginToken: Logintoken,
     };
 
     userDetail(obj)
-      .then((response) => {})
+      .then((response) => {
+        dispatch(setUserDatas(response.data));
+
+        setUserDetails(response?.data);
+      })
       .catch((error) => {
         console.error(error);
       })
       .finally(() => {
         setLoadingPage(false);
       });
+  }, []);
+
+  const userDataApi = () => {
+    setLoadingPage(true);
+    const Logintoken = sessionStorage.getItem("LoginToken");
+    const obj = {
+      loginToken: Logintoken,
+    };
+
+    userDetail(obj)
+      .then((response: UserAllDetail) => {
+        setUserDetails(response?.data);
+        setLoadingPage(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        setLoadingPage(false);
+      })
+      .finally(() => {
+        setLoadingPage(false);
+      });
+  };
+
+  const downloadRecord = () => {
+    navigate("/record-download");
   };
 
   const columns: GridColDef[] = [
-    { field: "id", headerName: "UserID", width: 250 },
-    { field: "HusbandName", headerName: "Husband Name", width: 200 },
-    { field: "WifeName", headerName: "Wife Name", width: 200 },
-    { field: "MobileNo", headerName: "Mobile No", width: 150 },
+    { field: "id", headerName: `${t("UserID")}`, width: 250 },
+    { field: "HusbandName", headerName: `${t("Husband Name")}`, width: 200 },
+    { field: "WifeName", headerName: `${t("Wife Name")}`, width: 200 },
+    { field: "MobileNo", headerName: `${t("Mobile No")}`, width: 150 },
     {
       field: "Status",
-      headerName: "Status",
+      headerName: `${t("Status")}`,
       width: 100,
     },
     {
       field: "actions",
-      headerName: "Actions",
+      headerName: `${t("Actions")}`,
       width: 424,
       sortable: false,
       renderCell: (params: GridCellParams) => (
@@ -103,7 +223,7 @@ export default function Table(userDetails: any, modal: any) {
             sx={{ marginRight: "10px" }}
             onClick={() => handleOpen(params.row.id)}
           >
-            Approve
+            {t("Approve")}
           </Button>
           <Button
             variant="contained"
@@ -111,7 +231,7 @@ export default function Table(userDetails: any, modal: any) {
             sx={{ marginRight: "10px" }}
             onClick={() => handleRejectMOdal(params.row.id)}
           >
-            Reject
+            {t("Reject")}
           </Button>
           <Button
             variant="contained"
@@ -119,22 +239,22 @@ export default function Table(userDetails: any, modal: any) {
             sx={{ marginRight: "10px" }}
             onClick={() => handleOpenProfileModal(params.row.id)}
           >
-            View
+            {t("View")}
           </Button>
           <Button
             variant="contained"
             color="info"
-            onClick={() => downloadUserDatas(params.row.id)}
+            onClick={() => downloadUserData(params.row.id)}
           >
-            Download
+            {t("Download")}
           </Button>
         </div>
       ),
     },
   ];
 
-  const rows = Array.isArray(userDetails?.userDetails)
-    ? userDetails?.userDetails?.map((user: any, index: any) => {
+  const rows = Array.isArray(userDetails)
+    ? userDetails?.map((user: any, index: any) => {
         return {
           id: user?._id,
           HusbandName:
@@ -147,36 +267,69 @@ export default function Table(userDetails: any, modal: any) {
     : [];
 
   return (
-    <div style={{ height: 371, width: "100%" }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 5 },
-          },
-        }}
-        pageSizeOptions={[5, 10]}
-        style={{ border: "1px solid #ddd" }}
-      />
-      <CustomModal
-        open={open}
-        handleClose={handleClose}
-        currentIndex={currentIndex}
-        onApproveSuccess={userDataApi}
-      />
-      <RejectModal
-        open={openRejectModal}
-        handleClose={handleCloseModal}
-        currentIndex={currentIndex || ""}
-        onRejectSuccess={userDataApi}
-      />
-      <ProfileModal
-        open={openProfileModal}
-        handleClose={handleCloseProfileModal}
-        storeId={storeId}
-      />
-      <Loader open={loadingPage} />
-    </div>
+    <>
+      <div className="search-box">
+        <TextField
+          label={t("Search")}
+          id="outlined-size-small"
+          size="small"
+          onChange={handleChange}
+          value={searchValue}
+        />
+        <Button
+          variant="contained"
+          size="medium"
+          sx={{ marginRight: "1rem" }}
+          onClick={handleSearch}
+        >
+          {t("Search")}{" "}
+        </Button>
+        <Button
+          variant="contained"
+          color="success"
+          size="medium"
+          sx={{ marginRight: "1rem" }}
+          onClick={downloadRecord}
+        >
+          {/* {t("Download Record")} */}
+          {t("Download Record")}
+        </Button>
+      </div>
+      <div style={{ height: 371, width: "100%" }}>
+        {!loadingPage ? (
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: { page: 0, pageSize: 5 },
+              },
+            }}
+            pageSizeOptions={[5, 10]}
+            style={{ border: "1px solid #ddd" }}
+          />
+        ) : (
+          <Loader open={loadingPage} />
+        )}
+        <CustomModal
+          open={open}
+          handleClose={handleClose}
+          currentIndex={currentIndex}
+          onApproveSuccess={userDataApi}
+        />
+        <RejectModal
+          open={openRejectModal}
+          handleClose={handleCloseModal}
+          currentIndex={currentIndex || ""}
+          onRejectSuccess={userDataApi}
+        />
+        <ProfileModal
+          open={openProfileModal}
+          handleClose={handleCloseProfileModal}
+          storeId={storeId}
+        />
+        <Loader open={loadingPage} />
+      </div>
+    </>
   );
 }

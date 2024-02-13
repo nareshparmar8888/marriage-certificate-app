@@ -44,7 +44,6 @@ const customModalStyle = {
 
 const CustomModal: React.FC<ApproveModalProps> = (props: any) => {
   const { open, handleClose, currentIndex } = props;
-  const [loadingPage, setLoadingPage] = useState<boolean>(false);
 
   const [modalState, setModalState] = useState<ModalState>({
     certificateData: undefined,
@@ -80,7 +79,6 @@ const CustomModal: React.FC<ApproveModalProps> = (props: any) => {
   };
 
   const handleApprove = () => {
-    setLoadingPage(true);
     const Logintoken = sessionStorage.getItem("LoginToken");
 
     const obj = {
@@ -96,12 +94,10 @@ const CustomModal: React.FC<ApproveModalProps> = (props: any) => {
           handleClose();
           resetState();
           props.onApproveSuccess();
-          setLoadingPage(false);
         }
       })
       .catch((error) => {
         console.error(error);
-        setLoadingPage(false);
       });
   };
 
@@ -199,7 +195,6 @@ const CustomModal: React.FC<ApproveModalProps> = (props: any) => {
           </div>
         </Box>
       </Modal>
-      <Loader open={loadingPage} />
     </>
   );
 };

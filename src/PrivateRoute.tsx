@@ -1,21 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-interface PrivateRouteProps {
-  children: React.ReactNode;
-}
-
-const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
-  const authCredential = sessionStorage.getItem("token");
-  const [validToken, setValidToken] = useState(true);
-
+const Protected = (props: any) => {
+  const { Component } = props;
+  const navigate = useNavigate();
   useEffect(() => {
-    if (!authCredential) {
-      setValidToken(false);
+    let login = sessionStorage.getItem("LoginToken");
+    if (!login) {
+      navigate("/");
     }
-  }, []);
-
-  return <>{!validToken ? <Navigate to={"/login"} /> : children}</>;
+  });
+  return (
+    <div>
+      <Component />
+    </div>
+  );
 };
 
-export default PrivateRoute;
+export default Protected;

@@ -59,6 +59,7 @@ import {
   priest,
   witness,
 } from "../Interface/Interface";
+import { useTranslation } from "react-i18next";
 
 const style = {
   position: "absolute" as "absolute",
@@ -232,6 +233,13 @@ const MainForm = () => {
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
   };
+
+  const { t, i18n } = useTranslation();
+
+  function changeLanguage(lang: any) {
+    i18n.changeLanguage(lang);
+  }
+
   const {
     values: valuesForm1,
     touched: touchedForm1,
@@ -562,24 +570,23 @@ const MainForm = () => {
       .then((response: any) => {
         if (response.statusCode === 200) {
           setOpen(true);
-
           setOpenSnackbar(true);
           setSnackbarSeverity("success");
           setSnackbarMessage("Registration successful!");
           setLoadingPage(false);
           navigate("/UserDashboard");
-
           return;
         } else {
           setOpenSnackbar(true);
           setSnackbarSeverity("error");
-          setSnackbarMessage(response?.message);
+          setSnackbarMessage("Please fill all field and click submit button");
           setLoadingPage(false);
+          return;
         }
       })
       .catch((error) => {
         setOpenSnackbar(true);
-        setSnackbarSeverity("success");
+        setSnackbarSeverity("error");
         setSnackbarMessage("Something went wrong!");
         setLoadingPage(false);
       });
@@ -607,6 +614,7 @@ const MainForm = () => {
                 cursor: "pointer",
               },
             }}
+            onClick={() => changeLanguage("en")}
           >
             Eng
           </Box>
@@ -619,6 +627,7 @@ const MainForm = () => {
                 cursor: "pointer",
               },
             }}
+            onClick={() => changeLanguage("gu")}
           >
             Guj
           </Box>

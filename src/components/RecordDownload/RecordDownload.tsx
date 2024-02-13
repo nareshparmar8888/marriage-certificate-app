@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import Header from "../Shared/Header/Header";
 import { shortByDate, userDetail } from "../Api/DashBoardAction";
@@ -8,13 +8,15 @@ import Loader from "../../Loader/Loader";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { t } from "i18next";
+import i18n from "../../i18n/config";
+import { useTranslation } from "react-i18next";
 
 const RecordDownload: React.FC = () => {
   const [loadingPage, setLoadingPage] = useState<boolean>(false);
   const [fromDate, setFromDate] = useState<string>("");
   const [toDate, setToDate] = useState<string>("");
   const [apiResponse, setApiResponse] = useState<any>([]);
-  const [downloadData, setDownloadData] = useState<boolean>(false);
   const formatDate = (dateString: any) => {
     const date = new Date(dateString);
     const day = date.getDate();
@@ -27,115 +29,132 @@ const RecordDownload: React.FC = () => {
     return formattedDate;
   };
 
-  const downloadUserData = async () => {
-    const fetchData = async () => {
-      try {
-        const Logintoken = sessionStorage.getItem("LoginToken");
-        const obj = {
-          loginToken: Logintoken,
-          fromDate: fromDate,
-          toDate: toDate,
-        };
-
-        const response = await shortByDate(obj);
-        await setApiResponse(response.data);
-        await setDownloadData(true);
-        const doc = new jsPDF();
-
-        (await apiResponse) &&
-          apiResponse.forEach((item: any, index: number) => {
-            doc.text(`Husband Details:`, 10, 10 + index * 10);
-            doc.text(`Name: ${item.husbandDetails.name}`, 10, 20 + index * 10);
-            doc.text(
-              `Surname: ${item.husbandDetails.surname}`,
-              10,
-              30 + index * 10
-            );
-            doc.text(
-              `Date of Birth: ${item.husbandDetails.dateOfBirth}`,
-              10,
-              40 + index * 10
-            );
-
-            doc.text(`Wife Details:`, 10, 60 + index * 10);
-            doc.text(`Name: ${item.wifeDetails.name}`, 10, 70 + index * 10);
-            doc.text(
-              `Surname: ${item.wifeDetails.surname}`,
-              10,
-              80 + index * 10
-            );
-            doc.text(
-              `Date of Birth: ${item.wifeDetails.dateOfBirth}`,
-              10,
-              90 + index * 10
-            );
-
-            doc.text(`Priest Details:`, 10, 110 + index * 10);
-            doc.text(`Name: ${item.priestDetails.name}`, 10, 120 + index * 10);
-            doc.text(
-              `Date of Birth: ${item.priestDetails.dateOfBirth}`,
-              10,
-              130 + index * 10
-            );
-
-            doc.text(`Witness One Details:`, 10, 150 + index * 10);
-            doc.text(
-              `name: ${item.witnessOneDetails.name}`,
-              10,
-              160 + index * 10
-            );
-            doc.text(
-              `Date of Birth: ${item.witnessOneDetails.dateOfBirth}`,
-              10,
-              170 + index * 10
-            );
-
-            doc.text(`Witness Two Details:`, 10, 190 + index * 10);
-            doc.text(
-              `name: ${item.witnessTwoDetails.name}`,
-              10,
-              200 + index * 10
-            );
-            doc.text(
-              `Date of Birth: ${item.witnessTwoDetails.dateOfBirth}`,
-              10,
-              210 + index * 10
-            );
-
-            doc.text(`Other Details:`, 10, 230 + index * 10);
-            doc.text(
-              `Application Status: ${item.applicationStatus}`,
-              10,
-              240 + index * 10
-            );
-            doc.text(
-              `Approve Appointment Date: ${item.approveAppointmentDate}`,
-              10,
-              250 + index * 10
-            );
-            doc.text(`UserID: ${item._id}`, 10, 260 + index * 10);
-
-            if (index < apiResponse.length - 1) {
-              doc.addPage();
-            }
-          });
-
-        doc.save("user_record.pdf");
-      } catch (error) {
-        console.error(error);
-      }
+  useEffect(() => {
+    const Logintoken = sessionStorage.getItem("LoginToken");
+    const obj = {
+      loginToken: Logintoken,
+      fromDate: fromDate,
+      toDate: toDate,
     };
 
-    fetchData();
+    shortByDate(obj)
+      .then((response) => {
+        setApiResponse(response.data);
+
+        setLoadingPage(false);
+      })
+      .catch((error: any) => {
+        setLoadingPage(false);
+        console.error(error);
+      });
+  }, [fromDate, toDate]);
+
+  const downloadUserData = async () => {
+    try {
+      const Logintoken = sessionStorage.getItem("LoginToken");
+      const obj = {
+        loginToken: Logintoken,
+        fromDate: fromDate,
+        toDate: toDate,
+      };
+
+      const response = await shortByDate(obj);
+      await setApiResponse(response.data);
+      const doc = new jsPDF();
+
+      (await apiResponse) &&
+        apiResponse.forEach((item: any, index: number) => {
+          doc.text(`Husband Details:`, 10, 10 + index * 10);
+          doc.text(`Name: ${item.husbandDetails.name}`, 10, 20 + index * 10);
+          doc.text(
+            `Surname: ${item.husbandDetails.surname}`,
+            10,
+            30 + index * 10
+          );
+          doc.text(
+            `Date of Birth: ${item.husbandDetails.dateOfBirth}`,
+            10,
+            40 + index * 10
+          );
+
+          doc.text(`Wife Details:`, 10, 60 + index * 10);
+          doc.text(`Name: ${item.wifeDetails.name}`, 10, 70 + index * 10);
+          doc.text(`Surname: ${item.wifeDetails.surname}`, 10, 80 + index * 10);
+          doc.text(
+            `Date of Birth: ${item.wifeDetails.dateOfBirth}`,
+            10,
+            90 + index * 10
+          );
+
+          doc.text(`Priest Details:`, 10, 110 + index * 10);
+          doc.text(`Name: ${item.priestDetails.name}`, 10, 120 + index * 10);
+          doc.text(
+            `Date of Birth: ${item.priestDetails.dateOfBirth}`,
+            10,
+            130 + index * 10
+          );
+
+          doc.text(`Witness One Details:`, 10, 150 + index * 10);
+          doc.text(
+            `name: ${item.witnessOneDetails.name}`,
+            10,
+            160 + index * 10
+          );
+          doc.text(
+            `Date of Birth: ${item.witnessOneDetails.dateOfBirth}`,
+            10,
+            170 + index * 10
+          );
+
+          doc.text(`Witness Two Details:`, 10, 190 + index * 10);
+          doc.text(
+            `name: ${item.witnessTwoDetails.name}`,
+            10,
+            200 + index * 10
+          );
+          doc.text(
+            `Date of Birth: ${item.witnessTwoDetails.dateOfBirth}`,
+            10,
+            210 + index * 10
+          );
+
+          doc.text(`Other Details:`, 10, 230 + index * 10);
+          doc.text(
+            `Application Status: ${item.applicationStatus}`,
+            10,
+            240 + index * 10
+          );
+          doc.text(
+            `Approve Appointment Date: ${item.approveAppointmentDate}`,
+            10,
+            250 + index * 10
+          );
+          doc.text(`UserID: ${item._id}`, 10, 260 + index * 10);
+
+          if (index < apiResponse.length - 1) {
+            doc.addPage();
+          }
+        });
+
+      await doc.save("user_record.pdf");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const handleFromDateChange = (newDate: any) => {
+  const handleFromDateChange = (newDate: string | null) => {
     setFromDate(formatDate(newDate));
   };
 
-  const handleToDateChange = (newDate: any) => {
+  const handleToDateChange = (newDate: string | null) => {
     setToDate(formatDate(newDate));
   };
+
+  const { t, i18n } = useTranslation();
+
+  function changeLanguage(lang: any) {
+    i18n.changeLanguage(lang);
+  }
 
   return (
     <>
@@ -156,7 +175,7 @@ const RecordDownload: React.FC = () => {
             component="h2"
             color={"rgb(70, 70, 201)"}
           >
-            Application Record Download
+            {t("Application Record Download")}
           </Typography>
 
           <Box
@@ -168,6 +187,7 @@ const RecordDownload: React.FC = () => {
                 cursor: "pointer",
               },
             }}
+            onClick={() => changeLanguage("en")}
           >
             Eng
           </Box>
@@ -180,6 +200,7 @@ const RecordDownload: React.FC = () => {
                 cursor: "pointer",
               },
             }}
+            onClick={() => changeLanguage("gu")}
           >
             Guj
           </Box>
@@ -190,14 +211,14 @@ const RecordDownload: React.FC = () => {
         className="heading-date"
         style={{ fontSize: "29px", fontWeight: "500", marginLeft: "5rem" }}
       >
-        Date :
+        {t("Date")} :
       </div>
 
       <div
         className="search-box"
         style={{ justifyContent: "flex-start", marginLeft: "7rem" }}
       >
-        <div style={{ fontSize: "20px", fontWeight: "500" }}>From:</div>
+        <div style={{ fontSize: "20px", fontWeight: "500" }}>{t("From")}:</div>
 
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DemoContainer components={["DatePicker"]}>
@@ -217,7 +238,7 @@ const RecordDownload: React.FC = () => {
         <div
           style={{ fontSize: "20px", fontWeight: "500", marginRight: "1.8rem" }}
         >
-          To:
+          {t("To")}:
         </div>
 
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -236,7 +257,7 @@ const RecordDownload: React.FC = () => {
         sx={{ marginLeft: "11.7rem", marginTop: "2rem" }}
         onClick={downloadUserData}
       >
-        Download
+        {t("Download")}
       </Button>
       <Loader open={loadingPage} />
     </>

@@ -2,6 +2,7 @@ import React from "react";
 import { AppBar, Toolbar, Tabs, Tab, Box } from "@mui/material";
 import Logo from "./Logo.png";
 import { Link } from "react-router-dom";
+import { t } from "i18next";
 
 const Header = () => {
   const [tabValue, setTabValue] = React.useState<number>(0);
@@ -16,6 +17,7 @@ const Header = () => {
 
   const currentUrl = window.location.href;
   const shouldHideTab = currentUrl.includes("record-download");
+  const hideTab = currentUrl.includes("dashboard");
   return (
     <>
       <div className="header" style={{ overflow: "hidden", height: "65px" }}>
@@ -36,13 +38,14 @@ const Header = () => {
                 value={tabValue}
                 onChange={handleChange}
               >
-                {!shouldHideTab && <Tab label="Registration" value={0} />}
+                {shouldHideTab ||
+                  (!hideTab && <Tab label={t("Registration")} value={0} />)}
 
                 {sessionStorage.getItem("LoginToken") &&
                 sessionStorage.getItem("email") ? (
                   <Link to="/login">
                     <Tab
-                      label="Logout"
+                      label={t("Logout")}
                       value={2}
                       style={{ color: "white" }}
                       onClick={clearLocalStorage}
@@ -50,7 +53,11 @@ const Header = () => {
                   </Link>
                 ) : (
                   <Link to="/login">
-                    <Tab label="Login" value={2} style={{ color: "white" }} />
+                    <Tab
+                      label={t("Login")}
+                      value={2}
+                      style={{ color: "white" }}
+                    />
                   </Link>
                 )}
               </Tabs>
