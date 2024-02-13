@@ -1,20 +1,33 @@
-import "./App.scss";
-import MainForm from "./components/MainForm/MainForm"
+import MainForm from "./components/MainForm/MainForm";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./components/Login/login";
 import Dashboard from "./components/Dashboard/dashboard";
+import UserDashboard from "./components/UserDashboard/UserDashboard";
+import RecordDownload from "./components/RecordDownload/RecordDownload";
+import Protected from "./PrivateRoute";
 
 const App = () => {
   return (
     <>
-    <BrowserRouter>
+      <BrowserRouter>
         <Routes>
-          <Route path="/" element={<MainForm />}></Route>
-          <Route path="/login" element={<Login/>}></Route>
-          <Route path="/dashboard" element={<Dashboard/>}></Route>
-          </Routes>
-        </BrowserRouter>
-      </>
+          <Route path="/" element={<MainForm />}></Route>{" "}
+          <Route
+            path="/dashboard"
+            element={<Protected Component={Dashboard} />}
+          />
+          <Route
+            path="/userDashboard"
+            element={<Protected Component={UserDashboard} />}
+          />
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/record-download"
+            element={<Protected Component={RecordDownload} />}
+          />
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 };
 

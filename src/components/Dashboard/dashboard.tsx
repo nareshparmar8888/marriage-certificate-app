@@ -1,26 +1,47 @@
-import React from "react";
-import {
-  Box,
-  Grid,
-  InputLabel,
-  Typography,
-  TableContainer,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  Paper,
-  TableBody,
-  Button,
-} from "@mui/material";
+import { useEffect, useState } from "react";
+import { Box, Grid, Typography } from "@mui/material";
 import Header from "../Shared/Header/Header";
-import { BorderAllOutlined } from "@material-ui/icons";
+import { UserCount } from "../Api/DashBoardAction";
+import Loader from "../../Loader/Loader";
+import "./style.scss";
+import { userData } from "../Interface/Interface";
+import Table from "./Table";
+import { useTranslation } from "react-i18next";
 
-const Dashboard = () => {
+const Dashboard: React.FC = () => {
+  const [userData, setUserData] = useState<number>(0);
+  const [totalUserApprove, setTotalUserApprove] = useState<number>(0);
+  const [totalUserReject, setTotalUserReject] = useState<number>(0);
+  const [loadingPage, setLoadingPage] = useState<boolean>(false);
+  const { t, i18n } = useTranslation();
+
+  function changeLanguage(lang: any) {
+    i18n.changeLanguage(lang);
+  }
+
+  useEffect(() => {
+    setLoadingPage(true);
+    const Logintoken = sessionStorage.getItem("LoginToken");
+    const obj = {
+      loginToken: Logintoken,
+    };
+
+    UserCount(obj)
+      .then((response: userData) => {
+        setUserData(response?.data?.totalUsers);
+        setTotalUserApprove(response?.data?.totalUsersApprove);
+        setTotalUserReject(response?.data?.totalUsersReject);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    setLoadingPage(false);
+  }, []);
+
   return (
     <>
       <Header />
-      <div style={{ width: "100%" }}>
+      <div className="dashboard_modal">
         <Box
           sx={{
             display: "flex",
@@ -36,7 +57,7 @@ const Dashboard = () => {
             component="h2"
             color={"rgb(70, 70, 201)"}
           >
-            Dashboard
+            {t("Dashboard")}
           </Typography>
 
           <Box
@@ -45,8 +66,10 @@ const Dashboard = () => {
               ":hover": {
                 bgcolor: "#AF5",
                 color: "white",
+                cursor: "pointer",
               },
             }}
+            onClick={() => changeLanguage("en")}
           >
             Eng
           </Box>
@@ -56,8 +79,10 @@ const Dashboard = () => {
               ":hover": {
                 bgcolor: "#AF5",
                 color: "white",
+                cursor: "pointer",
               },
             }}
+            onClick={() => changeLanguage("gu")}
           >
             Guj
           </Box>
@@ -76,9 +101,11 @@ const Dashboard = () => {
             component="h6"
             color={"rgb(70, 70, 201)"}
           >
-            20
+            {userData}
           </Typography>
-          <Typography align="center">Number of Application Accept</Typography>
+          <Typography align="center">
+            {t("Number of Application Accept")}
+          </Typography>
         </Grid>
         <Grid item xs={3} sx={{ border: "1px solid green", height: "100px" }}>
           <Typography
@@ -88,9 +115,11 @@ const Dashboard = () => {
             component="h6"
             color={"rgb(70, 70, 201)"}
           >
-            20
+            {totalUserApprove}
           </Typography>
-          <Typography align="center">Number of Application Accept</Typography>
+          <Typography align="center">
+            {t("Number of Application Reject")}
+          </Typography>
         </Grid>
         <Grid item xs={3} sx={{ border: "1px solid green", height: "100px" }}>
           <Typography
@@ -100,71 +129,18 @@ const Dashboard = () => {
             component="h6"
             color={"rgb(70, 70, 201)"}
           >
-            20
+            {totalUserReject}
           </Typography>
-          <Typography align="center">Number of Application Accept</Typography>
+          <Typography align="center">
+            {t("Number of Application Receive")}
+          </Typography>
         </Grid>
       </Grid>
-      <TableContainer component={Paper} sx={{justifyContent: "space-around"}} aria-label="customized table">
-        <Table sx={{ minWidth: 650, marginTop:"20px"}} aria-label="simple table">
-          <TableHead sx={{backgroundColor:"black"}}>
-            <TableRow>
-              <TableCell align="center" sx={{color:"white"}}>Husband Name</TableCell>
-              <TableCell align="center" sx={{color:"white"}}>Wife Name</TableCell>
-              <TableCell align="center" sx={{color:"white"}}>Email</TableCell>
-              <TableCell align="center" sx={{color:"white"}}>Mobile No</TableCell>
-              <TableCell align="center" sx={{color:"white"}}>Action</TableCell>
-              {/* <TableCell sx={{color:"white"}}>Action</TableCell>
-              <TableCell sx={{color:"white"}}>Action</TableCell> */}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-              <TableRow >
-                <TableCell align="center">Jhon David</TableCell>
-                <TableCell align="center" >Alinafe David</TableCell>
-                <TableCell align="center">abc@gmail.com</TableCell>
-                <TableCell align="center">422-333-2338</TableCell>
-                <TableCell align="center"><Button  variant="contained"
-                color="success"
-                sx={{marginRight:"10px" }}>Action</Button><Button  variant="contained"
-                color="success"
-                sx={{marginRight:"10px" }}>View</Button><Button  variant="contained"
-                color="success">Download</Button></TableCell>
-                
-              </TableRow>
-          </TableBody>
-          <TableBody>
-          <TableRow >
-                <TableCell align="center">Jhon David</TableCell>
-                <TableCell align="center">Alinafe David</TableCell>
-                <TableCell align="center" >abc@gmail.com</TableCell>
-                <TableCell align="center">422-333-2338</TableCell>
-                <TableCell align="center"><Button  variant="contained"
-                color="success"
-                sx={{marginRight:"10px" }}>Action</Button><Button  variant="contained"
-                color="success"
-                sx={{marginRight:"10px" }}>View</Button><Button  variant="contained"
-                color="success">Download</Button></TableCell>
-              </TableRow>
-              
-          </TableBody>
-          <TableBody>
-          <TableRow >
-                <TableCell align="center">Jhon David</TableCell>
-                <TableCell align="center">Alinafe David</TableCell>
-                <TableCell align="center">abc@gmail.com</TableCell>
-                <TableCell align="center">422-333-2338</TableCell>
-                <TableCell align="center"><Button  variant="contained"
-                color="success"
-                sx={{marginRight:"10px" }}>Action</Button><Button  variant="contained"
-                color="success"
-                sx={{marginRight:"10px" }}>View</Button><Button  variant="contained"
-                color="success">Download</Button></TableCell>
-              </TableRow>
-          </TableBody>
-        </Table>
-      </TableContainer>
+
+      <Table />
+      <Loader open={loadingPage} />
     </>
   );
 };
+
 export default Dashboard;
