@@ -84,6 +84,12 @@ const MainForm = () => {
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
+  const { t, i18n } = useTranslation();
+
+  function changeLanguage(lang: any) {
+    i18n.changeLanguage(lang);
+  }
+
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
@@ -92,55 +98,55 @@ const MainForm = () => {
   const [document, setDocument] = useState([
     {
       id: 0,
-      title: "Husband School Leaving Certificate/ Birth Proof",
+      title: `${t("Husband School Leaving Certificate/ Birth Proof")}`,
       image: "",
       error: "",
     },
     {
       id: 1,
-      title: "Wife School Leaving Certificate/ Birth Proof",
+      title: `${t("Wife School Leaving Certificate/ Birth Proof")}`,
       image: "",
       error: "",
     },
     {
       id: 2,
-      title: "Witness-1 photo ID Proof",
+      title: `${t("Witness-1 photo ID Proof")}`,
       image: "",
       error: "",
     },
     {
       id: 3,
-      title: "Witness-2 photo ID Proof",
+      title: `${t("Witness-2 photo ID Proof")}`,
       image: "",
       error: "",
     },
     {
       id: 4,
-      title: "200+200 Agreement Stamp",
+      title: `${t("200+200 Agreement Stamp")}`,
       image: "",
       error: "",
     },
     {
       id: 5,
-      title: "Husband photo ID Proof",
+      title: `${t("Husband photo ID Proof")}`,
       image: "",
       error: "",
     },
     {
       id: 6,
-      title: "Wife photo ID Proof",
+      title: `${t("Wife photo ID Proof")}`,
       image: "",
       error: "",
     },
     {
       id: 7,
-      title: "Priest photo ID Proof",
+      title: `${t("Priest photo ID Proof")}`,
       image: "",
       error: "",
     },
     {
       id: 8,
-      title: "Marriage Evidence",
+      title: `${t("Marriage Evidence")}`,
       image: "",
       error: "",
     },
@@ -233,12 +239,6 @@ const MainForm = () => {
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
   };
-
-  const { t, i18n } = useTranslation();
-
-  function changeLanguage(lang: any) {
-    i18n.changeLanguage(lang);
-  }
 
   const {
     values: valuesForm1,
@@ -712,14 +712,14 @@ const MainForm = () => {
               boxShadow: 20,
             }}
           >
-            Merriage Details
+            {t("Merriage Details")}
           </AccordionSummary>
 
           <AccordionDetails>
             <FormGroup>
               <Grid container spacing={2}>
                 <Grid item xs={6}>
-                  <InputLabel>Application Date</InputLabel>
+                  <InputLabel>{t("Application Date")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -729,7 +729,7 @@ const MainForm = () => {
                   />
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Location</InputLabel>
+                  <InputLabel>{t("Location")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -744,7 +744,7 @@ const MainForm = () => {
                 </Grid>
 
                 <Grid item xs={6}>
-                  <InputLabel>Marriage Date</InputLabel>
+                  <InputLabel>{t("Marriage Date")}</InputLabel>
                   <TextField
                     type="date"
                     InputProps={{
@@ -768,7 +768,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Marriage Address</InputLabel>
+                  <InputLabel>{t("Marriage Address")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -792,7 +792,7 @@ const MainForm = () => {
                   color="success"
                   sx={{ m: "20px", width: "7%" }}
                 >
-                  Save
+                  {t("Save")}
                 </Button>
               </Grid>
             </FormGroup>
@@ -809,13 +809,13 @@ const MainForm = () => {
               boxShadow: 20,
             }}
           >
-            Husband Details
+            {t("Husband Details")}
           </AccordionSummary>
           <AccordionDetails>
             <FormGroup>
               <Grid container spacing={2}>
                 <Grid item xs={6}>
-                  <InputLabel>Surname</InputLabel>
+                  <InputLabel>{t("Surname")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -831,7 +831,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Name</InputLabel>
+                  <InputLabel>{t("Name")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -848,7 +848,7 @@ const MainForm = () => {
                 </Grid>
 
                 <Grid item xs={6}>
-                  <InputLabel>Birth Date</InputLabel>
+                  <InputLabel>{t("Birth Date")}</InputLabel>
                   <TextField
                     type="date"
                     variant="outlined"
@@ -866,7 +866,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Age</InputLabel>
+                  <InputLabel>{t("Age")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -882,7 +882,9 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Status of Bridegroom at the time</InputLabel>
+                  <InputLabel>
+                    {t("Status of Bridegroom at the time")}
+                  </InputLabel>
                   <Select
                     label="Age"
                     sx={{ width: "100%" }}
@@ -892,12 +894,14 @@ const MainForm = () => {
                     onBlur={handleBlurForm2}
                   >
                     <MenuItem value="">
-                      <em>None</em>
+                      <em>{t("None")}</em>
                     </MenuItem>
-                    <MenuItem value={"Married"}>Married</MenuItem>
-                    <MenuItem value={"UnMarried"}>UnMarried</MenuItem>
-                    <MenuItem value={"Divorced"}>Divorced</MenuItem>
-                    <MenuItem value={"Widower/Widow"}>Widower/Widow</MenuItem>
+                    <MenuItem value={"Married"}>{t("Married")}</MenuItem>
+                    <MenuItem value={"UnMarried"}>{t("UnMarried")}</MenuItem>
+                    <MenuItem value={"Divorced"}>{t("Divorced")}</MenuItem>
+                    <MenuItem value={"Widower/Widow"}>
+                      {t("Widower/Widow")}
+                    </MenuItem>
                   </Select>
                   {errorsForm2.husbandstatus && touchedForm2.husbandstatus ? (
                     <span style={{ color: "red" }}>
@@ -906,7 +910,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Religious</InputLabel>
+                  <InputLabel>{t("Religious")}</InputLabel>
                   <Select
                     label="Age"
                     sx={{ width: "100%" }}
@@ -916,20 +920,22 @@ const MainForm = () => {
                     onBlur={handleBlurForm2}
                   >
                     <MenuItem value="">
-                      <em>None</em>
+                      <em>{t("None")}</em>
                     </MenuItem>
-                    <MenuItem value={"Hindu"}>Hindu</MenuItem>
-                    <MenuItem value={"Jain"}>Jain</MenuItem>
-                    <MenuItem value={"Buddhist"}>Buddhist</MenuItem>
-                    <MenuItem value={"Sikh"}>Sikh</MenuItem>
-                    <MenuItem value={"Christian"}>Christian</MenuItem>
-                    <MenuItem value={"Parsi"}>Parsi</MenuItem>
-                    <MenuItem value={"Jewish"}>Jewish</MenuItem>
-                    <MenuItem value={"Muslim"}>Muslim</MenuItem>
-                    <MenuItem value={"Other"}>Other</MenuItem>
-                    <MenuItem value={"No Religion"}>No Religion</MenuItem>
+                    <MenuItem value={"Hindu"}>{t("Hindu")}</MenuItem>
+                    <MenuItem value={"Jain"}>{t("Jain")}</MenuItem>
+                    <MenuItem value={"Buddhist"}>{t("Buddhist")}</MenuItem>
+                    <MenuItem value={"Sikh"}>{t("Sikh")}</MenuItem>
+                    <MenuItem value={"Christian"}>{t("Christian")}</MenuItem>
+                    <MenuItem value={"Parsi"}>{t("Parsi")}</MenuItem>
+                    <MenuItem value={"Jewish"}>{t("Jewish")}</MenuItem>
+                    <MenuItem value={"Muslim"}>{t("Muslim")}</MenuItem>
+                    <MenuItem value={"Other"}>{t("Other")}</MenuItem>
+                    <MenuItem value={"No Religion"}>
+                      {t("No Religion")}
+                    </MenuItem>
                     <MenuItem value={"Spiritual-not religious"}>
-                      Spiritual-not religious
+                      {t("Spiritual-not religious")}
                     </MenuItem>
                   </Select>
                   {errorsForm2.husbandreligions &&
@@ -940,7 +946,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Location</InputLabel>
+                  <InputLabel>{t("Location")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -957,7 +963,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Address</InputLabel>
+                  <InputLabel>{t("Address")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -974,8 +980,8 @@ const MainForm = () => {
                 </Grid>
 
                 <Grid item xs={6}>
-                  <h3>Guardian/Mother/Father</h3>
-                  <InputLabel>Surname</InputLabel>
+                  <h3>{t("Guardian/Mother/Father")}</h3>
+                  <InputLabel>{t("Surname")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -991,7 +997,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6} sx={{ width: "100%", mt: "60px" }}>
-                  <InputLabel>Name</InputLabel>
+                  <InputLabel>{t("Name")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -1007,7 +1013,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Age</InputLabel>
+                  <InputLabel>{t("Age")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -1023,7 +1029,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Location</InputLabel>
+                  <InputLabel>{t("Location")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -1040,7 +1046,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Address</InputLabel>
+                  <InputLabel>{t("Address")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -1056,7 +1062,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Contact(Landline)</InputLabel>
+                  <InputLabel>{t("Contact(Landline)")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -1072,7 +1078,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Mobile</InputLabel>
+                  <InputLabel>{t("Mobile")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -1088,7 +1094,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Email</InputLabel>
+                  <InputLabel>{t("Email")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -1109,7 +1115,7 @@ const MainForm = () => {
                   color="success"
                   sx={{ m: "20px", width: "7%" }}
                 >
-                  Save
+                  {t("Save")}
                 </Button>
               </Grid>
             </FormGroup>
@@ -1126,13 +1132,13 @@ const MainForm = () => {
               boxShadow: 20,
             }}
           >
-            Wife Details
+            {t("Wife Details")}
           </AccordionSummary>
           <AccordionDetails>
             <FormGroup>
               <Grid container spacing={2}>
                 <Grid item xs={6}>
-                  <InputLabel>Surname</InputLabel>
+                  <InputLabel>{t("Surname")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -1148,7 +1154,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Name</InputLabel>
+                  <InputLabel>{t("Name")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -1163,7 +1169,7 @@ const MainForm = () => {
                 </Grid>
 
                 <Grid item xs={6}>
-                  <InputLabel>Birth Date</InputLabel>
+                  <InputLabel>{t("Birth Date")}</InputLabel>
                   <TextField
                     type="date"
                     variant="outlined"
@@ -1181,7 +1187,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Age</InputLabel>
+                  <InputLabel>{t("Age")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -1195,7 +1201,9 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Status of Bridegroom at the time</InputLabel>
+                  <InputLabel>
+                    {t("Status of Bridegroom at the time")}
+                  </InputLabel>
                   <Select
                     label="Age"
                     sx={{ width: "100%" }}
@@ -1205,12 +1213,14 @@ const MainForm = () => {
                     onBlur={handleBlurForm3}
                   >
                     <MenuItem value="">
-                      <em>None</em>
+                      <em>{t("None")}</em>
                     </MenuItem>
-                    <MenuItem value={"Married"}>Married</MenuItem>
-                    <MenuItem value={"UnMarried"}>UnMarried</MenuItem>
-                    <MenuItem value={"Divorced"}>Divorced</MenuItem>
-                    <MenuItem value={"Widower/Widow"}>Widower/Widow</MenuItem>
+                    <MenuItem value={"Married"}>{t("Married")}</MenuItem>
+                    <MenuItem value={"UnMarried"}>{t("UnMarried")}</MenuItem>
+                    <MenuItem value={"Divorced"}>{t("Divorced")}</MenuItem>
+                    <MenuItem value={"Widower/Widow"}>
+                      {t("Widower/Widow")}
+                    </MenuItem>
                   </Select>
                   {errorsForm3.wifestatus && touchedForm3.wifestatus ? (
                     <span style={{ color: "red" }}>
@@ -1219,7 +1229,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Religious</InputLabel>
+                  <InputLabel>{t("Religious")}</InputLabel>
                   <Select
                     label="Age"
                     sx={{ width: "100%" }}
@@ -1229,20 +1239,22 @@ const MainForm = () => {
                     onBlur={handleBlurForm3}
                   >
                     <MenuItem value="">
-                      <em>None</em>
+                      <em>{t("None")}</em>
                     </MenuItem>
-                    <MenuItem value={"Hindu"}>Hindu</MenuItem>
-                    <MenuItem value={"Jain"}>Jain</MenuItem>
-                    <MenuItem value={"Buddhist"}>Buddhist</MenuItem>
-                    <MenuItem value={"Sikh"}>Sikh</MenuItem>
-                    <MenuItem value={"Christian"}>Christian</MenuItem>
-                    <MenuItem value={"Parsi"}>Parsi</MenuItem>
-                    <MenuItem value={"Jewish"}>Jewish</MenuItem>
-                    <MenuItem value={"Muslim"}>Muslim</MenuItem>
-                    <MenuItem value={"Other"}>Other</MenuItem>
-                    <MenuItem value={"No Religion"}>No Religion</MenuItem>
+                    <MenuItem value={"Hindu"}>{t("Hindu")}</MenuItem>
+                    <MenuItem value={"Jain"}>{t("Jain")}</MenuItem>
+                    <MenuItem value={"Buddhist"}>{t("Buddhist")}</MenuItem>
+                    <MenuItem value={"Sikh"}>{t("Sikh")}</MenuItem>
+                    <MenuItem value={"Christian"}>{t("Christian")}</MenuItem>
+                    <MenuItem value={"Parsi"}>{t("Parsi")}</MenuItem>
+                    <MenuItem value={"Jewish"}>{t("Jewish")}</MenuItem>
+                    <MenuItem value={"Muslim"}>{t("Muslim")}</MenuItem>
+                    <MenuItem value={"Other"}>{t("Other")}</MenuItem>
+                    <MenuItem value={"No Religion"}>
+                      {t("No Religion")}
+                    </MenuItem>
                     <MenuItem value={"Spiritual-not religious"}>
-                      Spiritual-not religious
+                      {t("Spiritual-not religious")}
                     </MenuItem>
                   </Select>
                   {errorsForm3.wifereligions && touchedForm3.wifereligions ? (
@@ -1252,7 +1264,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Location</InputLabel>
+                  <InputLabel>{t("Location")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -1268,7 +1280,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Address</InputLabel>
+                  <InputLabel>{t("Address")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -1285,8 +1297,8 @@ const MainForm = () => {
                 </Grid>
 
                 <Grid item xs={6}>
-                  <h3>Guardian/Mother/Father</h3>
-                  <InputLabel>Surname</InputLabel>
+                  <h3>{t("Guardian/Mother/Father")}</h3>
+                  <InputLabel>{t("Surname")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -1303,7 +1315,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6} sx={{ width: "100%", mt: "60px" }}>
-                  <InputLabel>Name</InputLabel>
+                  <InputLabel>{t("Name")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -1320,7 +1332,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Age</InputLabel>
+                  <InputLabel>{t("Age")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -1336,7 +1348,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Location</InputLabel>
+                  <InputLabel>{t("Location")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -1353,7 +1365,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Address</InputLabel>
+                  <InputLabel>{t("Address")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -1370,7 +1382,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Contact(Landline)</InputLabel>
+                  <InputLabel>{t("Contact(Landline)")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -1387,7 +1399,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Mobile</InputLabel>
+                  <InputLabel>{t("Mobile")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -1404,7 +1416,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Email</InputLabel>
+                  <InputLabel>{t("Email")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -1426,7 +1438,7 @@ const MainForm = () => {
                   color="success"
                   sx={{ m: "20px", width: "7%" }}
                 >
-                  Save
+                  {t("Save")}
                 </Button>
               </Grid>
             </FormGroup>
@@ -1443,13 +1455,13 @@ const MainForm = () => {
               boxShadow: 20,
             }}
           >
-            Priest Details
+            {t("Priest Details")}
           </AccordionSummary>
           <AccordionDetails>
             <FormGroup>
               <Grid container spacing={2}>
                 <Grid item xs={6}>
-                  <InputLabel>Name</InputLabel>
+                  <InputLabel>{t("Name")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -1465,7 +1477,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Date of Birth</InputLabel>
+                  <InputLabel>{t("Date of Birth")}</InputLabel>
                   <TextField
                     type="date"
                     variant="outlined"
@@ -1483,7 +1495,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Age</InputLabel>
+                  <InputLabel>{t("Age")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -1499,7 +1511,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Priest Location</InputLabel>
+                  <InputLabel>{t("Priest Location")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -1515,7 +1527,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={12}>
-                  <InputLabel>Address</InputLabel>
+                  <InputLabel>{t("Address")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -1536,7 +1548,7 @@ const MainForm = () => {
                   color="success"
                   sx={{ m: "20px", width: "7%" }}
                 >
-                  Save
+                  {t("Save")}
                 </Button>
               </Grid>
             </FormGroup>
@@ -1553,13 +1565,13 @@ const MainForm = () => {
               boxShadow: 20,
             }}
           >
-            Witness-1 Details
+            {t("Witness-1 Details")}
           </AccordionSummary>
           <AccordionDetails>
             <FormGroup>
               <Grid container spacing={2}>
                 <Grid item xs={6}>
-                  <InputLabel>Name</InputLabel>
+                  <InputLabel>{t("Name")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -1575,7 +1587,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Date of Birth</InputLabel>
+                  <InputLabel>{t("Date of Birth")}</InputLabel>
                   <TextField
                     type="date"
                     variant="outlined"
@@ -1593,7 +1605,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Age</InputLabel>
+                  <InputLabel>{t("Age")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -1609,7 +1621,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Address</InputLabel>
+                  <InputLabel>{t("Address")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -1631,7 +1643,7 @@ const MainForm = () => {
                   color="success"
                   sx={{ m: "20px", width: "7%" }}
                 >
-                  Save
+                  {t("Save")}
                 </Button>
               </Grid>
             </FormGroup>
@@ -1648,13 +1660,13 @@ const MainForm = () => {
               boxShadow: 20,
             }}
           >
-            Witness-2 Details
+            {t("Witness-2 Details")}
           </AccordionSummary>
           <AccordionDetails>
             <FormGroup>
               <Grid container spacing={2}>
                 <Grid item xs={6}>
-                  <InputLabel>Name</InputLabel>
+                  <InputLabel>{t("Name")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -1670,7 +1682,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Date of Birth</InputLabel>
+                  <InputLabel>{t("Date of Birth")}</InputLabel>
                   <TextField
                     type="date"
                     variant="outlined"
@@ -1688,7 +1700,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Age</InputLabel>
+                  <InputLabel>{t("Age")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -1704,7 +1716,7 @@ const MainForm = () => {
                   ) : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <InputLabel>Address</InputLabel>
+                  <InputLabel>{t("Address")}</InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -1726,7 +1738,7 @@ const MainForm = () => {
                   color="success"
                   sx={{ m: "20px", width: "7%" }}
                 >
-                  Save
+                  {t("Save")}
                 </Button>
               </Grid>
             </FormGroup>
@@ -1743,7 +1755,7 @@ const MainForm = () => {
               boxShadow: 20,
             }}
           >
-            Attachment Document
+            {t("Attachment Document")}
           </AccordionSummary>
           <center>
             <AccordionDetails>
@@ -1763,7 +1775,7 @@ const MainForm = () => {
               variant="contained"
               sx={{ width: "10%", height: "50px", mt: "20px", mb: "20px" }}
             >
-              Submit
+              {t("Submit")}
             </Button>
           </Box>
         </Accordion>
@@ -1782,7 +1794,7 @@ const MainForm = () => {
           // onClick={submitData}
           type="submit"
         >
-          Apply for marriage Registration
+          {t("Apply for marriage Registration")}
         </Button>
       </Box>
       <Footer />
