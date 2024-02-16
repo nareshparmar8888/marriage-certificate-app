@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import {
   Grid,
@@ -47,7 +47,7 @@ import {
   password,
 } from "../Formik/InitalValue";
 import Preview from "./Preview";
-import { registration } from "../Api/DashBoardAction";
+import { registration, updateUser } from "../Api/DashBoardAction";
 import CustomSnackbar from "../../utils/CustomSnackbar";
 import { formatDateFirstMonth } from "../../config";
 import { useNavigate } from "react-router-dom";
@@ -645,8 +645,11 @@ const MainForm = () => {
         await setSnackbarSeverity("success");
         await setSnackbarMessage("Registration successful!");
         // setOpen(true);
-
-        navigate("/login");
+        await sessionStorage.setItem(
+          "passwordToken",
+          response?.data?.setPasswordToken
+        );
+        navigate("/set-password");
       } else {
         setOpenSnackbar(true);
         setSnackbarSeverity("error");
@@ -660,6 +663,16 @@ const MainForm = () => {
       setLoadingPage(false);
     }
   };
+
+  useEffect(() => {
+    updateUser()
+      .then((response) => {
+        console.log("response", response);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   return (
     <form onSubmit={submitData}>
