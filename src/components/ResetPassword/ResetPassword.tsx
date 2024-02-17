@@ -1,12 +1,10 @@
 import { Typography, Box, TextField, Button } from "@mui/material";
 import { useFormik } from "formik";
-import { login } from "../Formik/InitalValue";
-import { loginSchema } from "../Formik/validationSchema";
+import { password } from "../Formik/InitalValue";
+import { passwordSchema } from "../Formik/validationSchema";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../Loader/Loader";
-import CustomSnackbar from "../../utils/CustomSnackbar";
 import { setPassword } from "../Api/DashBoardAction";
 
 const ResetPassword = () => {
@@ -21,8 +19,8 @@ const ResetPassword = () => {
     handleChange: handleChangeForm1,
     handleSubmit: handleSubmitForm1,
   } = useFormik({
-    initialValues: login,
-    validationSchema: loginSchema,
+    initialValues: password,
+    validationSchema: passwordSchema,
     onSubmit: (valuesForm1) => {
       setLoading(true);
       const passwordToken = sessionStorage.getItem("passwordToken") || "";

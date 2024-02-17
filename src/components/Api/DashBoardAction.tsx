@@ -142,11 +142,11 @@ export const shortByDate = async (payload: any) => {
   }
 };
 
-export const updateUser = async () => {
-  const url = "https://marriage-portal-api.onrender.com/updateUserDetails";
+export const updateUser = async (payload: any) => {
+  const url = "http://localhost:3000/updateUserDetails";
 
   try {
-    const response = await axios.patch(url, {
+    const response = await axios.patch(url, JSON.stringify(payload), {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -166,6 +166,28 @@ export const updateUser = async () => {
 
 export const setPassword = async (setPassword: string, payload: any) => {
   const url = `https://marriage-portal-api.onrender.com/setPassword?setPasswordToken=${setPassword}`;
+
+  try {
+    const response = await axios.post(url, JSON.stringify(payload), {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response && response.status === 200) {
+      return response.data;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};
+
+export const updateUserDetails = async (payload: any) => {
+  const url = `https://marriage-portal-api.onrender.com/userDetails`;
 
   try {
     const response = await axios.post(url, JSON.stringify(payload), {

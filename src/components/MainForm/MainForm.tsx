@@ -47,7 +47,11 @@ import {
   password,
 } from "../Formik/InitalValue";
 import Preview from "./Preview";
-import { registration, updateUser } from "../Api/DashBoardAction";
+import {
+  registration,
+  updateUser,
+  updateUserDetails,
+} from "../Api/DashBoardAction";
 import CustomSnackbar from "../../utils/CustomSnackbar";
 import { formatDateFirstMonth } from "../../config";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -79,9 +83,11 @@ const MainForm = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [userPassword, setUserPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [responseData, setResponseData] = useState<any>();
+
   const state = useLocation();
-  const states = state;
-  console.log("secondTime", states?.state?.fillForm);
+  const isSecondTime = state?.state?.fillForm;
+
   const handleClose = () => setOpen(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -175,6 +181,8 @@ const MainForm = () => {
     Religions: "",
     location: "",
     address: "",
+    mobile: "",
+    email: "",
   });
 
   const [husbandGardian, setHusbandGardian] = useState<husbandGardian>({
@@ -197,6 +205,8 @@ const MainForm = () => {
     Religions: "",
     location: "",
     address: "",
+    mobile: "",
+    email: "",
   });
 
   const [wifeGardian, setWifeGardian] = useState<husbandGardian>({
@@ -284,6 +294,8 @@ const MainForm = () => {
         Religions: valuesForm2?.husbandreligions,
         location: valuesForm2?.husbandlocation,
         address: valuesForm2?.husbandaddress,
+        mobile: valuesForm2?.mobile,
+        email: valuesForm2?.email,
       }));
       setHusbandGardian((prevState: any) => ({
         ...prevState,
@@ -321,6 +333,8 @@ const MainForm = () => {
         Religions: valuesForm3?.wifereligions,
         location: valuesForm3?.wifelocation,
         address: valuesForm3?.wifeaddress,
+        mobile: valuesForm3?.wifemobile,
+        email: valuesForm3?.wifeemail,
       }));
       setWifeGardian((prevState: any) => ({
         ...prevState,
@@ -460,8 +474,8 @@ const MainForm = () => {
       religious: husbandDetail?.Religions,
       location: husbandDetail?.location,
       address: husbandDetail?.address,
-      mobileNumber: husbandGardian?.mobile,
-      emailId: husbandGardian?.email,
+      mobileNumber: husbandDetail?.mobile,
+      emailId: husbandDetail?.email,
       guardianDetails: {
         name: husbandGardian?.name,
         surname: husbandGardian?.surname,
@@ -481,8 +495,8 @@ const MainForm = () => {
       religious: wifeDetail?.Religions,
       location: wifeDetail?.location,
       address: wifeDetail?.address,
-      mobileNumber: wifeGardian?.mobile,
-      emailId: wifeGardian?.email,
+      mobileNumber: wifeDetail?.mobile,
+      emailId: wifeDetail?.email,
       guardianDetails: {
         name: wifeGardian?.name,
         surname: wifeGardian?.surname,
@@ -638,25 +652,73 @@ const MainForm = () => {
     formData.append("PriestPhotoIdProof", document[7]?.image);
     formData.append("MarriageEvidence", document[8]?.image);
 
-    try {
-      const response = await registration(formData);
+    //   try {
+    //     const response = await registration(formData);
 
-      if (response.statusCode === 200) {
-        await setLoadingPage(false);
-        await setOpenSnackbar(true);
-        await setSnackbarSeverity("success");
-        await setSnackbarMessage("Registration successful!");
-        // setOpen(true);
-        await sessionStorage.setItem(
-          "passwordToken",
-          response?.data?.setPasswordToken
-        );
-        navigate("/set-password");
+    //     if (response.statusCode === 200) {
+    //       await setLoadingPage(false);
+    //       await setOpenSnackbar(true);
+    //       await setSnackbarSeverity("success");
+    //       await setSnackbarMessage("Registration successful!");
+    //       // setOpen(true);
+    //       await sessionStorage.setItem(
+    //         "passwordToken",
+    //         response?.data?.setPasswordToken
+    //       );
+    //       navigate("/set-password");
+    //     } else {
+    //       setOpenSnackbar(true);
+    //       setSnackbarSeverity("error");
+    //       setSnackbarMessage(response?.message);
+    //       setLoadingPage(false);
+    //     }
+    //   } catch (error) {
+    //     setOpenSnackbar(true);
+    //     setSnackbarSeverity("error");
+    //     setSnackbarMessage("Something went wrong!");
+    //     setLoadingPage(false);
+    //   }
+    // };
+
+    try {
+      if (isSecondTime) {
+        const response = await registration(formData);
+
+        if (response.statusCode === 200) {
+          await setLoadingPage(false);
+          await setOpenSnackbar(true);
+          await setSnackbarSeverity("success");
+          await setSnackbarMessage("Registration successful!");
+          await sessionStorage.setItem(
+            "passwordToken",
+            response?.data?.setPasswordToken
+          );
+          navigate("/set-password");
+        } else {
+          setOpenSnackbar(true);
+          setSnackbarSeverity("error");
+          setSnackbarMessage(response?.message);
+          setLoadingPage(false);
+        }
       } else {
-        setOpenSnackbar(true);
-        setSnackbarSeverity("error");
-        setSnackbarMessage(response?.message);
-        setLoadingPage(false);
+        const response = await updateUser(formData);
+
+        if (response.statusCode === 200) {
+          await setLoadingPage(false);
+          await setOpenSnackbar(true);
+          await setSnackbarSeverity("success");
+          await setSnackbarMessage("Update successful!");
+          // await sessionStorage.setItem(
+          //   "passwordToken",
+          //   response?.data?.setPasswordToken
+          // );
+          // navigate("/login");
+        } else {
+          setOpenSnackbar(true);
+          setSnackbarSeverity("error");
+          setSnackbarMessage(response?.message);
+          setLoadingPage(false);
+        }
       }
     } catch (error) {
       setOpenSnackbar(true);
@@ -665,16 +727,19 @@ const MainForm = () => {
       setLoadingPage(false);
     }
   };
-
   useEffect(() => {
-    updateUser()
+    const loginToken = sessionStorage.getItem("LoginToken");
+    const obj = {
+      loginToken: loginToken,
+    };
+    updateUserDetails(obj)
       .then((response) => {
-        console.log("response", response);
+        setResponseData(response?.data);
       })
       .catch((error) => {
         console.error(error);
       });
-  }, []);
+  }, [isSecondTime]);
 
   return (
     <form onSubmit={submitData}>
@@ -995,6 +1060,35 @@ const MainForm = () => {
                 </Grid>
 
                 <Grid item xs={6}>
+                  <InputLabel>{t("Mobile")}</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="mobile"
+                    value={valuesForm2.mobile}
+                    onChange={handleChangeForm2}
+                    onBlur={handleBlurForm2}
+                  />
+                  {errorsForm2.mobile && touchedForm2.mobile ? (
+                    <span style={{ color: "red" }}>{errorsForm2.mobile}</span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>{t("Email")}</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="email"
+                    value={valuesForm2.email || ""}
+                    onChange={handleChangeForm2}
+                    onBlur={handleBlurForm2}
+                  />
+                  {errorsForm2.email && touchedForm2.email ? (
+                    <span style={{ color: "red" }}>{errorsForm2.email}</span>
+                  ) : null}
+                </Grid>
+
+                <Grid item xs={6}>
                   <h3>{t("Guardian/Mother/Father")}</h3>
                   <InputLabel>{t("Surname")}</InputLabel>
                   <TextField
@@ -1307,6 +1401,39 @@ const MainForm = () => {
                   {errorsForm3.wifeaddress && touchedForm3.wifeaddress ? (
                     <span style={{ color: "red" }}>
                       {errorsForm3.wifeaddress}
+                    </span>
+                  ) : null}
+                </Grid>
+
+                <Grid item xs={6}>
+                  <InputLabel>{t("Mobile")}</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="wifemobile"
+                    value={valuesForm3.wifemobile}
+                    onChange={handleChangeForm3}
+                    onBlur={handleBlurForm3}
+                  />
+                  {errorsForm3.wifemobile && touchedForm3.wifemobile ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm3.wifemobile}
+                    </span>
+                  ) : null}
+                </Grid>
+                <Grid item xs={6}>
+                  <InputLabel>{t("Email")}</InputLabel>
+                  <TextField
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    name="wifeemail"
+                    value={valuesForm3.wifeemail}
+                    onChange={handleChangeForm3}
+                    onBlur={handleBlurForm3}
+                  />
+                  {errorsForm3.wifeemail && touchedForm3.wifeemail ? (
+                    <span style={{ color: "red" }}>
+                      {errorsForm3.wifeemail}
                     </span>
                   ) : null}
                 </Grid>

@@ -15,14 +15,22 @@ export const HusbandSchema = Yup.object({
   husbandstatus: Yup.string().required("Husband status is required"),
   husbandlocation: Yup.string().required("Husband Location is required"),
   husbandaddress: Yup.string().required("Husband address is required"),
-  gardianSurname: Yup.string().required("Gardian surname is required"),
-  gardianName: Yup.string().required("Gardian Name is required"),
-  gardianAge: Yup.number().min(23).required("Gardian Age is required"),
-  gardianLocation: Yup.string().required("Gardian Location is required"),
-  gardianAddress: Yup.string().required("Gardian Address is required"),
-  gardianContact: Yup.number().required("Gardian Contact is required"),
-  gardianMobile: Yup.string().max(10).required("Gardian Mobile is required"),
-  gardianEmail: Yup.string().email().required("Please enter proper E-mail"),
+  mobile: Yup.string().max(10).required("Husband Mobile number is required"),
+  email: Yup.string().email().required("Husband email is required"),
+  gardianSurname: Yup.string().required("Husband gardian surname is required"),
+  gardianName: Yup.string().required("Husband gardian Name is required"),
+  gardianAge: Yup.number().min(23).required("Husband gardian Age is required"),
+  gardianLocation: Yup.string().required(
+    "Husband gardian Location is required"
+  ),
+  gardianAddress: Yup.string().required("Husband gardian Address is required"),
+  gardianContact: Yup.number().required("Husband gardian Contact is required"),
+  gardianMobile: Yup.string()
+    .max(10)
+    .required("Husband gardian Mobile is required"),
+  gardianEmail: Yup.string()
+    .email()
+    .required("Husband gardian email is required"),
 });
 
 export const WifeSchema = Yup.object({
@@ -34,6 +42,8 @@ export const WifeSchema = Yup.object({
   wifestatus: Yup.string().required("Wife status is required"),
   wifelocation: Yup.string().required("Wife Location is required"),
   wifeaddress: Yup.string().required("Wife address is required"),
+  wifemobile: Yup.string().max(10).required("Wife Mobile is required"),
+  wifeemail: Yup.string().email().required("Wife email is required"),
   gardianwifeSurname: Yup.string().required("Gardian surname is required"),
   gardianwifeName: Yup.string().required("Gardian Name is required"),
   gardianwifeAge: Yup.number().min(19).required("Gardian Age is required"),
@@ -43,7 +53,9 @@ export const WifeSchema = Yup.object({
   gardianwifeMobile: Yup.string()
     .max(10)
     .required("Wife Gardian Mobile is required"),
-  gardianwifeEmail: Yup.string().email().required("Please enter proper E-mail"),
+  gardianwifeEmail: Yup.string()
+    .email()
+    .required("Wife gardian email is required"),
 });
 
 export const PriestSchema = Yup.object({
