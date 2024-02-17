@@ -29,8 +29,6 @@ export default function Table() {
   };
 
   useEffect(() => {
-    setLoadingPage(true);
-
     const Logintoken = sessionStorage.getItem("LoginToken");
     const obj = {
       loginToken: Logintoken,
@@ -44,12 +42,8 @@ export default function Table() {
       .catch((error) => {
         console.error(error);
       })
-      .finally(() => {
-        setLoadingPage(false);
-      });
+      .finally(() => {});
     if (searchValue === "") {
-      setLoadingPage(true);
-
       const Logintoken = sessionStorage.getItem("LoginToken");
       const obj = {
         loginToken: Logintoken,
@@ -61,9 +55,7 @@ export default function Table() {
         .catch((error) => {
           console.error(error);
         })
-        .finally(() => {
-          setLoadingPage(false);
-        });
+        .finally(() => {});
     }
   }, [searchValue]);
 
@@ -180,6 +172,7 @@ export default function Table() {
       .then((response: UserAllDetail) => {
         setUserDetails(response?.data);
         setLoadingPage(false);
+        setSearchValue("");
       })
       .catch((error) => {
         console.error(error);

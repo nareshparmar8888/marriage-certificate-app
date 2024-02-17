@@ -50,7 +50,7 @@ import Preview from "./Preview";
 import { registration, updateUser } from "../Api/DashBoardAction";
 import CustomSnackbar from "../../utils/CustomSnackbar";
 import { formatDateFirstMonth } from "../../config";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Loader from "../../Loader/Loader";
 import {
   husband,
@@ -79,7 +79,9 @@ const MainForm = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [userPassword, setUserPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
-
+  const state = useLocation();
+  const states = state;
+  console.log("secondTime", states?.state?.fillForm);
   const handleClose = () => setOpen(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
