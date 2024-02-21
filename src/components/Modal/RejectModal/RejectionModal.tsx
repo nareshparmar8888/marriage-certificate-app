@@ -7,9 +7,9 @@ import {
   TextareaAutosize,
 } from "@material-ui/core";
 import { FormGroup, FormControlLabel, Checkbox } from "@mui/material";
-import { Reject } from "../../Api/DashBoardAction";
-import "./styles.scss";
+import { Reject } from "../../Api/Apis";
 import { checkUserDocument } from "../../Interface/Interface";
+import "./styles.scss";
 
 const customModalStyle = {
   position: "absolute",
@@ -33,6 +33,7 @@ interface RejectModalProps {
 const RejectModal: React.FC<RejectModalProps> = (props: any) => {
   const { open, handleClose, currentIndex } = props;
   const [commentdata, setCommentData] = useState<string>("");
+  const [disable, setDisable] = useState<boolean>(true);
   const [checkboxState, setCheckboxState] = useState<checkUserDocument>({
     husbandSchoolLeavingCertificateStatus: false,
     wifeSchoolLeavingCertificateStatus: false,
@@ -44,7 +45,6 @@ const RejectModal: React.FC<RejectModalProps> = (props: any) => {
     priestPhotoIdProofStatus: false,
     marriageEvidenceStatus: false,
   });
-  const [disable, setDisable] = useState<boolean>(true);
 
   const handleCheckboxChange = (event: any) => {
     const { name } = event.target;
@@ -137,7 +137,7 @@ const RejectModal: React.FC<RejectModalProps> = (props: any) => {
             </div>
           </div>
         </div>
-        <FormGroup className="check-box-group">
+        <FormGroup className="check-box-group" sx={{ marginLeft: "9px" }}>
           {Object.entries(checkboxState).map(([name, checked]) => (
             <FormControlLabel
               key={name}
@@ -146,6 +146,10 @@ const RejectModal: React.FC<RejectModalProps> = (props: any) => {
                   checked={checked as boolean}
                   onChange={handleCheckboxChange}
                   name={name}
+                  sx={{
+                    "& .MuiSvgIcon-root": { fontSize: 28 },
+                    fontSize: "17px",
+                  }}
                 />
               }
               label={name}

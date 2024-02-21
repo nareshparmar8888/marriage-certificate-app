@@ -115,7 +115,7 @@ export interface UserAllDetail {
     husbandSchoolLeavingCertificateStatus: boolean | null;
     marriageDetails: {
       applicationDate: Date;
-      location: string;
+      location: string | null;
       marriageAddress: string;
       marriageDate: Date;
     };

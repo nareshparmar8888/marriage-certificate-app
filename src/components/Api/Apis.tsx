@@ -143,13 +143,12 @@ export const shortByDate = async (payload: any) => {
 };
 
 export const updateUser = async (payload: any) => {
-  const url = "http://localhost:3000/updateUserDetails";
+  const url = "https://marriage-portal-api.onrender.com/updateUserDetails";
 
   try {
-    const response = await axios.patch(url, JSON.stringify(payload), {
+    const response = await axios.patch(url, payload, {
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        "Content-Type": "multipart/form-data",
       },
     });
 

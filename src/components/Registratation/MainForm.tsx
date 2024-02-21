@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import "react-toastify/dist/ReactToastify.css";
+import { useFormik } from "formik";
+import { formatDateFirstMonth } from "../../config";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
   Grid,
   TextField,
@@ -23,10 +26,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Button from "@mui/material/Button";
 import Header from "../Shared/Header/Header";
 import Footer from "../Shared/Footer/footer";
-import { useFormik } from "formik";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-
 import {
   HusbandSchema,
   MerriageSchema,
@@ -36,7 +37,6 @@ import {
   Witness2Schema,
   passwordSchema,
 } from "../Formik/validationSchema";
-
 import {
   HusbandValue,
   MerriageValue,
@@ -46,16 +46,7 @@ import {
   Witness2Value,
   password,
 } from "../Formik/InitalValue";
-import Preview from "./Preview";
-import {
-  registration,
-  updateUser,
-  updateUserDetails,
-} from "../Api/DashBoardAction";
-import CustomSnackbar from "../../utils/CustomSnackbar";
-import { formatDateFirstMonth } from "../../config";
-import { useLocation, useNavigate } from "react-router-dom";
-import Loader from "../../Loader/Loader";
+import { registration, updateUser, updateUserDetails } from "../Api/Apis";
 import {
   husband,
   husbandGardian,
@@ -63,7 +54,10 @@ import {
   priest,
   witness,
 } from "../Interface/Interface";
-import { useTranslation } from "react-i18next";
+import Preview from "./Preview";
+import CustomSnackbar from "../../utils/CustomSnackbar";
+import Loader from "../../Loader/Loader";
+import "react-toastify/dist/ReactToastify.css";
 
 const style = {
   position: "absolute" as "absolute",
@@ -269,7 +263,6 @@ const MainForm = () => {
         marriageDate: valuesForm1?.marriageDate,
         marriageAddress: valuesForm1?.marriageAddress,
       }));
-      console.log("valuesForm1", valuesForm1);
     },
   });
 
@@ -308,7 +301,6 @@ const MainForm = () => {
         mobile: valuesForm2?.gardianMobile,
         email: valuesForm2?.gardianEmail,
       }));
-      console.log("valuesForm2", valuesForm2);
     },
   });
 
@@ -347,7 +339,6 @@ const MainForm = () => {
         mobile: valuesForm3?.gardianwifeMobile,
         email: valuesForm3?.gardianwifeEmail,
       }));
-      console.log("valueForm3", valuesForm3);
     },
   });
 
@@ -370,7 +361,6 @@ const MainForm = () => {
         location: valuesForm4?.priestlocation,
         address: valuesForm4?.prietsaddress,
       }));
-      console.log("valueForm4", valuesForm4);
     },
   });
 
@@ -392,7 +382,6 @@ const MainForm = () => {
         age: valuesForm5?.witness1age,
         address: valuesForm5?.witness1address,
       }));
-      console.log("valueForm5", valuesForm5);
     },
   });
 
@@ -414,7 +403,6 @@ const MainForm = () => {
         age: valuesForm6?.witness2age,
         address: valuesForm6?.witness2address,
       }));
-      console.log("valueForm6", valuesForm6);
     },
   });
 
@@ -652,73 +640,25 @@ const MainForm = () => {
     formData.append("PriestPhotoIdProof", document[7]?.image);
     formData.append("MarriageEvidence", document[8]?.image);
 
-    //   try {
-    //     const response = await registration(formData);
-
-    //     if (response.statusCode === 200) {
-    //       await setLoadingPage(false);
-    //       await setOpenSnackbar(true);
-    //       await setSnackbarSeverity("success");
-    //       await setSnackbarMessage("Registration successful!");
-    //       // setOpen(true);
-    //       await sessionStorage.setItem(
-    //         "passwordToken",
-    //         response?.data?.setPasswordToken
-    //       );
-    //       navigate("/set-password");
-    //     } else {
-    //       setOpenSnackbar(true);
-    //       setSnackbarSeverity("error");
-    //       setSnackbarMessage(response?.message);
-    //       setLoadingPage(false);
-    //     }
-    //   } catch (error) {
-    //     setOpenSnackbar(true);
-    //     setSnackbarSeverity("error");
-    //     setSnackbarMessage("Something went wrong!");
-    //     setLoadingPage(false);
-    //   }
-    // };
-
     try {
-      if (isSecondTime) {
-        const response = await registration(formData);
+      const response = await registration(formData);
 
-        if (response.statusCode === 200) {
-          await setLoadingPage(false);
-          await setOpenSnackbar(true);
-          await setSnackbarSeverity("success");
-          await setSnackbarMessage("Registration successful!");
-          await sessionStorage.setItem(
-            "passwordToken",
-            response?.data?.setPasswordToken
-          );
-          navigate("/set-password");
-        } else {
-          setOpenSnackbar(true);
-          setSnackbarSeverity("error");
-          setSnackbarMessage(response?.message);
-          setLoadingPage(false);
-        }
+      if (response.statusCode === 200) {
+        await setLoadingPage(false);
+        await setOpenSnackbar(true);
+        await setSnackbarSeverity("success");
+        await setSnackbarMessage("Registration successful!");
+        // setOpen(true);
+        await sessionStorage.setItem(
+          "passwordToken",
+          response?.data?.setPasswordToken
+        );
+        navigate("/set-password");
       } else {
-        const response = await updateUser(formData);
-
-        if (response.statusCode === 200) {
-          await setLoadingPage(false);
-          await setOpenSnackbar(true);
-          await setSnackbarSeverity("success");
-          await setSnackbarMessage("Update successful!");
-          // await sessionStorage.setItem(
-          //   "passwordToken",
-          //   response?.data?.setPasswordToken
-          // );
-          // navigate("/login");
-        } else {
-          setOpenSnackbar(true);
-          setSnackbarSeverity("error");
-          setSnackbarMessage(response?.message);
-          setLoadingPage(false);
-        }
+        setOpenSnackbar(true);
+        setSnackbarSeverity("error");
+        setSnackbarMessage(response?.message);
+        setLoadingPage(false);
       }
     } catch (error) {
       setOpenSnackbar(true);
@@ -727,6 +667,7 @@ const MainForm = () => {
       setLoadingPage(false);
     }
   };
+
   useEffect(() => {
     const loginToken = sessionStorage.getItem("LoginToken");
     const obj = {
@@ -758,9 +699,10 @@ const MainForm = () => {
             p={1}
             sx={{
               ":hover": {
-                bgcolor: "#AF5",
+                bgcolor: "#063970",
                 color: "white",
                 cursor: "pointer",
+                borderRadius: "10px",
               },
             }}
             onClick={() => changeLanguage("en")}
@@ -771,9 +713,10 @@ const MainForm = () => {
             p={1}
             sx={{
               ":hover": {
-                bgcolor: "#AF5",
+                bgcolor: "#063970",
                 color: "white",
                 cursor: "pointer",
+                borderRadius: "10px",
               },
             }}
             onClick={() => changeLanguage("gu")}
@@ -1090,7 +1033,9 @@ const MainForm = () => {
 
                 <Grid item xs={6}>
                   <h3>{t("Guardian/Mother/Father")}</h3>
-                  <InputLabel>{t("Surname")}</InputLabel>
+                  <InputLabel sx={{ marginTop: "1.9rem" }}>
+                    {t("Surname")}
+                  </InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -1186,7 +1131,7 @@ const MainForm = () => {
                     </span>
                   ) : null}
                 </Grid>
-                <Grid item xs={6}>
+                {/* <Grid item xs={6}>
                   <InputLabel>{t("Mobile")}</InputLabel>
                   <TextField
                     variant="outlined"
@@ -1217,7 +1162,7 @@ const MainForm = () => {
                       {errorsForm2.gardianEmail}
                     </span>
                   ) : null}
-                </Grid>
+                </Grid> */}
                 <Button
                   onClick={() => handleSubmitForm2()}
                   variant="contained"
@@ -1440,7 +1385,9 @@ const MainForm = () => {
 
                 <Grid item xs={6}>
                   <h3>{t("Guardian/Mother/Father")}</h3>
-                  <InputLabel>{t("Surname")}</InputLabel>
+                  <InputLabel sx={{ marginTop: "1.9rem" }}>
+                    {t("Surname")}
+                  </InputLabel>
                   <TextField
                     variant="outlined"
                     sx={{ width: "100%" }}
@@ -1540,7 +1487,7 @@ const MainForm = () => {
                     </span>
                   ) : null}
                 </Grid>
-                <Grid item xs={6}>
+                {/* <Grid item xs={6}>
                   <InputLabel>{t("Mobile")}</InputLabel>
                   <TextField
                     variant="outlined"
@@ -1573,7 +1520,7 @@ const MainForm = () => {
                       {errorsForm3.gardianwifeEmail}
                     </span>
                   ) : null}
-                </Grid>
+                </Grid> */}
                 <Button
                   onClick={() => handleSubmitForm3()}
                   variant="contained"
@@ -1915,9 +1862,15 @@ const MainForm = () => {
             <Button
               onClick={() => handleSubmit()}
               variant="contained"
-              sx={{ width: "10%", height: "50px", mt: "20px", mb: "20px" }}
+              sx={{
+                width: "10%",
+                height: "40px",
+                mt: "20px",
+                mb: "20px",
+                backgroundColor: "#2e7d32",
+              }}
             >
-              {t("Submit")}
+              {t("SAVE")}
             </Button>
           </Box>
         </Accordion>

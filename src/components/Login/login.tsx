@@ -12,13 +12,13 @@ import CustomSnackbar from "../../utils/CustomSnackbar";
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState<boolean>(false);
-  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   const [snackbarSeverity, setSnackbarSeverity] = useState<
     "success" | "error" | "warning" | "info"
   >("success");
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const dispatch = useDispatch();
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
 
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
@@ -37,7 +37,6 @@ const Login = () => {
         return false;
       }
     } catch (error) {
-      console.log("reposne", response);
       setOpenSnackbar(true);
       setSnackbarSeverity("error");
       setSnackbarMessage("Please enter valid Email and password");

@@ -5,7 +5,7 @@ import { passwordSchema } from "../Formik/validationSchema";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../Loader/Loader";
-import { setPassword } from "../Api/DashBoardAction";
+import { setPassword } from "../Api/Apis";
 
 const ResetPassword = () => {
   const navigate = useNavigate();

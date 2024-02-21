@@ -9,7 +9,9 @@ const UserDashboard = () => {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
-    navigate("/", { state: { fillForm: "secondTime" } });
+    navigate("/update-registration-form", {
+      state: { fillForm: "secondTime" },
+    });
   };
 
   return (
@@ -37,18 +39,6 @@ const UserDashboard = () => {
               Fill Form second time
             </Button>
           ) : (
-            // <div
-            //   style={{
-            //     marginLeft: "20rem",
-            //     marginRight: "20rem",
-            //     marginTop: "20px",
-            //   }}
-            // >
-            //   Regrettably, your application cannot be processed due to
-            //   discrepancies. Please{" "}
-            //   <span style={{ fontSize: "30px" }}>resubmit</span> the form for
-            //   accurate details.
-            // </div>
             ""
           )}
         </div>

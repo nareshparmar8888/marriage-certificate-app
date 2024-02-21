@@ -1,7 +1,8 @@
 import "./style.scss";
 import { useEffect, useState } from "react";
-import { formatDate } from "../../../config";
+import { formatDate, formatDates } from "../../../config";
 import { useSelector } from "react-redux";
+import { Dialog, DialogContent, DialogTitle, Typography } from "@mui/material";
 
 interface RootState {
   application: any;
@@ -22,6 +23,23 @@ export default function ProfileModal(props: any) {
   let month = date.getMonth() + 1;
   let year = date.getFullYear();
   let currentDate = `${day}-${month}-${year}`;
+
+  const modalStyle = {
+    display: open ? "block" : "none",
+    background: "white",
+    padding: "20px",
+    borderRadius: "8px",
+    maxWidth: "800px",
+    margin: "auto",
+  };
+
+  const closeModalStyle = {
+    cursor: "pointer",
+    position: "absolute",
+    top: "10px",
+    right: "10px",
+    fontSize: "24px",
+  };
 
   return (
     <div
@@ -100,6 +118,16 @@ export default function ProfileModal(props: any) {
                         Husband address :
                         {filterData[0]?.husbandDetails?.address}{" "}
                       </div>
+                      <div>
+                        Husband mobile :
+                        {filterData[0]?.husbandDetails?.mobileNumber}{" "}
+                      </div>
+                      <div>
+                        Husband email :
+                        {filterData[0]?.husbandDetails?.emailId
+                          ? filterData[0]?.husbandDetails?.emailId
+                          : "N/A"}{" "}
+                      </div>
                     </div>
                     <br />
                     <div>
@@ -121,20 +149,6 @@ export default function ProfileModal(props: any) {
                             ?.location
                         }{" "}
                       </div>
-                      <div>
-                        Husband mobile :
-                        {
-                          filterData[0]?.husbandDetails?.guardianDetails
-                            ?.contactNumber
-                        }{" "}
-                      </div>
-                      <div>
-                        Husband email :
-                        {filterData[0]?.husbandDetails?.guardianDetails?.email
-                          ? filterData[0]?.husbandDetails?.guardianDetails
-                              ?.email
-                          : "N/A"}{" "}
-                      </div>
                     </div>
                     <br />
                     <div>
@@ -149,7 +163,9 @@ export default function ProfileModal(props: any) {
                       </div>
                       <div>
                         Witness-1 Birthdate :
-                        {filterData[0]?.witnessOneDetails?.Birthdate}{" "}
+                        {formatDates(
+                          filterData[0]?.witnessOneDetails?.dateOfBirth
+                        )}{" "}
                       </div>
                       <div>
                         Witness-1 address :
@@ -210,6 +226,16 @@ export default function ProfileModal(props: any) {
                         <div>
                           Wife address : {filterData[0]?.wifeDetails?.address}{" "}
                         </div>
+                        <div>
+                          Wife mobile :
+                          {filterData[0]?.wifeDetails?.mobileNumber}{" "}
+                        </div>
+                        <div>
+                          Wife email :
+                          {filterData[0]?.wifeDetails?.emailId
+                            ? filterData[0]?.wifeDetails?.emailId
+                            : "N/A"}{" "}
+                        </div>
                       </div>
                     </div>
                     <br />
@@ -229,19 +255,6 @@ export default function ProfileModal(props: any) {
                         Wife location :
                         {filterData[0]?.wifeDetails?.guardianDetails?.location}{" "}
                       </div>
-                      <div>
-                        Wife mobile :
-                        {
-                          filterData[0]?.wifeDetails?.guardianDetails
-                            ?.contactNumber
-                        }{" "}
-                      </div>
-                      <div>
-                        Wife email :
-                        {filterData[0]?.wifeDetails?.guardianDetails?.email
-                          ? filterData[0]?.wifeDetails?.guardianDetails?.email
-                          : "N/A"}{" "}
-                      </div>
                     </div>
                     <br />
                     <div>
@@ -256,7 +269,9 @@ export default function ProfileModal(props: any) {
                       </div>
                       <div>
                         Witness-2 Birthdate :
-                        {filterData[0]?.witnessTwoDetails?.Birthdate}{" "}
+                        {formatDates(
+                          filterData[0]?.witnessTwoDetails?.dateOfBirth
+                        )}{" "}
                       </div>
                       <div>
                         Witness-2 address :

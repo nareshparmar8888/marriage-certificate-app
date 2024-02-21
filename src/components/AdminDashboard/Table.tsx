@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import { Button, TextField } from "@mui/material";
 import { DataGrid, GridCellParams, GridColDef } from "@mui/x-data-grid";
-import { DownloadData, userDetail } from "../Api/DashBoardAction";
+import { DownloadData, userDetail } from "../Api/Apis";
 import { UserAllDetail, downloadUserData } from "../Interface/Interface";
-import CustomModal from "../Modal/ApproveModal/ApproveModal";
-import RejectModal from "../Modal/RejectModal/RejectionModal";
-import ProfileModal from "../Modal/ProfileModal/ProfileModal";
-import Loader from "../../Loader/Loader";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUserDatas } from "../reducer/dashboardReducer";
 import { t } from "i18next";
+import CustomModal from "../Modal/ApproveModal/ApproveModal";
+import RejectModal from "../Modal/RejectModal/RejectionModal";
+import ProfileModal from "../Modal/ProfileModal/ProfileModal";
+import Loader from "../../Loader/Loader";
 
 export default function Table() {
   const navigate = useNavigate();
@@ -284,7 +284,6 @@ export default function Table() {
           sx={{ marginRight: "1rem" }}
           onClick={downloadRecord}
         >
-          {/* {t("Download Record")} */}
           {t("Download Record")}
         </Button>
       </div>

@@ -1,22 +1,21 @@
 import { useEffect, useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
-import Header from "../Shared/Header/Header";
-import { shortByDate, userDetail } from "../Api/DashBoardAction";
+import { shortByDate } from "../Api/Apis";
 import { jsPDF } from "jspdf";
-import "jspdf-autotable";
-import Loader from "../../Loader/Loader";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { t } from "i18next";
-import i18n from "../../i18n/config";
 import { useTranslation } from "react-i18next";
+import "jspdf-autotable";
+import Header from "../Shared/Header/Header";
+import Loader from "../../Loader/Loader";
 
 const RecordDownload: React.FC = () => {
   const [loadingPage, setLoadingPage] = useState<boolean>(false);
   const [fromDate, setFromDate] = useState<string>("");
   const [toDate, setToDate] = useState<string>("");
   const [apiResponse, setApiResponse] = useState<any>([]);
+  const [disbled, setDisbled] = useState(true);
   const formatDate = (dateString: any) => {
     const date = new Date(dateString);
     const day = date.getDate();
@@ -47,6 +46,12 @@ const RecordDownload: React.FC = () => {
         setLoadingPage(false);
         console.error(error);
       });
+  }, [fromDate, toDate]);
+
+  useEffect(() => {
+    if (fromDate && toDate) {
+      setDisbled(false);
+    }
   }, [fromDate, toDate]);
 
   const downloadUserData = async () => {
@@ -182,9 +187,10 @@ const RecordDownload: React.FC = () => {
             p={1}
             sx={{
               ":hover": {
-                bgcolor: "#AF5",
+                bgcolor: "#063970",
                 color: "white",
                 cursor: "pointer",
+                borderRadius: "10px",
               },
             }}
             onClick={() => changeLanguage("en")}
@@ -195,9 +201,10 @@ const RecordDownload: React.FC = () => {
             p={1}
             sx={{
               ":hover": {
-                bgcolor: "#AF5",
+                bgcolor: "#063970",
                 color: "white",
                 cursor: "pointer",
+                borderRadius: "10px",
               },
             }}
             onClick={() => changeLanguage("gu")}
@@ -256,6 +263,7 @@ const RecordDownload: React.FC = () => {
         size="medium"
         sx={{ marginLeft: "11.7rem", marginTop: "2rem" }}
         onClick={downloadUserData}
+        disabled={disbled}
       >
         {t("Download")}
       </Button>

@@ -11,10 +11,9 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers";
-import { Approve } from "../../Api/DashBoardAction";
+import { Approve } from "../../Api/Apis";
 import "./style.scss";
-import { convertDateFormat, formatDate } from "../../../config";
-import Loader from "../../../Loader/Loader";
+import { convertDateFormat } from "../../../config";
 
 interface ModalState {
   certificateData: string | undefined;
