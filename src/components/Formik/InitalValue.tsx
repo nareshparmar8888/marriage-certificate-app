@@ -1,5 +1,3 @@
-import { number } from "yup";
-
 export const MerriageValue = {
   location: "",
   marriageDate: "",
@@ -15,6 +13,8 @@ export const HusbandValue = {
   husbandstatus: "",
   husbandlocation: "",
   husbandaddress: "",
+  mobile: "",
+  email: "",
   gardianSurname: "",
   gardianName: "",
   gardianAge: 0,
@@ -34,6 +34,8 @@ export const WifeValue = {
   wifestatus: "",
   wifelocation: "",
   wifeaddress: "",
+  wifemobile: "",
+  wifeemail: "",
   gardianwifeSurname: "",
   gardianwifeName: "",
   gardianwifeAge: 0,

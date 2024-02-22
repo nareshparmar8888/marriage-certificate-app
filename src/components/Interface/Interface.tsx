@@ -41,6 +41,21 @@ export interface husband {
   Religions: string;
   location: string;
   address: string;
+  mobile: string;
+  email: string;
+}
+
+export interface wife {
+  surname: string;
+  name: string;
+  birthDate: string;
+  age: number;
+  statusBride: string;
+  Religions: string;
+  location: string;
+  address: string;
+  wifemobile: string;
+  wifeemail: string;
 }
 
 export interface husbandGardian {
@@ -100,7 +115,7 @@ export interface UserAllDetail {
     husbandSchoolLeavingCertificateStatus: boolean | null;
     marriageDetails: {
       applicationDate: Date;
-      location: string;
+      location: string | null;
       marriageAddress: string;
       marriageDate: Date;
     };

@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { Box, Grid, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
+import { UserCount } from "../Api/Apis";
+import { userData } from "../Interface/Interface";
 import Header from "../Shared/Header/Header";
-import { UserCount } from "../Api/DashBoardAction";
 import Loader from "../../Loader/Loader";
 import "./style.scss";
-import { userData } from "../Interface/Interface";
 import Table from "./Table";
-import { useTranslation } from "react-i18next";
 
 const Dashboard: React.FC = () => {
   const [userData, setUserData] = useState<number>(0);
@@ -64,9 +64,10 @@ const Dashboard: React.FC = () => {
             p={1}
             sx={{
               ":hover": {
-                bgcolor: "#AF5",
+                bgcolor: "#063970",
                 color: "white",
                 cursor: "pointer",
+                borderRadius: "10px",
               },
             }}
             onClick={() => changeLanguage("en")}
@@ -77,9 +78,10 @@ const Dashboard: React.FC = () => {
             p={1}
             sx={{
               ":hover": {
-                bgcolor: "#AF5",
+                bgcolor: "#063970",
                 color: "white",
                 cursor: "pointer",
+                borderRadius: "10px",
               },
             }}
             onClick={() => changeLanguage("gu")}
