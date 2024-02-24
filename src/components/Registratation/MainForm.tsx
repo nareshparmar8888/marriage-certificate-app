@@ -88,7 +88,7 @@ const MainForm = () => {
 
   const { t, i18n } = useTranslation();
 
-  function changeLanguage(lang: any) {
+  function changeLanguage(lang: string) {
     i18n.changeLanguage(lang);
   }
 
@@ -186,8 +186,6 @@ const MainForm = () => {
     location: "",
     address: "",
     landline: "",
-    mobile: "",
-    email: "",
   });
 
   const [wifeDetail, setWifeDetail] = useState<husband>({
@@ -210,8 +208,8 @@ const MainForm = () => {
     location: "",
     address: "",
     landline: "",
-    mobile: "",
-    email: "",
+    // mobile: "",
+    // email: "",
   });
 
   const [priestDetail, setPriestDetail] = useState<priest>({

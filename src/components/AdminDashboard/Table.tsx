@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import { Button, TextField } from "@mui/material";
 import { DataGrid, GridCellParams, GridColDef } from "@mui/x-data-grid";
 import { DownloadData, userDetail } from "../Api/Apis";
-import { UserAllDetail, downloadUserData } from "../Interface/Interface";
+import {
+  UserAllDetail,
+  downloadUserData,
+  userResponse,
+} from "../Interface/Interface";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUserDatas } from "../reducer/dashboardReducer";
@@ -21,10 +25,10 @@ export default function Table() {
   const [openProfileModal, setOpenProfileModel] = useState<boolean>(false);
   const [storeId, setStoreId] = useState<string>();
   const [loadingPage, setLoadingPage] = useState<boolean>(false);
-  const [userDetails, setUserDetails] = useState<any>();
+  const [userDetails, setUserDetails] = useState<userResponse>();
   const [searchValue, setSearchValue] = useState<string>("");
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e?.target?.value);
   };
 
@@ -247,7 +251,7 @@ export default function Table() {
   ];
 
   const rows = Array.isArray(userDetails)
-    ? userDetails?.map((user: any, index: any) => {
+    ? userDetails?.map((user: userResponse) => {
         return {
           id: user?._id,
           HusbandName:

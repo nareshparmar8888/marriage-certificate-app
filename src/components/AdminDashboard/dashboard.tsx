@@ -15,9 +15,9 @@ const Dashboard: React.FC = () => {
   const [loadingPage, setLoadingPage] = useState<boolean>(false);
   const { t, i18n } = useTranslation();
 
-  function changeLanguage(lang: any) {
+  const changeLanguage = (lang: string) => {
     i18n.changeLanguage(lang);
-  }
+  };
 
   useEffect(() => {
     setLoadingPage(true);

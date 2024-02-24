@@ -1,5 +1,5 @@
-import MainForm from "./components/Registratation/MainForm";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import MainForm from "./components/Registratation/MainForm";
 import Login from "./components/Login/login";
 import Dashboard from "./components/AdminDashboard/dashboard";
 import UserDashboard from "./components/UserDashboard/UserDashboard";

@@ -1,6 +1,7 @@
 import axios from "axios";
+import { PayloadType, modalPayload, password } from "../Interface/Interface";
 
-export const UserCount = async (payload: any) => {
+export const UserCount = async (payload: PayloadType) => {
   const url = "https://marriage-portal-api.onrender.com/usersCounts";
   try {
     const response = await axios.post(url, payload);
@@ -16,7 +17,7 @@ export const UserCount = async (payload: any) => {
   }
 };
 
-export const userDetail = async (payload: any) => {
+export const userDetail = async (payload: PayloadType) => {
   const url = "http://localhost:3000/listUsers";
 
   try {
@@ -33,7 +34,7 @@ export const userDetail = async (payload: any) => {
   }
 };
 
-export const Approve = async (payload: any) => {
+export const Approve = async (payload: modalPayload) => {
   const url = "https://marriage-portal-api.onrender.com/approve";
 
   try {
@@ -55,7 +56,7 @@ export const Approve = async (payload: any) => {
   }
 };
 
-export const Reject = async (payload: any) => {
+export const Reject = async (payload: modalPayload) => {
   const url = "https://marriage-portal-api.onrender.com/reject";
 
   try {
@@ -98,7 +99,7 @@ export const registration = async (payload: any) => {
   }
 };
 
-export const DownloadData = async (payload: any) => {
+export const DownloadData = async (payload: PayloadType) => {
   const url = "https://marriage-portal-api.onrender.com/download";
 
   try {
@@ -120,7 +121,7 @@ export const DownloadData = async (payload: any) => {
   }
 };
 
-export const shortByDate = async (payload: any) => {
+export const shortByDate = async (payload: PayloadType) => {
   const url = "https://marriage-portal-api.onrender.com/shortByDate";
 
   try {
@@ -163,7 +164,7 @@ export const updateUser = async (payload: any) => {
   }
 };
 
-export const setPassword = async (setPassword: string, payload: any) => {
+export const setPassword = async (setPassword: string, payload: password) => {
   const url = `https://marriage-portal-api.onrender.com/setPassword?setPasswordToken=${setPassword}`;
 
   try {
@@ -185,7 +186,7 @@ export const setPassword = async (setPassword: string, payload: any) => {
   }
 };
 
-export const updateUserDetails = async (payload: any) => {
+export const updateUserDetails = async (payload: PayloadType) => {
   const url = `https://marriage-portal-api.onrender.com/userDetails`;
 
   try {

@@ -12,8 +12,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers";
 import { Approve } from "../../Api/Apis";
-import "./style.scss";
 import { convertDateFormat } from "../../../config";
+import "./style.scss";
 
 interface ModalState {
   certificateData: string | undefined;
@@ -25,7 +25,7 @@ interface ModalState {
 interface ApproveModalProps {
   open: boolean;
   handleClose: () => void;
-  currentIndex: any;
+  currentIndex: string | undefined;
   onApproveSuccess: () => void;
 }
 
@@ -41,7 +41,7 @@ const customModalStyle = {
   width: "40rem",
 };
 
-const CustomModal: React.FC<ApproveModalProps> = (props: any) => {
+const CustomModal: React.FC<ApproveModalProps> = (props: ApproveModalProps) => {
   const { open, handleClose, currentIndex } = props;
 
   const [modalState, setModalState] = useState<ModalState>({

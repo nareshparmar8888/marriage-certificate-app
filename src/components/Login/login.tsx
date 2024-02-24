@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { setLoginDatas } from "../reducer/dashboardReducer";
 import Loader from "../../Loader/Loader";
 import CustomSnackbar from "../../utils/CustomSnackbar";
+import { loginPayload } from "../Interface/Interface";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ const Login = () => {
     setOpenSnackbar(false);
   };
 
-  const loginApi = async (payload: any, dispatch: any) => {
+  const loginApi = async (payload: loginPayload, dispatch: any) => {
     setLoading(true);
     const url = "https://marriage-portal-api.onrender.com/login";
     let response: any;

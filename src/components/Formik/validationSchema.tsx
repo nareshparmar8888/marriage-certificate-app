@@ -25,12 +25,6 @@ export const HusbandSchema = Yup.object({
   ),
   gardianAddress: Yup.string().required("Husband gardian Address is required"),
   gardianContact: Yup.number().required("Husband gardian Contact is required"),
-  gardianMobile: Yup.string()
-    .max(10)
-    .required("Husband gardian Mobile is required"),
-  gardianEmail: Yup.string()
-    .email()
-    .required("Husband gardian email is required"),
 });
 
 export const WifeSchema = Yup.object({
@@ -50,12 +44,6 @@ export const WifeSchema = Yup.object({
   gardianwifeLocation: Yup.string().required("Gardian Location is required"),
   gardianwifeAddress: Yup.string().required("Gardian Address is required"),
   gardianwifeContact: Yup.number().required("Wife Gardian Contact is required"),
-  gardianwifeMobile: Yup.string()
-    .max(10)
-    .required("Wife Gardian Mobile is required"),
-  gardianwifeEmail: Yup.string()
-    .email()
-    .required("Wife gardian email is required"),
 });
 
 export const PriestSchema = Yup.object({

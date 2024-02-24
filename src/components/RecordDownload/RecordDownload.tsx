@@ -39,7 +39,6 @@ const RecordDownload: React.FC = () => {
     shortByDate(obj)
       .then((response) => {
         setApiResponse(response.data);
-
         setLoadingPage(false);
       })
       .catch((error: any) => {
@@ -157,7 +156,7 @@ const RecordDownload: React.FC = () => {
 
   const { t, i18n } = useTranslation();
 
-  function changeLanguage(lang: any) {
+  function changeLanguage(lang: string) {
     i18n.changeLanguage(lang);
   }
 

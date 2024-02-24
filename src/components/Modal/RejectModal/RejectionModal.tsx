@@ -30,7 +30,7 @@ interface RejectModalProps {
   onRejectSuccess: () => void;
 }
 
-const RejectModal: React.FC<RejectModalProps> = (props: any) => {
+const RejectModal: React.FC<RejectModalProps> = (props: RejectModalProps) => {
   const { open, handleClose, currentIndex } = props;
   const [commentdata, setCommentData] = useState<string>("");
   const [disable, setDisable] = useState<boolean>(true);
@@ -46,7 +46,7 @@ const RejectModal: React.FC<RejectModalProps> = (props: any) => {
     marriageEvidenceStatus: false,
   });
 
-  const handleCheckboxChange = (event: any) => {
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name } = event.target;
     setCheckboxState((prev: any) => ({
       ...prev,

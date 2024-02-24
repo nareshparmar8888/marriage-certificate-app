@@ -3,18 +3,29 @@ import { useEffect, useState } from "react";
 import { formatDate, formatDates } from "../../../config";
 import { useSelector } from "react-redux";
 import { Dialog, DialogContent, DialogTitle, Typography } from "@mui/material";
+import { userResponse } from "../../Interface/Interface";
 
 interface RootState {
   application: any;
 }
 
-export default function ProfileModal(props: any) {
-  const datas = useSelector((state: RootState) => state?.application?.useData);
+interface propsType {
+  open: boolean;
+  handleClose: () => void;
+  storeId: string | undefined;
+}
+
+export default function ProfileModal(props: propsType) {
+  const userData = useSelector(
+    (state: RootState) => state?.application?.useData
+  );
   const { open, handleClose, storeId } = props;
   const [filterData, setFilterData] = useState<any>();
 
   useEffect(() => {
-    const filteredData = datas?.filter((item: any) => item?._id === storeId);
+    const filteredData = userData?.filter(
+      (item: userResponse) => item?._id === storeId
+    );
     setFilterData(filteredData);
   }, [open, storeId, handleClose]);
 

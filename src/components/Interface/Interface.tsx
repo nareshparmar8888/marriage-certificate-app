@@ -8,7 +8,7 @@ export interface UserDetails {
     name: string;
     surname: string;
   };
-  applicationStatus: any;
+  applicationStatus: string;
 }
 
 export interface userData {
@@ -65,8 +65,8 @@ export interface husbandGardian {
   location: string;
   address: string;
   landline: string;
-  mobile: string;
-  email: string;
+  // mobile: string;
+  // email: string;
 }
 
 export interface priest {
@@ -183,4 +183,125 @@ export interface checkUserDocument {
   wifePhotoIdProofStatus: boolean;
   priestPhotoIdProofStatus: boolean;
   marriageEvidenceStatus: boolean;
+}
+
+export interface userResponse {
+  agreementStampStatus: boolean;
+  applicationStatus: string;
+  approveAppointmentDate: string;
+  approveMessage: string;
+  approveRequestCertificate: string;
+  husbandDetails: {
+    address: string;
+    age: number;
+    dateOfBirth: Date;
+    emailId: string;
+    guardianDetails: {
+      address: string;
+      age: number;
+      contactNumber: string;
+      location: string;
+      name: string;
+      surname: string;
+    };
+    location: string;
+    mobileNumber: string;
+    name: string;
+    religious: string;
+    statusOfBridegroom: string;
+    surname: string;
+  };
+  husbandPhotoIdProofStatus: boolean | null;
+  husbandSchoolLeavingCertificateStatus: boolean | null;
+  marriageDetails: {
+    applicationDate: Date;
+    location: string | null;
+    marriageAddress: string;
+    marriageDate: Date;
+  };
+  marriageEvidenceStatus: boolean;
+  priestDetails: {
+    address: string;
+    age: number;
+    dateOfBirth: Date;
+    location: string;
+    name: string;
+  };
+  priestPhotoIdProofStatus: boolean;
+  rejectedMessage: string;
+  role: string;
+  setPasswordToken: string;
+  wifeDetails: {
+    address: string;
+    age: number;
+    dateOfBirth: Date;
+    emailId: string;
+    guardianDetails: {
+      address: string;
+      age: number;
+      contactNumber: string;
+      location: string;
+      name: string;
+      surname: string;
+    };
+    location: string;
+    mobileNumber: string;
+    name: string;
+    religious: string;
+    statusOfBridegroom: string;
+    surname: string;
+  };
+  wifePhotoIdProofStatus: boolean;
+  wifeSchoolLeavingCertificate: string;
+  wifeSchoolLeavingCertificateStatus: boolean;
+  witnessOneDetails: {
+    address: string;
+    age: number;
+    dateOfBirth: Date;
+    name: string;
+  };
+  witnessOnePhotoProofStatus: boolean;
+  witnessTwoDetails: {
+    address: string;
+    age: number;
+    dateOfBirth: Date;
+    name: string;
+  };
+  witnessTwoPhotoProofStatus: boolean;
+  __v: number;
+  _id: string;
+}
+
+export interface PayloadType {
+  loginToken: string | null;
+  userId?: string;
+  fromDate?: string;
+  toDate?: string;
+}
+
+export interface modalPayload {
+  approveAppointmentDate?: string | null;
+  approveMessage?: string | null;
+  approveRequestCertificate?: string | null;
+  loginToken?: string | null;
+  userId?: string | null;
+  agreementStampStatus?: boolean;
+  husbandPhotoIdProofStatus?: boolean;
+  husbandSchoolLeavingCertificateStatus?: boolean;
+  marriageEvidenceStatus?: boolean;
+  priestPhotoIdProofStatus?: boolean;
+  rejectedMessage?: string;
+  wifePhotoIdProofStatus?: boolean;
+  wifeSchoolLeavingCertificateStatus?: boolean;
+  witnessOnePhotoProofStatus?: boolean;
+  witnessTwoPhotoProofStatus?: boolean;
+}
+
+export interface password {
+  password: string;
+}
+
+export interface loginPayload {
+  email: string;
+  password: string;
 }
