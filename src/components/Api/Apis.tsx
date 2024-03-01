@@ -2,7 +2,7 @@ import axios from "axios";
 import { PayloadType, modalPayload, password } from "../Interface/Interface";
 
 export const UserCount = async (payload: PayloadType) => {
-  const url = "https://marriage-portal-api.onrender.com/usersCounts";
+  const url = "https://marriage-app-26ak.onrender.com/usersCounts";
   try {
     const response = await axios.post(url, payload);
 
@@ -18,7 +18,7 @@ export const UserCount = async (payload: PayloadType) => {
 };
 
 export const userDetail = async (payload: PayloadType) => {
-  const url = "http://localhost:3000/listUsers";
+  const url = "https://marriage-app-26ak.onrender.com/listUsers";
 
   try {
     const response = await axios.post(url, payload);
@@ -35,7 +35,7 @@ export const userDetail = async (payload: PayloadType) => {
 };
 
 export const Approve = async (payload: modalPayload) => {
-  const url = "https://marriage-portal-api.onrender.com/approve";
+  const url = "https://marriage-app-26ak.onrender.com/approve";
 
   try {
     const response = await axios.post(url, JSON.stringify(payload), {
@@ -57,7 +57,7 @@ export const Approve = async (payload: modalPayload) => {
 };
 
 export const Reject = async (payload: modalPayload) => {
-  const url = "https://marriage-portal-api.onrender.com/reject";
+  const url = "https://marriage-app-26ak.onrender.com/reject";
 
   try {
     const response = await axios.post(url, JSON.stringify(payload), {
@@ -79,7 +79,7 @@ export const Reject = async (payload: modalPayload) => {
 };
 
 export const registration = async (payload: any) => {
-  const url = "http://localhost:3000/registration";
+  const url = "https://marriage-app-26ak.onrender.com/registration";
 
   try {
     const response = await axios.post(url, payload, {
@@ -100,7 +100,7 @@ export const registration = async (payload: any) => {
 };
 
 export const DownloadData = async (payload: PayloadType) => {
-  const url = "https://marriage-portal-api.onrender.com/download";
+  const url = "https://marriage-app-26ak.onrender.com/download";
 
   try {
     const response = await axios.post(url, JSON.stringify(payload), {
@@ -122,7 +122,7 @@ export const DownloadData = async (payload: PayloadType) => {
 };
 
 export const shortByDate = async (payload: PayloadType) => {
-  const url = "https://marriage-portal-api.onrender.com/shortByDate";
+  const url = "https://marriage-app-26ak.onrender.com/shortByDate";
 
   try {
     const response = await axios.post(url, JSON.stringify(payload), {
@@ -144,7 +144,7 @@ export const shortByDate = async (payload: PayloadType) => {
 };
 
 export const updateUser = async (payload: any) => {
-  const url = "https://marriage-portal-api.onrender.com/updateUserDetails";
+  const url = "https://marriage-app-26ak.onrender.com/updateUserDetails";
 
   try {
     const response = await axios.patch(url, payload, {
@@ -165,7 +165,7 @@ export const updateUser = async (payload: any) => {
 };
 
 export const setPassword = async (setPassword: string, payload: password) => {
-  const url = `https://marriage-portal-api.onrender.com/setPassword?setPasswordToken=${setPassword}`;
+  const url = `https://marriage-app-26ak.onrender.com/setPassword?setPasswordToken=${setPassword}`;
 
   try {
     const response = await axios.post(url, JSON.stringify(payload), {
@@ -187,7 +187,7 @@ export const setPassword = async (setPassword: string, payload: password) => {
 };
 
 export const updateUserDetails = async (payload: PayloadType) => {
-  const url = `https://marriage-portal-api.onrender.com/userDetails`;
+  const url = `https://marriage-app-26ak.onrender.com/userDetails`;
 
   try {
     const response = await axios.post(url, JSON.stringify(payload), {

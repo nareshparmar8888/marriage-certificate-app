@@ -27,7 +27,7 @@ const Login = () => {
 
   const loginApi = async (payload: loginPayload, dispatch: any) => {
     setLoading(true);
-    const url = "https://marriage-portal-api.onrender.com/login";
+    const url = "https://marriage-app-26ak.onrender.com/login";
     let response: any;
     try {
       response = await axios.post(url, payload);
