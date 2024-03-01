@@ -1890,6 +1890,18 @@ const MainForm = () => {
           {t("Apply for marriage Registration")}
         </Button>
       </Box>
+      <span
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          color: "red",
+          fontWeight: "500",
+        }}
+      >
+        * This site is for testing purposes only. Your data is your
+        responsibility{" "}
+      </span>
       <Footer />
       <Loader open={loadingPage} />
       <Modal
