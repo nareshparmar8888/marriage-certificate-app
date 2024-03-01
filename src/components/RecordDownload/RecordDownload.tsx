@@ -55,15 +55,15 @@ const RecordDownload: React.FC = () => {
 
   const downloadUserData = async () => {
     try {
-      const Logintoken = sessionStorage.getItem("LoginToken");
-      const obj = {
-        loginToken: Logintoken,
-        fromDate: fromDate,
-        toDate: toDate,
-      };
+      // const Logintoken = sessionStorage.getItem("LoginToken");
+      // const obj = {
+      //   loginToken: Logintoken,
+      //   fromDate: fromDate,
+      //   toDate: toDate,
+      // };
 
-      const response = await shortByDate(obj);
-      await setApiResponse(response.data);
+      // const response = await shortByDate(obj);
+      // await setApiResponse(response.data);
       const doc = new jsPDF();
 
       (await apiResponse) &&

@@ -92,8 +92,8 @@ export default function ProfileModal(props: propsType) {
                   </div>
                   <div style={{ marginLeft: "4rem" }}>
                     Merriage Date :{" "}
-                    {filterData[0]?.approveAppointmentDate
-                      ? formatDate(filterData[0]?.approveAppointmentDate)
+                    {filterData[0]?.marriageDetails
+                      ? formatDate(filterData[0]?.marriageDetails?.marriageDate)
                       : ""}
                   </div>
                 </div>
